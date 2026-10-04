@@ -50,7 +50,7 @@
 </nav>
 
 <header class="hero wrap" id="top">
-  <div class="frame splash cut-b">
+  <div class="frame splash cut-b anim-gate">
     <div class="in">
       <svg class="scene" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
         <rect width="1200" height="600" class="sky-a"/>
@@ -58,9 +58,7 @@
         <g class="star"><circle cx="720" cy="70" r="2"/><circle cx="860" cy="130" r="1.6"/><circle cx="1010" cy="60" r="2.2"/><circle cx="640" cy="160" r="1.4"/><circle cx="1120" cy="180" r="1.8"/><circle cx="560" cy="60" r="1.5"/><circle cx="960" cy="230" r="1.3"/></g>
         <g class="layer" data-depth="0.08">
           <circle cx="930" cy="170" r="74" class="orb ink"/>
-          <path d="M650 250 a36 36 0 0 1 64 -22 a46 46 0 0 1 86 8 a30 30 0 0 1 30 34 h-190z" class="cloud ink"/>
-          <path d="M980 300 a30 30 0 0 1 54 -16 a40 40 0 0 1 74 10 a26 26 0 0 1 26 28 h-160z" class="cloud ink"/>
-          <path d="M760 268 h60 v-30 M840 270 h40 v-50 h30" class="ink-thin s-teal" fill="none" opacity=".7"/>
+          <path d="M760 268 h60 v-30 M840 270 h40 v-50 h30" class="ink-thin s-teal pulse" fill="none" opacity=".7"/>
         </g>
         <g class="layer" data-depth="0.16">
           <path d="M0 470 V400 h70 v-30 h60 v50 h50 v-80 h14 v-34 l8 -22 l8 22 v34 h14 v80 h50 v-60 a40 40 0 0 1 80 0 v60 h60 v-110 h70 v110 h50 v-40 h90 v40 h50 v-70 h80 v70 h60 v-50 h70 v-60 h50 v60 h40 v-30 h90 v40 h60 v-80 h14 v-30 l8 -20 l8 20 v30 h14 v80 h40 V470z" class="far ink"/>
@@ -77,6 +75,10 @@
         <path d="M0 556 C200 540 400 570 600 552 S1000 540 1200 556" class="ink-thin s-teal" fill="none" stroke-width="3" opacity=".8"/>
         <use href="#me" x="860" y="430" width="44" height="92"/>
       </svg>
+      <div class="hero-clouds" aria-hidden="true">
+        <svg class="hc hc1" viewBox="646 196 198 58"><path d="M650 250 a36 36 0 0 1 64 -22 a46 46 0 0 1 86 8 a30 30 0 0 1 30 34 h-190z" class="cloud ink"/></svg>
+        <svg class="hc hc2" viewBox="976 255 168 49"><path d="M980 300 a30 30 0 0 1 54 -16 a40 40 0 0 1 74 10 a26 26 0 0 1 26 28 h-160z" class="cloud ink"/></svg>
+      </div>
       <div class="hero-copy">
         <span class="caption" id="hero-location">Cairo, Egypt</span>
         <h1>Ali<br>Ahmed</h1>
@@ -97,7 +99,7 @@
     </div>
     <div class="story">
       <!-- 1: GIU / Cairo -->
-      <article class="frame cut-a panel p1 reveal clickable" id="chapter-1">
+      <article class="frame cut-a panel p1 reveal clickable anim-gate" id="chapter-1">
         <div class="in">
           <div class="art">
             <svg viewBox="0 0 640 300" role="img" aria-label="A student looking at the Cairo skyline">
@@ -122,7 +124,7 @@
       </article>
 
       <!-- 2: Bank -->
-      <article class="frame cut-b panel p2 reveal">
+      <article class="frame cut-b panel p2 reveal anim-gate">
         <div class="in">
           <div class="art">
             <svg viewBox="0 0 400 330" preserveAspectRatio="xMidYMax slice" role="img" aria-label="A bank building with a shield on its front">
@@ -153,19 +155,19 @@
       </article>
 
       <!-- 3: Cloud -->
-      <article class="frame cut-c panel p3 reveal">
+      <article class="frame cut-c panel p3 reveal anim-gate">
         <div class="in">
           <div class="art">
             <svg viewBox="0 0 480 280" role="img" aria-label="A padlock inside a cloud, connected by lines to the ground">
               <rect width="480" height="280" class="sky-b"/>
               <g class="star"><circle cx="40" cy="40" r="1.8"/><circle cx="430" cy="50" r="2"/><circle cx="380" cy="230" r="1.4"/></g>
               <path d="M110 150 a46 46 0 0 1 80 -40 a62 62 0 0 1 116 6 a44 44 0 0 1 64 34 a34 34 0 0 1 -6 66 h-250 a34 34 0 0 1 -4 -66z" class="cloud ink"/>
-              <path d="M220 150 v-22 a20 20 0 0 1 40 0 v22" fill="none" class="ink" stroke-width="7" stroke="var(--line)"/>
-              <path d="M220 150 v-22 a20 20 0 0 1 40 0 v22" fill="none" stroke="var(--purple)" stroke-width="3.5"/>
+              <g class="shackle"><path d="M220 150 v-22 a20 20 0 0 1 40 0 v22" fill="none" class="ink" stroke-width="7" stroke="var(--line)"/>
+              <path d="M220 150 v-22 a20 20 0 0 1 40 0 v22" fill="none" stroke="var(--purple)" stroke-width="3.5"/></g>
               <rect x="206" y="148" width="68" height="54" rx="4" class="f-purple ink"/>
               <circle cx="240" cy="170" r="7" class="f-panel"/><rect x="237" y="172" width="6" height="16" class="f-panel"/>
-              <g fill="none" class="s-green" stroke-width="3"><path d="M150 216 v30 h-50 v34"/><path d="M240 216 v64"/><path d="M330 216 v24 h60 v40"/></g>
-              <g class="f-green ink-thin"><circle cx="100" cy="246" r="5"/><circle cx="240" cy="250" r="5"/><circle cx="390" cy="240" r="5"/></g>
+              <g fill="none" class="s-green wires" stroke-width="3"><path pathLength="1" d="M150 216 v30 h-50 v34"/><path pathLength="1" d="M240 216 v64"/><path pathLength="1" d="M330 216 v24 h60 v40"/></g>
+              <g class="f-green ink-thin nodes"><circle cx="100" cy="246" r="5"/><circle cx="240" cy="250" r="5"/><circle cx="390" cy="240" r="5"/></g>
               <text x="296" y="112" class="sfx" transform="rotate(-8 296 112)">click.</text>
               <text x="472" y="272" class="b64" text-anchor="end">QUF7Y2wwdWRzX2szM3BfczNjcjN0c30=</text>
             </svg>
@@ -179,7 +181,7 @@
       </article>
 
       <!-- 4: Next certs -->
-      <article class="frame cut-a panel p4 reveal">
+      <article class="frame cut-a panel p4 reveal anim-gate">
         <div class="in">
           <div class="art">
             <svg viewBox="0 0 480 280" role="img" aria-label="Three rising blocks like stairs, with a flag on the top one">
@@ -191,7 +193,7 @@
                 <path d="M224 230 h90 v-100 h-90z" class="mid"/><path d="M224 130 l14 -12 h90 l-14 12z" class="far"/><path d="M314 230 v-100 l14 -12 v100z" class="near"/>
                 <path d="M328 230 h90 v-160 h-90z" class="mid"/><path d="M328 70 l14 -12 h90 l-14 12z" class="far"/><path d="M418 230 v-160 l14 -12 v160z" class="near"/>
               </g>
-              <path d="M378 64 v-46" class="ink"/><path d="M378 18 l30 9 l-30 9z" class="f-green ink"/>
+              <path d="M378 64 v-46" class="ink"/><path d="M378 18 l30 9 l-30 9z" class="f-green ink flag"/>
               <rect y="230" width="480" height="50" class="ground ink"/>
               <rect y="230" width="480" height="50" class="dots"/>
               <use href="#me" x="70" y="164" width="34" height="72"/>
@@ -206,7 +208,7 @@
       </article>
 
       <!-- 5: Horizon -->
-      <article class="frame cut-b panel p5 reveal">
+      <article class="frame cut-b panel p5 reveal anim-gate">
         <div class="in">
           <div class="art">
             <svg viewBox="0 0 1100 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A road leading toward a distant city on the horizon">
@@ -222,7 +224,7 @@
               <rect y="198" width="1100" height="102" class="ground ink"/>
               <rect y="198" width="1100" height="102" class="dots"/>
               <path d="M520 300 L566 200 h10 L640 300z" class="near ink"/>
-              <path d="M572 210 v10 M573 232 v14 M575 260 v20" class="s-teal" stroke-width="3"/>
+              <path d="M572 210 v10 M573 232 v14 M575 260 v20" class="s-teal road" stroke-width="3"/>
               <use href="#me" x="560" y="226" width="30" height="64"/>
             </svg>
             <span class="chap">Chapter 5</span>
@@ -249,7 +251,7 @@
       <h2 id="certs-h">Certifications</h2>
       <p>Earned badges fill in. Dashed ones are in progress or planned.</p>
     </div>
-    <div class="certs" id="certs-grid"></div>
+    <div class="certs anim-gate" id="certs-grid"></div>
   </section>
 
   <section class="sec wrap" id="writeups" aria-labelledby="writeups-h">
