@@ -1,0 +1,280 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Ali Ahmed</title>
+<meta name="description" content="Ali Ahmed, cybersecurity student in Cairo building toward a career in cloud security.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preload" href="assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/main.js" defer></script>
+</head>
+<body>
+<!-- shared drawing bits -->
+<svg class="defs" aria-hidden="true" focusable="false">
+  <defs>
+    <pattern id="halftone" width="6" height="6" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.1" fill="#000" opacity=".22"/>
+    </pattern>
+    <symbol id="me" viewBox="0 0 40 84">
+      <rect x="11" y="54" width="7.5" height="27" rx="2" class="near ink"/>
+      <rect x="21.5" y="54" width="7.5" height="27" rx="2" class="near ink"/>
+      <path d="M8 24 h24 l4 32 h-32z" class="mid ink"/>
+      <rect x="11" y="27" width="18" height="20" rx="3" class="f-purple ink"/>
+      <circle cx="20" cy="13" r="9.5" class="near ink"/>
+    </symbol>
+  </defs>
+</svg>
+
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="#top">Ali Ahmed</a>
+    <ul>
+      <li><a href="#story">Story</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#certs">Certifications</a></li>
+      <li><a href="#writeups">Write-ups</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"/></svg>
+      <span id="toggle-label">Night</span>
+    </button>
+  </div>
+</nav>
+
+<header class="hero wrap" id="top">
+  <div class="frame splash cut-b">
+    <div class="in">
+      <svg class="scene" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMax slice" aria-hidden="true">
+        <rect width="1200" height="600" class="sky-a"/>
+        <rect y="330" width="1200" height="270" class="sky-b"/>
+        <g class="star"><circle cx="720" cy="70" r="2"/><circle cx="860" cy="130" r="1.6"/><circle cx="1010" cy="60" r="2.2"/><circle cx="640" cy="160" r="1.4"/><circle cx="1120" cy="180" r="1.8"/><circle cx="560" cy="60" r="1.5"/><circle cx="960" cy="230" r="1.3"/></g>
+        <g class="layer" data-depth="0.08">
+          <circle cx="930" cy="170" r="74" class="orb ink"/>
+          <path d="M650 250 a36 36 0 0 1 64 -22 a46 46 0 0 1 86 8 a30 30 0 0 1 30 34 h-190z" class="cloud ink"/>
+          <path d="M980 300 a30 30 0 0 1 54 -16 a40 40 0 0 1 74 10 a26 26 0 0 1 26 28 h-160z" class="cloud ink"/>
+          <path d="M760 268 h60 v-30 M840 270 h40 v-50 h30" class="ink-thin s-teal" fill="none" opacity=".7"/>
+        </g>
+        <g class="layer" data-depth="0.16">
+          <path d="M0 470 V400 h70 v-30 h60 v50 h50 v-80 h14 v-34 l8 -22 l8 22 v34 h14 v80 h50 v-60 a40 40 0 0 1 80 0 v60 h60 v-110 h70 v110 h50 v-40 h90 v40 h50 v-70 h80 v70 h60 v-50 h70 v-60 h50 v60 h40 v-30 h90 v40 h60 v-80 h14 v-30 l8 -20 l8 20 v30 h14 v80 h40 V470z" class="far ink"/>
+        </g>
+        <g class="layer" data-depth="0.26">
+          <path d="M0 520 V450 h120 v-40 h90 v40 h70 v-70 h110 v70 h60 v-30 h120 v-60 h100 v90 h80 v-40 h110 v40 h70 v-80 h120 v80 h90 v-30 h60 V520z" class="mid ink"/>
+          <g class="win">
+            <rect x="140" y="420" width="10" height="12"/><rect x="170" y="420" width="10" height="12"/><rect x="300" y="395" width="10" height="12"/><rect x="330" y="395" width="10" height="12"/><rect x="360" y="420" width="10" height="12"/>
+            <rect x="600" y="385" width="10" height="12"/><rect x="630" y="385" width="10" height="12"/><rect x="660" y="415" width="10" height="12"/><rect x="870" y="400" width="10" height="12"/><rect x="900" y="400" width="10" height="12"/><rect x="930" y="430" width="10" height="12"/><rect x="1110" y="460" width="10" height="12"/>
+          </g>
+        </g>
+        <rect y="512" width="1200" height="88" class="ground ink"/>
+        <rect y="512" width="1200" height="88" class="dots"/>
+        <path d="M0 556 C200 540 400 570 600 552 S1000 540 1200 556" class="ink-thin s-teal" fill="none" stroke-width="3" opacity=".8"/>
+        <use href="#me" x="860" y="430" width="44" height="92"/>
+      </svg>
+      <div class="hero-copy">
+        <span class="caption">Cairo, Egypt</span>
+        <h1>Ali<br>Ahmed</h1>
+        <div class="hero-card">
+          <p class="lede">Cybersecurity student building toward a career in cloud security.</p>
+          <div class="btns" id="hero-btns"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="sec wrap" id="story" aria-labelledby="story-h">
+    <div class="sec-head">
+      <h2 id="story-h">The story so far</h2>
+      <p>Where I've been, where I am, and where I'm heading.</p>
+    </div>
+    <div class="story">
+      <!-- 1: GIU / Cairo -->
+      <article class="frame cut-a panel p1 reveal">
+        <div class="in">
+          <div class="art">
+            <svg viewBox="0 0 640 300" role="img" aria-label="A student looking at the Cairo skyline">
+              <rect width="640" height="300" class="sky-a"/>
+              <g class="star"><circle cx="80" cy="50" r="2"/><circle cx="210" cy="30" r="1.6"/><circle cx="380" cy="60" r="1.8"/></g>
+              <circle cx="520" cy="80" r="40" class="orb ink"/>
+              <path d="M0 210 v-50 h50 v-30 h40 v80 h20 v-70 h8 v-40 l6 -18 l6 18 v40 h8 v70 h30 v-40 a34 34 0 0 1 68 0 v40 h50 v-90 h60 v90 h40 v-30 h70 v30 h60 v-60 h60 v60 h70 V210z" class="far ink"/>
+              <path d="M0 250 v-40 h100 v-30 h80 v30 h120 v-50 h110 v50 h60 v-30 h80 v30 h90 V250z" class="mid ink"/>
+              <g class="win"><rect x="320" y="180" width="9" height="11"/><rect x="345" y="180" width="9" height="11"/><rect x="370" y="180" width="9" height="11"/><rect x="200" y="190" width="9" height="11"/><rect x="540" y="200" width="9" height="11"/><rect x="120" y="193" width="9" height="11"/></g>
+              <rect y="246" width="640" height="54" class="ground ink"/>
+              <rect y="246" width="640" height="54" class="dots"/>
+              <use href="#me" x="250" y="176" width="40" height="84"/>
+            </svg>
+            <span class="chap">Chapter 1</span>
+          </div>
+          <div class="txt">
+            <h3>Studying cybersecurity at GIU</h3>
+            <p>Final year of a B.Sc. in Cybersecurity in Egypt. Networks, operating systems, cryptography, and how all of it breaks.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 2: Bank -->
+      <article class="frame cut-b panel p2 reveal">
+        <div class="in">
+          <div class="art">
+            <svg viewBox="0 0 400 330" preserveAspectRatio="xMidYMax slice" role="img" aria-label="A bank building with a shield on its front">
+              <rect width="400" height="330" class="sky-a"/>
+              <g class="star"><circle cx="60" cy="60" r="1.8"/><circle cx="330" cy="40" r="2"/></g>
+              <rect x="20" y="90" width="70" height="200" class="far ink"/><rect x="310" y="60" width="70" height="230" class="far ink"/>
+              <g class="win"><rect x="34" y="110" width="10" height="12"/><rect x="62" y="140" width="10" height="12"/><rect x="326" y="90" width="10" height="12"/><rect x="354" y="130" width="10" height="12"/></g>
+              <path d="M90 160 L200 100 L310 160z" class="mid ink"/>
+              <rect x="96" y="160" width="208" height="16" class="near ink"/>
+              <g class="f-panel ink"><rect x="112" y="176" width="20" height="96"/><rect x="152" y="176" width="20" height="96"/><rect x="228" y="176" width="20" height="96"/><rect x="268" y="176" width="20" height="96"/></g>
+              <path d="M200 182 l26 10 v22 c0 18 -12 28 -26 34 c-14 -6 -26 -16 -26 -34 v-22z" class="f-teal ink"/>
+              <path d="M189 214 l8 8 l16 -18" fill="none" stroke="var(--panel)" stroke-width="4" stroke-linecap="round"/>
+              <rect x="84" y="272" width="232" height="14" class="mid ink"/>
+              <rect y="286" width="400" height="44" class="ground ink"/>
+              <rect y="286" width="400" height="44" class="dots"/>
+            </svg>
+            <span class="chap">Chapter 2</span>
+          </div>
+          <div class="txt">
+            <h3>Six months inside a bank</h3>
+            <p>Interning at Ebank, seeing how a financial institution runs its IT and security.</p>
+            <div class="meter">
+              <div class="meter-top"><span>Internship</span><span id="intern-left">—</span></div>
+              <div class="bar" role="progressbar" aria-label="Internship progress" aria-valuemin="0" aria-valuemax="100" id="intern-bar"><i id="intern-fill"></i></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <!-- 3: Cloud -->
+      <article class="frame cut-c panel p3 reveal">
+        <div class="in">
+          <div class="art">
+            <svg viewBox="0 0 480 280" role="img" aria-label="A padlock inside a cloud, connected by lines to the ground">
+              <rect width="480" height="280" class="sky-b"/>
+              <g class="star"><circle cx="40" cy="40" r="1.8"/><circle cx="430" cy="50" r="2"/><circle cx="380" cy="230" r="1.4"/></g>
+              <path d="M110 150 a46 46 0 0 1 80 -40 a62 62 0 0 1 116 6 a44 44 0 0 1 64 34 a34 34 0 0 1 -6 66 h-250 a34 34 0 0 1 -4 -66z" class="cloud ink"/>
+              <path d="M220 150 v-22 a20 20 0 0 1 40 0 v22" fill="none" class="ink" stroke-width="7" stroke="var(--line)"/>
+              <path d="M220 150 v-22 a20 20 0 0 1 40 0 v22" fill="none" stroke="var(--purple)" stroke-width="3.5"/>
+              <rect x="206" y="148" width="68" height="54" rx="4" class="f-purple ink"/>
+              <circle cx="240" cy="170" r="7" class="f-panel"/><rect x="237" y="172" width="6" height="16" class="f-panel"/>
+              <g fill="none" class="s-green" stroke-width="3"><path d="M150 216 v30 h-50 v34"/><path d="M240 216 v64"/><path d="M330 216 v24 h60 v40"/></g>
+              <g class="f-green ink-thin"><circle cx="100" cy="246" r="5"/><circle cx="240" cy="250" r="5"/><circle cx="390" cy="240" r="5"/></g>
+              <text x="296" y="112" class="sfx" transform="rotate(-8 296 112)">click.</text>
+            </svg>
+            <span class="chap">Chapter 3</span>
+          </div>
+          <div class="txt">
+            <h3>Up into the cloud</h3>
+            <p>Studying for AWS Certified Cloud Practitioner. Cloud is where I want to specialise: identity, data and infrastructure that defend themselves.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 4: Next certs -->
+      <article class="frame cut-a panel p4 reveal">
+        <div class="in">
+          <div class="art">
+            <svg viewBox="0 0 480 280" role="img" aria-label="Three rising blocks like stairs, with a flag on the top one">
+              <rect width="480" height="280" class="sky-a"/>
+              <g class="star"><circle cx="70" cy="60" r="2"/><circle cx="190" cy="30" r="1.6"/></g>
+              <path d="M40 110 a24 24 0 0 1 44 -12 a32 32 0 0 1 60 8 a20 20 0 0 1 16 22 h-120z" class="cloud ink"/>
+              <g class="ink">
+                <path d="M120 230 h90 v-50 h-90z" class="mid"/><path d="M120 180 l14 -12 h90 l-14 12z" class="far"/><path d="M210 230 v-50 l14 -12 v50z" class="near"/>
+                <path d="M224 230 h90 v-100 h-90z" class="mid"/><path d="M224 130 l14 -12 h90 l-14 12z" class="far"/><path d="M314 230 v-100 l14 -12 v100z" class="near"/>
+                <path d="M328 230 h90 v-160 h-90z" class="mid"/><path d="M328 70 l14 -12 h90 l-14 12z" class="far"/><path d="M418 230 v-160 l14 -12 v160z" class="near"/>
+              </g>
+              <path d="M378 64 v-46" class="ink"/><path d="M378 18 l30 9 l-30 9z" class="f-green ink"/>
+              <rect y="230" width="480" height="50" class="ground ink"/>
+              <rect y="230" width="480" height="50" class="dots"/>
+              <use href="#me" x="70" y="164" width="34" height="72"/>
+            </svg>
+            <span class="chap">Chapter 4</span>
+          </div>
+          <div class="txt">
+            <h3>Next steps</h3>
+            <p>AWS Solutions Architect – Associate to learn how secure systems are designed, then AWS Certified Security – Specialty.</p>
+          </div>
+        </div>
+      </article>
+
+      <!-- 5: Horizon -->
+      <article class="frame cut-b panel p5 reveal">
+        <div class="in">
+          <div class="art">
+            <svg viewBox="0 0 1100 300" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A road leading toward a distant city on the horizon">
+              <rect width="1100" height="300" class="sky-a"/>
+              <rect y="120" width="1100" height="80" class="sky-b"/>
+              <g class="star"><circle cx="120" cy="40" r="2"/><circle cx="300" cy="80" r="1.5"/><circle cx="820" cy="40" r="2"/><circle cx="1000" cy="90" r="1.6"/><circle cx="660" cy="30" r="1.4"/></g>
+              <path d="M520 200 a46 46 0 0 1 92 0z" class="orb ink"/>
+              <!-- distant city -->
+              <path d="M640 200 v-30 h20 v-24 l8 -22 l8 22 v24 h24 v-40 a22 22 0 0 1 44 0 v40 h20 v-20 h30 v-46 l10 -26 l10 26 v46 h30 v26 h40 v-12 h30 v42z" class="far ink"/>
+              <!-- office towers -->
+              <path d="M220 200 v-110 h50 v110z M280 200 v-150 h60 v150z M350 200 v-90 h44 v90z" class="mid ink"/>
+              <g class="win"><rect x="292" y="70" width="10" height="12"/><rect x="316" y="70" width="10" height="12"/><rect x="292" y="100" width="10" height="12"/><rect x="316" y="130" width="10" height="12"/><rect x="232" y="110" width="10" height="12"/><rect x="250" y="140" width="10" height="12"/><rect x="362" y="130" width="10" height="12"/></g>
+              <rect y="198" width="1100" height="102" class="ground ink"/>
+              <rect y="198" width="1100" height="102" class="dots"/>
+              <path d="M520 300 L566 200 h10 L640 300z" class="near ink"/>
+              <path d="M572 210 v10 M573 232 v14 M575 260 v20" class="s-teal" stroke-width="3"/>
+              <use href="#me" x="560" y="226" width="30" height="64"/>
+            </svg>
+            <span class="chap">Chapter 5</span>
+          </div>
+          <div class="txt">
+            <h3>Cloud Security Architect</h3>
+            <p>Where this road leads.</p>
+          </div>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="sec wrap" id="skills" aria-labelledby="skills-h">
+    <div class="sec-head">
+      <h2 id="skills-h">Skills</h2>
+      <p>Grouped by where I am with each one.</p>
+    </div>
+    <div class="skills" id="skills-grid"></div>
+  </section>
+
+  <section class="sec wrap" id="certs" aria-labelledby="certs-h">
+    <div class="sec-head">
+      <h2 id="certs-h">Certifications</h2>
+      <p>Earned badges fill in. Dashed ones are in progress or planned.</p>
+    </div>
+    <div class="certs" id="certs-grid"></div>
+  </section>
+
+  <section class="sec wrap" id="writeups" aria-labelledby="writeups-h">
+    <div class="sec-head">
+      <h2 id="writeups-h">Write-ups</h2>
+      <p>Notes from labs, CTFs and cloud security topics I'm learning.</p>
+    </div>
+    <div class="posts" id="posts" hidden></div>
+    <div class="frame cut-b empty" id="posts-empty"><div class="in">
+      <div><h3>First write-up coming soon</h3>
+      <p>AWS labs, CTF notes and cloud security write-ups will show up here as I finish them. In the meantime, my work in progress is on GitHub.</p></div>
+      <svg viewBox="0 0 200 140" aria-hidden="true">
+        <rect x="20" y="16" width="120" height="110" class="f-panel ink"/>
+        <path d="M38 44 h84 M38 64 h84 M38 84 h56" class="ink-thin" stroke-width="3"/>
+        <path d="M150 40 l20 20 l-60 60 h-20 v-20z" class="f-purple ink"/>
+        <path d="M144 46 l20 20" class="ink"/>
+      </svg>
+    </div></div>
+  </section>
+
+  <section class="ending wrap" id="contact" aria-labelledby="contact-h">
+    <div class="frame end-panel cut-a">
+      <div class="in">
+        <h2 id="contact-h">To be continued…</h2>
+        <p>I'm looking for cloud security internships and junior roles. If your team works on cloud security, I'd like to hear from you.</p>
+        <div class="btns" id="end-btns"></div>
+      </div>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap"><span>Ali Ahmed, Cairo</span><span id="year">2026</span></div></footer>
+</body>
+</html>
