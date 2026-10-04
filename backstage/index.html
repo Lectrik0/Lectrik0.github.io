@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self' https://api.github.com; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex, nofollow, noarchive">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Backstage</title>
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/admin.css">
+<script src="../assets/admin.js" defer></script>
+</head>
+<body class="bs">
+<main class="wrap bs-wrap">
+
+  <!-- 1. First time on a device: encrypt the GitHub token with your password -->
+  <section class="frame cut-a bs-card" id="view-setup" hidden><div class="in">
+    <h1>Set up this device</h1>
+    <p class="muted">Your GitHub token is encrypted with your password and stored only in this browser. The password itself is never stored or sent anywhere.</p>
+    <form id="setup-form" class="bs-form" novalidate autocomplete="off">
+      <label for="setup-user">Username</label>
+      <input id="setup-user" type="text" autocomplete="username" required>
+      <label for="setup-pass">Password</label>
+      <input id="setup-pass" type="password" autocomplete="new-password" required>
+      <label for="setup-pass2">Repeat password</label>
+      <input id="setup-pass2" type="password" autocomplete="new-password" required>
+      <label for="setup-token">GitHub token</label>
+      <input id="setup-token" type="password" autocomplete="off" spellcheck="false" required placeholder="github_pat_…">
+      <details class="bs-help">
+        <summary>How to make the token</summary>
+        <ol>
+          <li>GitHub → Settings → Developer settings → Personal access tokens → <b>Fine-grained tokens</b> → Generate new token.</li>
+          <li>Repository access: <b>Only select repositories</b> → <code>Lectrik0.github.io</code>.</li>
+          <li>Permissions → Repository → <b>Contents: Read and write</b>. Nothing else.</li>
+          <li>Pick an expiry (90 days is a good balance), generate, and paste it here.</li>
+        </ol>
+      </details>
+      <button class="btn" type="submit">Encrypt and save</button>
+      <p class="bs-msg" id="setup-msg" role="status" aria-live="polite"></p>
+    </form>
+  </div></section>
+
+  <!-- 2. Normal visit: unlock -->
+  <section class="frame cut-b bs-card" id="view-login" hidden><div class="in">
+    <h1>Backstage</h1>
+    <form id="login-form" class="bs-form" novalidate>
+      <label for="login-user">Username</label>
+      <input id="login-user" type="text" autocomplete="username" required>
+      <label for="login-pass">Password</label>
+      <input id="login-pass" type="password" autocomplete="current-password" required>
+      <button class="btn" type="submit">Unlock</button>
+      <p class="bs-msg" id="login-msg" role="status" aria-live="polite"></p>
+    </form>
+    <button class="linkish" id="forget-device" type="button">Forget this device</button>
+  </div></section>
+
+  <!-- 3. Editor -->
+  <section id="view-editor" hidden>
+    <header class="bs-bar">
+      <div class="bs-bar-left">
+        <h1>Backstage</h1>
+        <span class="bs-status" id="status">Loading…</span>
+      </div>
+      <div class="btns">
+        <button class="btn ghost" id="discard" type="button" disabled>Discard changes</button>
+        <button class="btn" id="publish" type="button" disabled>Publish changes</button>
+        <button class="btn ghost" id="lock" type="button">Lock</button>
+      </div>
+    </header>
+    <nav class="bs-tabs" id="tabs" aria-label="Sections"></nav>
+    <div class="bs-panel" id="panel"></div>
+    <p class="bs-toast" id="toast" role="status" aria-live="polite" hidden></p>
+  </section>
+
+</main>
+</body>
+</html>
