@@ -338,3 +338,70 @@ figure.frame{margin:0}
 .sem-total{margin:0;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--line) 35%,transparent);font:600 .85rem/1 var(--f-display);color:var(--muted);text-align:right}
 .selectable{user-select:all}
 @media (max-width:560px){.dlg-head{flex-direction:column}}
+/* courses dialog: the inner panel is the scroller (fix: it used to grow and get clipped) */
+.dlg-frame>.in{min-height:0;max-height:calc(100dvh - 32px - 2*var(--frame));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
+@supports not (height:100dvh){.dlg-frame>.in{max-height:calc(100vh - 38px)}}
+
+/* ================= animations =================
+   Light by design. The clouds are separate small layers moved with transform, so the GPU
+   handles them without repainting anything. Loops inside the drawings run in a few
+   "comic" steps per second instead of every frame, which keeps repaints rare. Everything
+   pauses off screen (.anim-gate without .live) and is off for reduced-motion users. */
+.hero-clouds{position:absolute;inset:0;z-index:1;pointer-events:none;overflow:hidden}
+.hc{position:absolute;height:auto;overflow:visible}
+.hc1{width:clamp(110px,16.5%,200px);left:54%;top:31%}
+.hc2{width:clamp(90px,14%,170px);left:81.5%;top:42%}
+@media (max-width:640px){.hc1{left:58%;top:6%}.hc2{left:80%;top:14%}}
+@media (prefers-reduced-motion:no-preference){
+  /* 1. page load: the name is inked in left to right, then the caption box drops in */
+  .hero h1{animation:ink-wipe .9s cubic-bezier(.7,0,.2,1) .1s both}
+  .hero .caption{animation:pop .45s cubic-bezier(.3,1.6,.5,1) .05s both}
+  .hero-card{animation:rise .6s cubic-bezier(.2,.8,.2,1) .75s both}
+
+  /* 2. hero: clouds drift (GPU only), data lines pulse, windows flicker at night */
+  .hc1{animation:drift 18s ease-in-out infinite alternate}
+  .hc2{animation:drift 26s ease-in-out -8s infinite alternate}
+  .pulse{stroke-dasharray:14 10;animation:march-line 2.4s steps(12) infinite}
+  .hero .win rect:nth-child(4n+1){animation:flicker 7s steps(1) infinite}
+  .hero .win rect:nth-child(5n+2){animation:flicker 11s steps(1) -3s infinite}
+
+  /* 3. stars twinkle, only at night (in daylight they're invisible, so they don't animate) */
+  :root[data-theme="dark"] .star circle{animation:twinkle 3.6s steps(4) infinite}
+  :root[data-theme="dark"] .star circle:nth-child(2n){animation-duration:4.8s;animation-delay:-1.5s}
+  :root[data-theme="dark"] .star circle:nth-child(3n){animation-duration:6s;animation-delay:-3s}
+
+  /* 4. Chapter 3: as the panel arrives, the wires light up and the padlock clicks shut (plays once) */
+  .js .p3 .shackle{transform:translateY(-14px);transition:transform .35s cubic-bezier(.5,0,.3,1.6) 1.1s}
+  .js .p3.seen .shackle{transform:none}
+  .js .p3 .wires path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset .9s ease-out .2s}
+  .js .p3.seen .wires path{stroke-dashoffset:0}
+  .js .p3 .nodes circle{opacity:0;transition:opacity .3s 1s}
+  .js .p3.seen .nodes circle{opacity:1}
+  .js .p3 .sfx{opacity:0;transform:scale(.4);transform-box:fill-box;transform-origin:center;transition:opacity .2s 1.4s,transform .35s cubic-bezier(.3,1.8,.5,1) 1.4s}
+  .js .p3.seen .sfx{opacity:1;transform:none}
+
+  /* 5. Chapter 4: the flag waves; Chapter 5: the road rolls toward you */
+  .flag{transform-box:fill-box;transform-origin:left center;animation:wave 2.6s steps(8) infinite}
+  .road{stroke-dasharray:6 8;animation:roll 1.6s steps(7) infinite}
+
+  /* 6. in-progress certification badge: its dashed edge keeps moving */
+  .cert.progress .hex{animation:march-hex 2.4s steps(16) infinite}
+
+  /* pause everything that's off screen */
+  .js .anim-gate:not(.live) :is(.pulse,.star circle,.win rect,.flag,.road,.hex,.hc){animation-play-state:paused}
+}
+@keyframes ink-wipe{from{clip-path:inset(-15% 100% -15% -5%)}to{clip-path:inset(-15% -10% -15% -5%)}}
+@keyframes pop{from{opacity:0;transform:scale(.6) rotate(-6deg)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes drift{from{transform:translateX(-18px)}to{transform:translateX(22px)}}
+@keyframes march-line{to{stroke-dashoffset:-48}}
+@keyframes march-hex{to{stroke-dashoffset:-32}}
+@keyframes flicker{0%,100%{opacity:1}48%{opacity:.35}52%{opacity:1}53%{opacity:.5}55%{opacity:1}}
+@media (prefers-reduced-motion:no-preference) and (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .star circle{animation:twinkle 3.6s steps(4) infinite}
+  :root:not([data-theme="light"]) .star circle:nth-child(2n){animation-duration:4.8s;animation-delay:-1.5s}
+  :root:not([data-theme="light"]) .star circle:nth-child(3n){animation-duration:6s;animation-delay:-3s}
+}
+@keyframes twinkle{0%,100%{opacity:1}50%{opacity:.25}}
+@keyframes wave{0%,100%{transform:skewY(0) scaleX(1)}50%{transform:skewY(7deg) scaleX(.92)}}
+@keyframes roll{to{stroke-dashoffset:-28}}

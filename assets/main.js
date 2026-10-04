@@ -345,6 +345,9 @@
         });
       }, { passive: true });
     }
+    // run the looping animations only while their section is on screen
+    const gate = new IntersectionObserver(entries => entries.forEach(e => e.target.classList.toggle("live", e.isIntersecting)), { rootMargin: "60px 0px" });
+    document.querySelectorAll(".anim-gate").forEach(n => gate.observe(n));
     const io = new IntersectionObserver(entries => entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add("seen"); io.unobserve(e.target); }
     }), { rootMargin: "0px 0px -8% 0px" });
