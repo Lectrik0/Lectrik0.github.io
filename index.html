@@ -13,6 +13,7 @@
 <script src="assets/main.js" defer></script>
 </head>
 <body>
+<!-- Hi, curious one. You found flag 1 of 4: AA{v13w_s0urc3_f1rst} -->
 <!-- shared drawing bits -->
 <svg class="defs" aria-hidden="true" focusable="false">
   <defs>
@@ -37,6 +38,8 @@
       <li><a href="#skills">Skills</a></li>
       <li><a href="#certs">Certifications</a></li>
       <li><a href="#writeups">Write-ups</a></li>
+      <li><a href="#flags">Flags</a></li>
+      <li><a href="cv.html">CV</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
     <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode">
@@ -163,6 +166,7 @@
               <g fill="none" class="s-green" stroke-width="3"><path d="M150 216 v30 h-50 v34"/><path d="M240 216 v64"/><path d="M330 216 v24 h60 v40"/></g>
               <g class="f-green ink-thin"><circle cx="100" cy="246" r="5"/><circle cx="240" cy="250" r="5"/><circle cx="390" cy="240" r="5"/></g>
               <text x="296" y="112" class="sfx" transform="rotate(-8 296 112)">click.</text>
+              <text x="472" y="272" class="b64" text-anchor="end">QUF7Y2wwdWRzX2szM3BfczNjcjN0c30=</text>
             </svg>
             <span class="chap">Chapter 3</span>
           </div>
@@ -263,6 +267,39 @@
         <path d="M144 46 l20 20" class="ink"/>
       </svg>
     </div></div>
+  </section>
+
+  <section class="sec wrap" id="flags" aria-labelledby="flags-h">
+    <div class="sec-head">
+      <h2 id="flags-h">Hidden flags</h2>
+      <p>There are four flags hidden on this site, each in the format <code>AA{...}</code>. Nothing here needs hacking: just curiosity and the tools in your browser.</p>
+    </div>
+    <div class="ctf">
+      <div class="frame cut-a ctf-hints"><div class="in">
+        <h3>Hints</h3>
+        <ol class="hints" id="hints">
+          <li data-flag="0"><span>Every page has a back side.</span></li>
+          <li data-flag="1"><span>The site talks to itself where only developers listen.</span></li>
+          <li data-flag="2"><span>Security people know exactly where a site keeps its contact details.</span></li>
+          <li data-flag="3"><span>Something in Chapter 3 isn't written in English.</span></li>
+        </ol>
+      </div></div>
+      <div class="frame cut-b ctf-check"><div class="in">
+        <h3>Check a flag</h3>
+        <form id="flag-form" class="flag-form" novalidate>
+          <label for="flag-input">Flag</label>
+          <div class="flag-row">
+            <input id="flag-input" name="flag" type="text" autocomplete="off" spellcheck="false" maxlength="64" placeholder="AA{...}">
+            <button class="btn" type="submit">Check flag</button>
+          </div>
+        </form>
+        <p class="flag-msg" id="flag-msg" role="status" aria-live="polite">Flags are checked in your browser. Nothing is sent anywhere.</p>
+        <div class="flag-progress" aria-label="Flags found">
+          <span class="pips" id="flag-pips"><i></i><i></i><i></i><i></i></span>
+          <span id="flag-count">0 of 4 found</span>
+        </div>
+      </div></div>
+    </div>
   </section>
 
   <section class="ending wrap" id="contact" aria-labelledby="contact-h">

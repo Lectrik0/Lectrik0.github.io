@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CV – Ali Ahmed</title>
+<meta name="description" content="CV of Ali Ahmed, cybersecurity student focused on cloud security.">
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="assets/style.css">
+<script src="assets/main.js" defer></script>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="index.html">Ali Ahmed</a>
+    <ul>
+      <li><a href="index.html#story">Story</a></li>
+      <li><a href="index.html#skills">Skills</a></li>
+      <li><a href="index.html#writeups">Write-ups</a></li>
+      <li><a href="index.html#flags">Flags</a></li>
+      <li><a href="cv.html" aria-current="page">CV</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"/></svg>
+      <span id="toggle-label">Night</span>
+    </button>
+  </div>
+</nav>
+<main>
+  <header class="page-head wrap">
+    <h1>Ali Ahmed</h1>
+    <p class="lede">Final-year cybersecurity student focused on cloud security.</p>
+    <ul class="contact-list">
+      <li>Cairo, Egypt</li>
+      <li><a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer" data-print="">linkedin.com/in/aliahmed255</a></li>
+      <li><a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer" data-print="">github.com/Lectrik0</a></li>
+      <li><a href="index.html" data-print="">lectrik0.github.io</a></li>
+      <!-- Add your email here when you want it public, e.g. <li>you@example.com</li> -->
+    </ul>
+    <div class="btns no-print">
+      <button class="btn" id="print-cv" type="button">Print or save as PDF</button>
+    </div>
+  </header>
+
+  <div class="wrap cv">
+    <div class="frame cut-a cv-main"><div class="in">
+      <section>
+        <h2>Profile</h2>
+        <p>Final-year B.Sc. Cybersecurity student building toward a career in cloud security. Studying for AWS Certified Cloud Practitioner and documenting hands-on cloud and web security work publicly on my site and GitHub.</p>
+      </section>
+
+      <section>
+        <h2>Education</h2>
+        <div class="item">
+          <div class="item-top"><b>B.Sc. Cybersecurity, GIU</b><span>Expected 2027</span></div>
+          <p>Final year. Networks, operating systems, cryptography and secure systems.</p>
+          <!-- Add: full university name, graduation month, GPA if strong, relevant courses or graduation project -->
+        </div>
+      </section>
+
+      <section>
+        <h2>Experience</h2>
+        <div class="item">
+          <div class="item-top"><b>Intern, Ebank</b><span>Jul 2026 – Jan 2027</span></div>
+          <p>Six-month internship in a banking IT environment.</p>
+          <!-- Add 2–3 bullets on what you did or learned there, e.g.
+          <ul><li>...</li></ul> -->
+        </div>
+      </section>
+
+      <section>
+        <h2>Projects</h2>
+        <div class="item">
+          <div class="item-top"><b>Personal site: lectrik0.github.io</b><span>2026</span></div>
+          <ul>
+            <li>Built a static portfolio with a strict Content Security Policy and Trusted Types, blocking XSS by design.</li>
+            <li>Tested it against XSS payloads (event-handler, script and <code>javascript:</code> URL injection); none executed.</li>
+            <li>Self-hosted all assets (zero third-party requests) and published an RFC 9116 <code>security.txt</code>.</li>
+            <li>Wrote AWS infrastructure as code (S3, CloudFront, security headers) with keyless GitHub Actions deploys via OIDC.</li>
+          </ul>
+        </div>
+      </section>
+    </div></div>
+
+    <aside class="frame cut-b cv-side"><div class="in">
+      <section>
+        <h2>Certifications</h2>
+        <ul class="side-list">
+          <li><b>AWS Certified Cloud Practitioner</b><br>In progress</li>
+          <li><b>AWS Solutions Architect – Associate</b><br>Planned</li>
+          <li><b>AWS Certified Security – Specialty</b><br>Planned</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Skills</h2>
+        <ul class="side-list">
+          <li><b>Security:</b> fundamentals, web security (XSS, CSP), cryptography basics</li>
+          <li><b>Cloud:</b> AWS core services, IAM, S3, CloudFront</li>
+          <li><b>Systems:</b> networking, Linux</li>
+          <li><b>Code &amp; tools:</b> Python, Git, GitHub Actions, CloudFormation</li>
+        </ul>
+      </section>
+      <!-- Add a Languages section, e.g. Arabic (native), English (fluent) -->
+    </div></aside>
+  </div>
+</main>
+
+<footer><div class="wrap"><span>Ali Ahmed, Cairo</span><span id="year">2026</span></div></footer>
+</body>
+</html>
