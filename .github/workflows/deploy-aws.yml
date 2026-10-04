@@ -40,13 +40,15 @@ jobs:
       - name: Upload site files
         run: |
           set -euo pipefail
-          # Everything except repo-only files. HTML is revalidated on each visit; assets are cached for a day.
+          # Everything except repo-only files. HTML and content data are revalidated on each visit; assets are cached for a day.
           aws s3 sync . "s3://${SITE_BUCKET}" --delete --only-show-errors \
             --exclude ".git/*" --exclude ".github/*" --exclude "infra/*" --exclude "README.md" \
-            --exclude "*.html" --cache-control "public, max-age=86400"
+            --exclude "*.html" --exclude "data/*" --cache-control "public, max-age=86400"
           aws s3 sync . "s3://${SITE_BUCKET}" --only-show-errors \
             --exclude "*" --include "*.html" --exclude ".github/*" --exclude "infra/*" \
             --cache-control "no-cache" --content-type "text/html; charset=utf-8"
+          aws s3 sync data "s3://${SITE_BUCKET}/data" --delete --only-show-errors \
+            --cache-control "no-cache" --content-type "application/json; charset=utf-8"
           aws s3 cp .well-known/security.txt "s3://${SITE_BUCKET}/.well-known/security.txt" \
             --content-type "text/plain; charset=utf-8" --cache-control "no-cache" --only-show-errors
 
