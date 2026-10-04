@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hardening a static site – Ali Ahmed</title>
@@ -105,7 +105,7 @@
       <p><b>1. Content is always text, never HTML.</b> Every element is built with <code>createElement</code> and filled with <code>textContent</code>. The browser treats the data as text, so markup inside it is shown, not run.</p>
       <p><b>2. A strict Content Security Policy.</b> The browser only loads scripts, styles, fonts and images from my own site. Inline scripts, <code>eval</code>, plugins and forms are all blocked.</p>
 <pre><code>default-src 'none'; script-src 'self'; style-src 'self';
-font-src 'self'; img-src 'self'; connect-src 'none';
+font-src 'self'; img-src 'self'; connect-src 'self';
 object-src 'none'; base-uri 'none'; form-action 'none';
 require-trusted-types-for 'script'; trusted-types 'none'</code></pre>
       <p><b>3. Trusted Types.</b> The last two lines of the policy make the browser refuse any raw HTML assignment, such as <code>innerHTML</code>. Even if a future edit of mine reintroduced the old pattern, it would throw an error instead of creating a hole.</p>
