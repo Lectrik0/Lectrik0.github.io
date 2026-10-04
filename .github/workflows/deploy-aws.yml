@@ -1,0 +1,54 @@
+name: Deploy to AWS
+
+# Runs on every push to main once the AWS stack exists and the repo variables are set.
+# No AWS keys are stored in GitHub: the job gets short-lived credentials through OIDC.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write   # needed to request the OIDC token
+
+concurrency:
+  group: deploy-aws
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    if: ${{ vars.AWS_ROLE_ARN != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      SITE_BUCKET: ${{ vars.SITE_BUCKET }}
+      DISTRIBUTION_ID: ${{ vars.DISTRIBUTION_ID }}
+    steps:
+      # Actions are pinned to full commit SHAs so a moved tag can't change what runs.
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Get short-lived AWS credentials
+        uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_ARN }}
+          aws-region: us-east-1
+          role-session-name: site-deploy-${{ github.run_id }}
+
+      - name: Upload site files
+        run: |
+          set -euo pipefail
+          # Everything except repo-only files. HTML is revalidated on each visit; assets are cached for a day.
+          aws s3 sync . "s3://${SITE_BUCKET}" --delete --only-show-errors \
+            --exclude ".git/*" --exclude ".github/*" --exclude "infra/*" --exclude "README.md" \
+            --exclude "*.html" --cache-control "public, max-age=86400"
+          aws s3 sync . "s3://${SITE_BUCKET}" --only-show-errors \
+            --exclude "*" --include "*.html" --exclude ".github/*" --exclude "infra/*" \
+            --cache-control "no-cache" --content-type "text/html; charset=utf-8"
+          aws s3 cp .well-known/security.txt "s3://${SITE_BUCKET}/.well-known/security.txt" \
+            --content-type "text/plain; charset=utf-8" --cache-control "no-cache" --only-show-errors
+
+      - name: Refresh CloudFront
+        run: aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths "/*" --query Invalidation.Id --output text
