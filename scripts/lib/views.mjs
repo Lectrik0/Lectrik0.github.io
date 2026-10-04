@@ -171,14 +171,16 @@ export const skills = data => raw(named(data.skills, "group").map(g => {
 const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planned" };
 const CERT_COLOR = { earned: "teal", progress: "blue", planned: "muted" };
 const certStatus = c => CERT_LABEL[c.status] ? c.status : "planned";
+// Badge text shrinks to stay inside the hexagon: exam codes like AZ-900 or CLF-C02 fit.
+const badgeClass = text => text.length > 5 ? "hex-t longer" : text.length > 4 ? "hex-t long" : "hex-t";
 
 export const certs = data => raw(named(data.certs, "name").map(c => {
-  const status = certStatus(c);
+  const status = certStatus(c), badge = str(c.short).slice(0, 7);
   return block("div", { class: `frame cut-c cert ${status} c-${CERT_COLOR[status]}` }, [
     block("div", { class: "in" }, [
       h("svg", { viewBox: "0 0 72 80", "aria-hidden": "true" },
         h("path", { class: "hex", d: "M36 4 L66 21 V59 L36 76 L6 59 V21z" }),
-        h("text", { class: "hex-t", x: "36", y: "45" }, str(c.short).slice(0, 4))),
+        h("text", { class: badgeClass(badge), x: "36", y: "45" }, badge)),
       h("div", {}, h("h3", {}, str(c.name)), h("p", {}, CERT_LABEL[status]))
     ])
   ]);

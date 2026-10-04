@@ -92,7 +92,7 @@
         "additionalProperties": false,
         "properties": {
           "name": { "$ref": "#/$defs/text" },
-          "short": { "type": "string", "minLength": 1, "maxLength": 4 },
+          "short": { "type": "string", "minLength": 1, "maxLength": 7 },
           "status": { "enum": ["earned", "progress", "planned"] }
         }
       }

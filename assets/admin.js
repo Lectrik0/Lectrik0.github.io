@@ -150,7 +150,7 @@
     ] },
     { id: "certs", label: "Certifications", fields: [
       ["certs", LIST("Certifications", {
-        name: T("Name"), short: T("Badge text (max 4 letters)", { max: 4 }),
+        name: T("Name"), short: T("Badge text (max 7 characters, e.g. AZ-900)", { max: 7 }),
         status: SEL("Status", [["earned", "Earned"], ["progress", "In progress"], ["planned", "Planned"]], { default: "planned" }) }, { name: it => it.name || "New certification" })]
     ] },
     { id: "posts", label: "Write-ups", fields: [

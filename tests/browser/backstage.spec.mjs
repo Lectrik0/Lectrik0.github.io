@@ -66,7 +66,7 @@ test("a half-filled certification is caught before publishing, then published on
   expect(published).toEqual([]);
 
   await item.getByLabel("Name").fill("Test certificate");
-  await item.getByLabel("Badge text (max 4 letters)").fill("TC");
+  await item.getByLabel("Badge text (max 7 characters, e.g. AZ-900)").fill("TC");
   await expect(problems).toBeHidden(); // the list updates while fixing
 
   await page.locator("#publish").click();
