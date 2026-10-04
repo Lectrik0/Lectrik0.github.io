@@ -31,6 +31,10 @@ jobs:
       - name: Install tools
         run: npm ci --no-audit --no-fund
 
+      # First, so a content mistake (e.g. from Backstage) fails with a plain message naming the field.
+      - name: Check content (data/site.json)
+        run: npm run check:content
+
       - name: Build pages from data/site.json
         run: |
           if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then

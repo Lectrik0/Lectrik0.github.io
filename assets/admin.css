@@ -74,4 +74,13 @@
 
 .bs-toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;margin:0;
   background:var(--text);color:var(--bg);padding:12px 18px;font:600 .98rem/1.3 var(--f-display);display:flex;gap:14px;align-items:center;max-width:calc(100vw - 32px)}
-.bs-toast .linkish{color:var(--bg)}
+.bs-toast .linkish,.bs-toast a{color:var(--bg)}
+
+/* problems found before publishing */
+.bs-problems{--cut:18px;background:var(--purple)}
+.bs-problems .in{padding:16px 20px 18px;display:grid;gap:8px}
+.bs-problems h2{margin:0;font-size:1.25rem}
+.bs-problems h2:focus{outline:none}
+.bs-problems ul{margin:0;padding-left:1.2em;display:grid;gap:6px}
+.bs-problems li b{font-weight:600}
+[data-field][aria-invalid="true"]{border-color:var(--purple)!important;box-shadow:inset 0 0 0 1px var(--purple)}

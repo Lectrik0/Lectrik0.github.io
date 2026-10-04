@@ -55,11 +55,13 @@ Even a static site can be attacked through XSS, malicious links or third-party s
 
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every pull request and every push to `main`:
 
-1. **Build:** on a PR the pages must already be rebuilt (`npm run check`); on `main` they're rebuilt from `data/site.json`.
-2. **Content schema:** `data/site.json` is validated against [`data/site.schema.json`](data/site.schema.json) (types, dates, allowed values, safe URLs, valid email).
+1. **Content:** `npm run check:content` checks `data/site.json` against [`data/site.schema.json`](data/site.schema.json) (types, dates, allowed values, safe URLs, valid email, links to pages that exist) and names any problem in plain words, e.g. `certs › #5 › name: Can't be empty.` It runs first so a content mistake is the first thing the failure says.
+2. **Build:** on a PR the pages must already be rebuilt (`npm run check`); on `main` they're rebuilt from `data/site.json`.
 3. **HTML validation** with html-validate.
-4. **Unit tests:** escaping, URL filtering, deterministic build, meta tags, sitemap, feed, security.txt.
-5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker and course list work; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs.
+4. **Unit tests:** escaping, URL filtering, deterministic build, meta tags, sitemap, feed, security.txt, and that Backstage's content checker agrees with Ajv on over a thousand edited versions of the content.
+5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker and course list work; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated).
+
+The tests check the site *against* the content rather than freezing today's content: what each page must show is worked out from `data/site.json`, and the content checks also run on copies of the site built from edited content (more entries, fewer entries, half-filled entries, write-ups stored out of order). So editing the content can't make a test fail unless the edit itself is a problem.
 6. **Publish** (`main` only, after everything passes): if the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
 
 ## Hosting on AWS (`infra/`)
@@ -99,7 +101,9 @@ All content (profile, story text, courses, skills, certifications, write-ups, CV
 - The real key is a GitHub fine-grained token that can only write to this repo's contents.
 - On first use the token is encrypted in the browser (AES-GCM-256, key from the password via PBKDF2-SHA256 with 600,000 rounds, username bound as authenticated data) and stored only on that device. The username, password and token are never stored in plain text or sent anywhere except the token to GitHub's API.
 - Unlocking decrypts the token into memory; locking, closing the tab or 30 idle minutes forgets it. Wrong attempts are slowed down.
-- Saving commits `data/site.json` through the GitHub API. CI then checks it, rebuilds the pages and publishes them, usually within a few minutes. If the content fails a check, GitHub emails the failed run and the live site doesn't change.
+- Before publishing, Backstage checks the content with the same rules CI uses ([`assets/content-check.js`](assets/content-check.js) + the schema, and asks GitHub whether linked pages exist). Problems are listed by field, with a *Show* button that jumps to it, and nothing is published until they're fixed.
+- Publishing commits `data/site.json` through the GitHub API. CI then checks it again, rebuilds the pages and publishes them, usually within a few minutes; Backstage links to the run. If a check still fails there, GitHub emails the failed run and the live site doesn't change.
+- Half-filled entries never break a page: the build leaves out an entry whose name or title is empty, and write-ups are always listed newest first by date.
 - The editor page has its own CSP that only allows connections to `api.github.com`, and Trusted Types like the rest of the site.
 
 Anyone can load the editor page, but without the encrypted token on their own device and the password, it can't do anything.

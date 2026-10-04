@@ -11,6 +11,7 @@
   "scripts": {
     "build": "node scripts/build.mjs",
     "check": "node scripts/build.mjs --check",
+    "check:content": "node scripts/check-content.mjs",
     "start": "node scripts/serve.mjs",
     "lint": "html-validate \"*.html\" \"writeups/*.html\" \"backstage/*.html\"",
     "test": "node --test tests/unit/*.test.mjs",

@@ -28,8 +28,3 @@ test("links to pages on this site point at files that exist", () => {
     assert.ok(existsSync(new URL(path, root)), `${url} doesn't exist`);
   }
 });
-
-test("write-ups are listed newest first", () => {
-  const dates = data.posts.map(p => p.date);
-  assert.deepEqual(dates, [...dates].sort().reverse());
-});

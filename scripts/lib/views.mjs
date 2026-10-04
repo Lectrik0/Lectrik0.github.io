@@ -8,6 +8,10 @@ import { h, link, raw, safeUrl } from "./html.mjs";
 export const str = v => (typeof v === "string" || typeof v === "number") ? String(v).trim() : "";
 export const arr = v => Array.isArray(v) ? v : [];
 const obj = v => (v && typeof v === "object" && !Array.isArray(v)) ? v : {};
+// Entries whose main field is filled in. A half-filled entry (e.g. one just added in Backstage) is
+// left out rather than rendered as an empty heading.
+const named = (list, key) => arr(list).filter(x => str(obj(x)[key]));
+const texts = list => arr(list).map(str).filter(Boolean);
 // The profile email if it looks like one, else "" (which hides it everywhere).
 export const email = data => {
   const e = str(obj(data.profile).email);
@@ -153,13 +157,13 @@ export function internship(data) {
 }
 
 const COLORS = ["teal", "blue", "purple", "green"];
-export const skills = data => raw(arr(data.skills).map(g => {
+export const skills = data => raw(named(data.skills, "group").map(g => {
   const color = COLORS.includes(g.color) ? g.color : "teal";
   return block("div", { class: `frame cut-a skill-col c-${color}` }, [
     block("div", { class: "in" }, [
       h("h3", {}, h("i", {}), str(g.group)),
       h("p", {}, str(g.note)),
-      h("ul", { class: "chips" }, arr(g.items).map(str).filter(Boolean).map(i => h("li", {}, i)))
+      h("ul", { class: "chips" }, texts(g.items).map(i => h("li", {}, i)))
     ])
   ]);
 }).join("\n"));
@@ -168,7 +172,7 @@ const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planne
 const CERT_COLOR = { earned: "teal", progress: "blue", planned: "muted" };
 const certStatus = c => CERT_LABEL[c.status] ? c.status : "planned";
 
-export const certs = data => raw(arr(data.certs).map(c => {
+export const certs = data => raw(named(data.certs, "name").map(c => {
   const status = certStatus(c);
   return block("div", { class: `frame cut-c cert ${status} c-${CERT_COLOR[status]}` }, [
     block("div", { class: "in" }, [
@@ -180,7 +184,11 @@ export const certs = data => raw(arr(data.certs).map(c => {
   ]);
 }).join("\n"));
 
-export const postList = data => arr(data.posts).filter(p => safeUrl(p.url) && str(p.title));
+// Write-ups with a title and a usable link, newest first (undated ones last, in their original order).
+export const postList = data => named(data.posts, "title").filter(p => safeUrl(p.url))
+  .map((p, i) => ({ p, i, day: isoDate(p.date) || "" }))
+  .sort((a, b) => (a.day < b.day) - (a.day > b.day) || a.i - b.i)
+  .map(x => x.p);
 
 export function posts(data) {
   const list = postList(data);
@@ -204,13 +212,15 @@ export function posts(data) {
 
 /* ---------- Chapter 1: course list ---------- */
 const SEM_STATUS = { completed: "Completed", current: "In progress", upcoming: "Upcoming" };
-const ects = courses => arr(courses).reduce((sum, c) => sum + (Number(c.ects) || 0), 0);
+const courseList = s => named(s.courses, "name");
+const ects = s => courseList(s).reduce((sum, c) => sum + (Number(c.ects) || 0), 0);
+const semesterList = data => named(obj(data.courses).semesters, "name");
 
 export function coursesSummary(data) {
-  const sems = arr(obj(data.courses).semesters);
-  const total = sems.reduce((a, s) => a + ects(s.courses), 0);
-  const done = sems.filter(s => s.status === "completed").reduce((a, s) => a + ects(s.courses), 0);
-  const count = sems.reduce((a, s) => a + arr(s.courses).length, 0);
+  const sems = semesterList(data);
+  const total = sems.reduce((a, s) => a + ects(s), 0);
+  const done = sems.filter(s => s.status === "completed").reduce((a, s) => a + ects(s), 0);
+  const count = sems.reduce((a, s) => a + courseList(s).length, 0);
   return raw([
     h("span", {}, h("b", {}, String(count)), " courses"),
     h("span", {}, h("b", {}, String(done)), ` of ${total} ECTS completed`),
@@ -218,13 +228,13 @@ export function coursesSummary(data) {
   ].join("\n"));
 }
 
-export const semesters = data => raw(arr(obj(data.courses).semesters).map(s => {
+export const semesters = data => raw(semesterList(data).map(s => {
   const status = SEM_STATUS[s.status] ? s.status : "upcoming";
   return block("section", { class: `sem ${status}` }, [
     h("div", { class: "sem-head" }, h("h3", {}, str(s.name)), h("span", { class: "sem-state" }, SEM_STATUS[status])),
-    block("ul", { class: "sem-list" }, arr(s.courses).map(c =>
+    block("ul", { class: "sem-list" }, courseList(s).map(c =>
       h("li", {}, h("span", {}, str(c.name)), h("span", { class: "ects" }, Number(c.ects) ? `${Number(c.ects)} ECTS` : "")))),
-    h("p", { class: "sem-total" }, `${ects(s.courses)} ECTS`)
+    h("p", { class: "sem-total" }, `${ects(s)} ECTS`)
   ]);
 }).join("\n"));
 
@@ -245,32 +255,43 @@ export function cvContact(data, site) {
 const section = (title, ...kids) => block("section", {}, [h("h2", {}, title), ...kids]);
 const item = (title, dates, ...kids) => block("div", { class: "item" }, [
   h("div", { class: "item-top" }, h("b", {}, title), h("span", {}, dates)), ...kids]);
-const bullets = list => arr(list).map(str).filter(Boolean).length
-  ? block("ul", {}, arr(list).map(str).filter(Boolean).map(b => h("li", {}, b))) : null;
+const bullets = list => texts(list).length ? block("ul", {}, texts(list).map(b => h("li", {}, b))) : null;
 const titleOrg = e => [str(e.title), str(e.org)].filter(Boolean).join(", ");
 
-export function cvMain(data) {
+// The CV's sections, in order, each only when it has something to show.
+export function cvSections(data) {
   const CV = obj(data.cv);
-  return raw([
-    section("Profile", h("p", {}, str(CV.summary))),
-    arr(CV.education).length && section("Education", ...arr(CV.education).map(e =>
-      item(titleOrg(e), str(e.dates), str(e.details) ? h("p", {}, str(e.details)) : null))),
-    arr(CV.experience).length && section("Experience", ...arr(CV.experience).map(e => item(titleOrg(e), str(e.dates), bullets(e.bullets)))),
-    arr(CV.projects).length && section("Projects", ...arr(CV.projects).map(p => item(str(p.title), str(p.dates), bullets(p.bullets))))
-  ].filter(Boolean).join("\n"));
+  return {
+    main: [
+      ["Profile", [str(CV.summary)].filter(Boolean)],
+      ["Education", named(CV.education, "title")],
+      ["Experience", named(CV.experience, "title")],
+      ["Projects", named(CV.projects, "title")]
+    ].filter(([, items]) => items.length),
+    side: [
+      ["Certifications", named(data.certs, "name")],
+      ["Skills", named(CV.skills, "label")],
+      ["Languages", texts(CV.languages)]
+    ].filter(([, items]) => items.length)
+  };
 }
 
-export function cvSide(data) {
-  const CV = obj(data.cv);
-  const list = items => block("ul", { class: "side-list" }, items);
-  return raw([
-    arr(data.certs).length && section("Certifications", list(arr(data.certs).map(c =>
-      h("li", {}, h("b", {}, str(c.name)), h("br"), CERT_LABEL[certStatus(c)])))),
-    arr(CV.skills).length && section("Skills", list(arr(CV.skills).map(s =>
-      h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text))))),
-    arr(CV.languages).length && section("Languages", list(arr(CV.languages).map(l => h("li", {}, str(l)))))
-  ].filter(Boolean).join("\n"));
-}
+const CV_MAIN = {
+  Profile: summary => h("p", {}, summary),
+  Education: e => item(titleOrg(e), str(e.dates), str(e.details) ? h("p", {}, str(e.details)) : null),
+  Experience: e => item(titleOrg(e), str(e.dates), bullets(e.bullets)),
+  Projects: p => item(str(p.title), str(p.dates), bullets(p.bullets))
+};
+const CV_SIDE = {
+  Certifications: c => h("li", {}, h("b", {}, str(c.name)), h("br"), CERT_LABEL[certStatus(c)]),
+  Skills: s => h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text)),
+  Languages: l => h("li", {}, l)
+};
+
+export const cvMain = data => raw(cvSections(data).main
+  .map(([title, items]) => section(title, ...items.map(CV_MAIN[title]))).join("\n"));
+export const cvSide = data => raw(cvSections(data).side
+  .map(([title, items]) => section(title, block("ul", { class: "side-list" }, items.map(CV_SIDE[title])))).join("\n"));
 
 /* ---------- single text values, for elements marked data-bind="..." ---------- */
 export function bindings(data) {

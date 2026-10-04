@@ -1,10 +1,12 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
-import { build, renderSite } from "../../scripts/build.mjs";
+import { readdirSync, readFileSync } from "node:fs";
+import { build, renderSite, siteConfig } from "../../scripts/build.mjs";
+import { postList } from "../../scripts/lib/views.mjs";
 import { hostileData, PAYLOAD } from "../fixtures/hostile-data.mjs";
 
 const read = f => readFileSync(new URL(`../../${f}`, import.meta.url), "utf8");
+const SITE = siteConfig().url;
 
 test("committed pages are up to date with data/site.json (run `npm run build` if this fails)", () => {
   assert.deepEqual(build({ check: true }), []);
@@ -43,9 +45,10 @@ test("the build refuses to publish a security.txt with no way to make contact", 
 });
 
 test("every page gets a canonical URL and social preview tags, except the 404 page", () => {
-  for (const f of ["index.html", "cv.html", "writeups/hardening-this-site.html"]) {
+  const writeups = readdirSync(new URL("../../writeups/", import.meta.url)).filter(f => f.endsWith(".html")).map(f => `writeups/${f}`);
+  for (const f of ["index.html", "cv.html", ...writeups]) {
     const html = read(f);
-    assert.match(html, /<link rel="canonical" href="https:\/\/lectrik0\.github\.io\/[^"]*">/, f);
+    assert.match(html, new RegExp(`<link rel="canonical" href="${SITE.replace(/\./g, "\\.")}[^"]*">`), f);
     for (const p of ["og:title", "og:description", "og:url", "og:image", "og:type"]) assert.match(html, new RegExp(`property="${p}" content="[^"]+"`), `${f}: ${p}`);
     assert.match(html, /name="twitter:card" content="summary_large_image"/, f);
   }
@@ -55,16 +58,46 @@ test("every page gets a canonical URL and social preview tags, except the 404 pa
 });
 
 test("sitemap lists the indexable pages and nothing else", () => {
-  const locs = [...read("sitemap.xml").matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1]);
-  assert.deepEqual(locs, ["https://lectrik0.github.io/", "https://lectrik0.github.io/cv.html", "https://lectrik0.github.io/writeups/hardening-this-site.html"]);
-  assert.match(read("robots.txt"), /^Sitemap: https:\/\/lectrik0\.github\.io\/sitemap\.xml$/m);
+  const locs = [...read("sitemap.xml").matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].replace(SITE, "/"));
+  const writeups = readdirSync(new URL("../../writeups/", import.meta.url)).filter(f => f.endsWith(".html")).map(f => `/writeups/${f}`);
+  assert.deepEqual([...locs].sort(), ["/", "/cv.html", ...writeups].sort());
+  assert.match(read("robots.txt"), new RegExp(`^Sitemap: ${SITE}sitemap\\.xml$`, "m"));
 });
 
-test("feed has one entry per write-up", () => {
+test("feed has one entry per write-up, newest first", () => {
   const data = JSON.parse(read("data/site.json"));
-  const feed = read("feed.xml");
-  assert.equal((feed.match(/<entry>/g) || []).length, data.posts.length);
-  for (const p of data.posts) assert.ok(feed.includes(`<link href="https://lectrik0.github.io/${p.url}"`), p.url);
+  const ids = [...read("feed.xml").matchAll(/<entry>\s*<title>[^<]*<\/title>\s*<link href="([^"]+)"/g)].map(m => m[1]);
+  assert.deepEqual(ids, postList(data).map(p => new URL(p.url, SITE).href));
+});
+
+test("write-ups are listed newest first, whatever order they're stored in", () => {
+  const data = JSON.parse(read("data/site.json"));
+  const post = (title, date) => ({ title, date, tag: "", summary: "", url: "writeups/hardening-this-site.html" });
+  data.posts = [post("Middle", "2026-05-01"), post("Oldest", "2025-01-01"), post("Newest", "2026-10-04")];
+  const html = renderSite({ data }).get("index.html");
+  assert.deepEqual([...html.matchAll(/<a[^>]*class="post"[^>]*>.*?<h3>([^<]+)<\/h3>/g)].map(m => m[1]), ["Newest", "Middle", "Oldest"]);
+});
+
+test("half-filled entries are left out instead of showing up empty", () => {
+  const data = JSON.parse(read("data/site.json"));
+  data.certs.push({ name: "", short: "", status: "earned" });
+  data.skills.push({ group: " ", note: "", color: "teal", items: [""] });
+  data.cv.languages.push("");
+  data.cv.projects.push({ title: "" });
+  data.courses.semesters.push({ name: "", status: "upcoming", courses: [{ name: "", ects: 5 }] });
+  const out = renderSite({ data });
+  for (const f of ["index.html", "cv.html"]) {
+    assert.doesNotMatch(out.get(f), /<(h2|h3|li|b)>\s*<\/\1>|<b>:<\/b>/, `${f} has an empty element`);
+  }
+  assert.equal(out.get("index.html"), renderSite().get("index.html"), "blank entries shouldn't change the home page at all");
+});
+
+test("CV sections appear when they get content and disappear when emptied", () => {
+  const data = JSON.parse(read("data/site.json"));
+  data.cv.languages = ["Arabic (native)"];
+  assert.match(renderSite({ data }).get("cv.html"), /<h2>Languages<\/h2>\s*<ul class="side-list">\s*<li>Arabic \(native\)<\/li>/);
+  data.cv.languages = [];
+  assert.doesNotMatch(renderSite({ data }).get("cv.html"), /<h2>Languages<\/h2>/);
 });
 
 test("security.txt is valid and not about to expire", () => {
