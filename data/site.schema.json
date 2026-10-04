@@ -17,7 +17,7 @@
         "location": { "$ref": "#/$defs/text" },
         "github": { "$ref": "#/$defs/httpsUrl" },
         "linkedin": { "$ref": "#/$defs/httpsUrl" },
-        "email": { "description": "Shown on the home page, the CV and in security.txt. Empty hides it.", "anyOf": [{ "const": "" }, { "type": "string", "format": "email" }] },
+        "email": { "description": "Needs a valid email address, or leave it empty to hide it.", "anyOf": [{ "const": "" }, { "type": "string", "format": "email" }] },
         "cv": { "$ref": "#/$defs/link" }
       }
     },
@@ -137,11 +137,11 @@
     }
   },
   "$defs": {
-    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
-    "date": { "type": "string", "format": "date" },
-    "httpsUrl": { "type": "string", "pattern": "^https://[^\\s/]+\\.[^\\s]+$" },
+    "text": { "description": "Can't be empty.", "type": "string", "minLength": 1, "pattern": "\\S" },
+    "date": { "description": "Needs a date, like 2026-10-04.", "type": "string", "format": "date" },
+    "httpsUrl": { "description": "Needs an https:// link.", "type": "string", "pattern": "^https://[^\\s/]+\\.[^\\s]+$" },
     "link": {
-      "description": "An https:// link, or a path on this site such as cv.html or writeups/my-lab.html.",
+      "description": "Needs an https:// link, or a page on this site such as cv.html or writeups/my-lab.html.",
       "type": "string",
       "pattern": "^(https://[^\\s/]+\\.[^\\s]+|(?![A-Za-z][A-Za-z0-9+.-]*:)(?!//)[^\\s]+)$"
     },

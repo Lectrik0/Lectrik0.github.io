@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-import { PAGES, data, local, watch } from "./helpers.mjs";
+import { PAGES, copyOfData, data, local, siteFrom, watch } from "./helpers.mjs";
+import { cvSections, postList } from "../../scripts/lib/views.mjs";
 
 for (const [name, path] of Object.entries(PAGES)) {
   test.describe(`${name} page`, () => {
@@ -77,17 +78,56 @@ test.describe("search engines and link previews", () => {
   });
 });
 
+// What the pages must show is worked out from the content, never typed in here, so editing the
+// content (e.g. adding a language in Backstage) can't make these tests fail.
+const filled = (list, key) => list.filter(x => String(x[key] ?? "").trim());
+const month = d => new Date(d).toLocaleDateString("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
+
+async function expectCompleteHome(page, d) {
+  await expect(page.locator(".skill-col h3")).toHaveText(filled(d.skills, "group").map(g => g.group));
+  await expect(page.locator(".cert h3")).toHaveText(filled(d.certs, "name").map(c => c.name));
+  await expect(page.locator(".post h3")).toHaveText(postList(d).map(p => p.title)); // newest first
+  await expect(page.locator("#writeups .empty")).toHaveCount(postList(d).length ? 0 : 1);
+  await expect(page.locator(".sem h3")).toHaveText(filled(d.courses.semesters, "name").map(s => s.name));
+  await expect(page.locator("#intern-left")).toHaveText(`${month(d.internship.start)} – ${month(d.internship.end)}`);
+  await expect(page.locator(".hero-card .btn").first()).toBeVisible();
+  // nothing half-filled slips through as an empty heading or list item
+  expect(await page.locator("h2:empty, h3:empty, li:empty, b:empty").count()).toBe(0);
+}
+
+async function expectCompleteCV(page, d) {
+  const { main, side } = cvSections(d);
+  await expect(page.locator(".cv h2")).toHaveText([...main, ...side].map(([title]) => title));
+  for (const language of side.find(([t]) => t === "Languages")?.[1] ?? []) await expect(page.locator(".cv-side li", { hasText: language })).toHaveCount(1);
+  expect(await page.locator("h2:empty, h3:empty, li:empty, b:empty").count()).toBe(0);
+}
+
+// Today's content, plus two edits of it: one with more of everything (and a half-filled entry,
+// as Backstage's Add buttons make), one with optional parts emptied out.
+const more = () => {
+  const d = copyOfData();
+  d.certs.push({ name: "Test certificate", short: "TST", status: "earned" }, { name: "", short: "", status: "earned" });
+  d.cv.languages.push("German (basic)", "");
+  d.cv.projects.push({ title: "Home lab", dates: "2027", bullets: ["Built a lab"] }, { title: "" });
+  d.skills.push({ group: "", note: "", color: "teal", items: [] });
+  d.posts.push({ title: "An older write-up", date: "2025-01-01", tag: "Lab", summary: "Old", url: "writeups/hardening-this-site.html" });
+  d.posts.reverse(); // stored oldest first: the site must still list newest first
+  return d;
+};
+const less = () => {
+  const d = copyOfData();
+  Object.assign(d.cv, { languages: [], projects: [], experience: [] });
+  d.posts = [];
+  d.certs = [];
+  return d;
+};
+
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
 
   test("the home page shows all of its content", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator(".skill-col")).toHaveCount(data.skills.length);
-    await expect(page.locator(".cert")).toHaveCount(data.certs.length);
-    await expect(page.locator(".post")).toHaveCount(data.posts.length);
-    await expect(page.locator(".sem")).toHaveCount(data.courses.semesters.length);
-    await expect(page.locator("#hero-buttons, .hero-card .btn").first()).toBeVisible();
-    await expect(page.getByText("Jul 2026 – Jan 2027")).toBeVisible();
+    await expectCompleteHome(page, data);
     // controls that need a script are hidden, with a note where it matters
     await expect(page.locator("#toggle")).toBeHidden();
     await expect(page.locator("#flag-form")).toBeHidden();
@@ -98,8 +138,23 @@ test.describe("without JavaScript", () => {
 
   test("the CV is complete", async ({ page }) => {
     await page.goto("/cv.html");
-    await expect(page.locator(".cv h2")).toHaveText(["Profile", "Education", "Experience", "Projects", "Certifications", "Skills"]);
+    await expectCompleteCV(page, data);
     await expect(page.getByText(data.cv.summary)).toBeVisible();
     await expect(page.locator("#print-cv")).toBeHidden();
   });
+
+  for (const [name, content] of [["more", more], ["less", less]]) {
+    test(`pages follow edited content (${name})`, async ({ page }) => {
+      const d = content();
+      const site = await siteFrom(d);
+      try {
+        await page.goto(site.origin + "/");
+        await expectCompleteHome(page, d);
+        await page.goto(site.origin + "/cv.html");
+        await expectCompleteCV(page, d);
+      } finally {
+        site.close();
+      }
+    });
+  }
 });

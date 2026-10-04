@@ -13,7 +13,8 @@
  * - Like the public pages: no innerHTML, CSP + Trusted Types, and connect-src limited to GitHub's API.
  */
 (() => {
-  const OWNER = "Lectrik0", REPO = "Lectrik0.github.io", BRANCH = "main", PATH = "data/site.json";
+  const OWNER = "Lectrik0", REPO = "Lectrik0.github.io", BRANCH = "main", PATH = "data/site.json", SCHEMA_PATH = "data/site.schema.json";
+  const CHECKS_URL = `https://github.com/${OWNER}/${REPO}/actions`;
   const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
   const VAULT_KEY = "aa-backstage-vault";
   const ITERATIONS = 600000;
@@ -28,6 +29,8 @@
   let data = null;         // working copy
   let original = "";       // JSON of last published version
   let sha = null;          // blob sha for optimistic concurrency
+  let schema = null;       // data/site.schema.json, the rules CI checks the content with
+  let problems = null;     // what the last check found (null = no check shown yet)
   let tab = "profile";
   let idleTimer = null;
 
@@ -91,7 +94,11 @@
   const fromB64Utf8 = s => dec.decode(unb64(s.replace(/\s/g, "")));
 
   async function load() {
-    const f = await gh(`/contents/${PATH}?ref=${BRANCH}`);
+    const [f, s] = await Promise.all([
+      gh(`/contents/${PATH}?ref=${BRANCH}`),
+      gh(`/contents/${SCHEMA_PATH}?ref=${BRANCH}`).catch(() => null)
+    ]);
+    try { schema = s ? JSON.parse(fromB64Utf8(s.content)) : null; } catch (e) { schema = null; }
     sha = f.sha;
     original = JSON.stringify(JSON.parse(fromB64Utf8(f.content)), null, 1);
     data = JSON.parse(original);
@@ -113,7 +120,7 @@
   const A = (label, extra = {}) => ({ type: "textarea", label, ...extra });
   const STR_LIST = (label, extra = {}) => ({ type: "strings", label, ...extra });
   const LIST = (label, item, extra = {}) => ({ type: "list", label, item, ...extra });
-  const SEL = (label, options) => ({ type: "select", label, options });
+  const SEL = (label, options, extra = {}) => ({ type: "select", label, options, ...extra });
 
   const TABS = [
     { id: "profile", label: "Profile", fields: [
@@ -131,7 +138,7 @@
       ["courses", { type: "object", label: "University", fields: {
         university: T("University"), degree: T("Degree"), major: T("Major"),
         semesters: LIST("Semesters", {
-          name: T("Name"), status: SEL("Status", [["completed", "Completed"], ["current", "In progress"], ["upcoming", "Upcoming"]]),
+          name: T("Name"), status: SEL("Status", [["completed", "Completed"], ["current", "In progress"], ["upcoming", "Upcoming"]], { default: "upcoming" }),
           courses: LIST("Courses", { name: T("Course"), ects: T("ECTS", { kind: "number" }) }, { name: it => it.name || "New course", compact: true })
         }, { name: it => it.name || "New semester" }) } }]
     ] },
@@ -144,12 +151,12 @@
     { id: "certs", label: "Certifications", fields: [
       ["certs", LIST("Certifications", {
         name: T("Name"), short: T("Badge text (max 4 letters)", { max: 4 }),
-        status: SEL("Status", [["earned", "Earned"], ["progress", "In progress"], ["planned", "Planned"]]) }, { name: it => it.name || "New certification" })]
+        status: SEL("Status", [["earned", "Earned"], ["progress", "In progress"], ["planned", "Planned"]], { default: "planned" }) }, { name: it => it.name || "New certification" })]
     ] },
     { id: "posts", label: "Write-ups", fields: [
       ["posts", LIST("Write-ups", {
         title: T("Title"), date: T("Date", { kind: "date" }), tag: T("Tag"), summary: A("Summary"),
-        url: T("Link", { help: "A page on this site like writeups/my-lab.html, or an https:// link" }) }, { name: it => it.title || "New write-up", help: "Newest first. Drag to reorder." })]
+        url: T("Link", { help: "A page on this site like writeups/my-lab.html, or an https:// link" }) }, { name: it => it.title || "New write-up", help: "The site lists them newest first, by date." })]
     ] },
     { id: "cv", label: "CV", fields: [
       ["cv", { type: "object", label: "CV", fields: {
@@ -166,9 +173,9 @@
   let uid = 0;
   const nextId = () => `f${++uid}`;
 
-  function blankFor(schema) {
+  function blankFor(fields) {
     const o = {};
-    for (const [k, f] of Object.entries(schema)) o[k] = f.type === "list" || f.type === "strings" ? [] : f.type === "select" ? f.options[0][0] : f.kind === "number" ? 0 : "";
+    for (const [k, f] of Object.entries(fields)) o[k] = f.type === "list" || f.type === "strings" ? [] : f.type === "select" ? (f.default ?? f.options[0][0]) : f.kind === "number" ? 0 : "";
     return o;
   }
 
@@ -188,6 +195,7 @@
       obj[key] = f.kind === "number" ? (input.value === "" ? 0 : Number(input.value)) : input.value;
       changed();
     });
+    bindField(input, obj, key);
     return el("div", { class: `bs-field${f.type === "textarea" ? " wide" : ""}` },
       el("label", { for: id, text: f.label }), input, f.help ? el("small", { text: f.help }) : null);
   }
@@ -266,6 +274,7 @@
         const handle = el("span", { class: "bs-handle", "aria-hidden": "true", text: "⋮⋮" });
         const input = el("input", { type: "text", value: s, "aria-label": `${f.label} ${i + 1}`, class: f.long ? "long" : null });
         input.addEventListener("input", () => { list[i] = input.value; changed(); });
+        bindField(input, list, i);
         const chip = el("div", { class: `bs-chip${f.long ? " long" : ""}` }, handle, input,
           el("button", { type: "button", class: "bs-icon", "aria-label": "Move up", title: "Move up", text: "↑", on: { click: () => { if (move(list, i, i - 1)) draw(); } } }),
           el("button", { type: "button", class: "bs-icon danger", "aria-label": `Delete ${s}`, title: "Delete", text: "✕", on: { click: () => { list.splice(i, 1); changed(); draw(); } } }));
@@ -296,6 +305,83 @@
       return el("div", { class: "frame cut-a bs-block" }, el("div", { class: "in" }, el("h2", { text: f.label }), renderObject(data[key], f.fields)));
     });
     $("panel").replaceChildren(...blocks);
+    markInvalid();
+  }
+
+  /* ================= checks before publishing =================
+     The same rules CI applies (assets/content-check.js + data/site.schema.json), so content that
+     would fail on GitHub is caught here, with the field named, instead of failing silently later. */
+  const fields = new WeakMap();   // input element → the {obj, key} it edits
+  function bindField(input, obj, key) { fields.set(input, { obj, key }); input.dataset.field = ""; }
+
+  // The input that edits the value at `path` (only on the tab that's showing), or null.
+  function findInput(path) {
+    let parent = data;
+    for (const p of path.slice(0, -1)) parent = parent == null ? parent : parent[p];
+    const key = path[path.length - 1];
+    return [...document.querySelectorAll("#panel [data-field]")].find(n => {
+      const f = fields.get(n);
+      return f && f.obj === parent && f.key === key;
+    }) || null;
+  }
+
+  // ["certs", 4, "name"] → "Certifications › #5 (New certification) › Name"
+  function describe(path) {
+    const t = TABS.find(x => x.fields.some(([k]) => k === path[0]));
+    if (!t) return ContentCheck.formatPath(path);
+    let f = t.fields.find(([k]) => k === path[0])[1], value = data[path[0]];
+    const parts = [t.label];
+    const short = label => label.replace(/\s*\(.*\)$/, "");
+    for (const p of path.slice(1)) {
+      if (f && f.type === "object") { f = f.fields[p]; parts.push(f ? short(f.label) : String(p)); value = value == null ? value : value[p]; }
+      else if (f && f.type === "list") { const it = value && value[p]; parts.push(`#${p + 1}${f.name ? ` (${f.name(it || {}, p)})` : ""}`); f = { type: "object", fields: f.item }; value = it; }
+      else if (f && f.type === "strings") { parts.push(`#${p + 1}`); f = null; }
+      else parts.push(String(p));
+    }
+    if (f && f.type === "list" && parts.length === 1) parts.push(f.label);
+    return parts.join(" › ");
+  }
+
+  const tabFor = path => (TABS.find(x => x.fields.some(([k]) => k === path[0])) || TABS[0]).id;
+  const valueAt = path => path.reduce((v, p) => (v == null ? v : v[p]), data);
+  let linkProblems = [];
+
+  function contentProblems() {
+    const found = [...(schema ? ContentCheck.validate(schema, data) : []), ...ContentCheck.crossCheck(data)];
+    // a link problem stays until that link is edited (it's re-checked on the next publish)
+    return [...found, ...linkProblems.filter(p => valueAt(p.path) === p.value)];
+  }
+
+  // Asks GitHub whether each link to a page on this site points at a file that exists.
+  async function checkLinks() {
+    const results = await Promise.all(ContentCheck.localLinks(data).map(async l => {
+      try { await gh(`/contents/${l.file.split("/").map(encodeURIComponent).join("/")}?ref=${BRANCH}`); return null; }
+      catch (e) { return e.status === 404 ? { path: l.path, value: valueAt(l.path), message: `There's no page at ${l.file} yet. Add that page first, or use an https:// link.` } : null; }
+    }));
+    linkProblems = results.filter(Boolean);
+  }
+
+  function markInvalid() {
+    document.querySelectorAll("#panel [aria-invalid]").forEach(n => n.removeAttribute("aria-invalid"));
+    for (const p of problems || []) { const n = findInput(p.path); if (n) n.setAttribute("aria-invalid", "true"); }
+  }
+
+  function showProblems() {
+    const box = $("problems");
+    box.hidden = !problems || !problems.length;
+    $("problems-list").replaceChildren(...(problems || []).map(p => el("li", {},
+      el("b", { text: describe(p.path) }), " ", el("span", { text: p.message }), " ",
+      el("button", { type: "button", class: "linkish", text: "Show", on: { click: () => reveal(p.path) } }))));
+    markInvalid();
+  }
+
+  function reveal(path) {
+    if (tab !== tabFor(path)) { tab = tabFor(path); renderTab(); }
+    const n = findInput(path);
+    const target = n || $("panel");
+    for (let d = target.closest("details"); d; d = d.parentElement.closest("details")) d.open = true;
+    target.scrollIntoView({ block: "center" });
+    if (n) n.focus();
   }
 
   /* ================= state + status ================= */
@@ -305,18 +391,22 @@
     $("discard").disabled = !dirty;
     $("status").textContent = dirty ? "Unsaved changes" : "Up to date with the live site";
     $("status").dataset.state = dirty ? "dirty" : "clean";
+    if (problems) { problems = contentProblems(); showProblems(); }   // keep the list current while fixing
   }
   let toastTimer = null;
-  function toast(text, undo) {
+  function toast(text, undo, link) {
     const t = $("toast");
-    t.replaceChildren(document.createTextNode(text), undo ? el("button", { type: "button", class: "linkish", text: "Undo", on: { click: () => { undo(); t.hidden = true; } } }) : "");
+    t.replaceChildren(document.createTextNode(text),
+      undo ? el("button", { type: "button", class: "linkish", text: "Undo", on: { click: () => { undo(); t.hidden = true; } } }) : "",
+      link ? el("a", { href: link.href, target: "_blank", rel: "noopener noreferrer", text: link.text }) : "");
     t.hidden = false;
     clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => { t.hidden = true; }, undo ? 7000 : 5000);
+    toastTimer = setTimeout(() => { t.hidden = true; }, undo || link ? 9000 : 5000);
   }
 
   function lock(reason) {
-    token = null; data = null; original = ""; sha = null;
+    token = null; data = null; original = ""; sha = null; schema = null; problems = null; linkProblems = [];
+    showProblems();
     $("panel").replaceChildren();
     $("login-pass").value = "";
     say("login-msg", reason || "");
@@ -417,16 +507,33 @@
     lock();
   });
 
-  $("discard").addEventListener("click", () => { data = JSON.parse(original); renderTab(); changed(); toast("Changes discarded."); });
+  $("discard").addEventListener("click", () => {
+    data = JSON.parse(original); problems = null; linkProblems = [];
+    showProblems(); renderTab(); changed(); toast("Changes discarded.");
+  });
 
   $("publish").addEventListener("click", async () => {
     const b = $("publish");
     b.disabled = true;
+    $("status").textContent = "Checking…";
+    await checkLinks();
+    problems = contentProblems();
+    showProblems();
+    if (problems.length) {
+      b.disabled = false;
+      $("status").textContent = `Fix ${problems.length} problem${problems.length === 1 ? "" : "s"} before publishing`;
+      $("status").dataset.state = "dirty";
+      $("problems-h").focus();
+      return;
+    }
+    problems = null;
+    showProblems();
     $("status").textContent = "Publishing…";
     try {
       await publish();
       changed();
-      toast("Published. The site is checked and rebuilt, then goes live in a few minutes.");
+      toast("Published. GitHub now checks the content and rebuilds the site; it's live in a few minutes. ", null,
+        { href: CHECKS_URL, text: "Follow the checks" });
     } catch (e) {
       b.disabled = false;
       $("status").textContent = "Unsaved changes";
