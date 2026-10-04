@@ -136,7 +136,8 @@ function contactLinks(data, order) {
   // the first link that survives is the primary button
   return order.filter(k => all[k]("btn")).map((k, i) => all[k](i === 0 ? "btn" : "btn ghost"));
 }
-export const heroButtons = data => raw(contactLinks(data, ["cv", "li", "gh", "mail"]).join("\n"));
+// Email lives in the contact section and on the CV; a fourth hero button would wrap onto its own row.
+export const heroButtons = data => raw(contactLinks(data, ["cv", "li", "gh"]).join("\n"));
 export const contactButtons = data => raw(contactLinks(data, ["li", "mail", "gh", "cv"]).join("\n"));
 
 export function internship(data) {
