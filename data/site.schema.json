@@ -93,7 +93,8 @@
         "properties": {
           "name": { "$ref": "#/$defs/text" },
           "short": { "type": "string", "minLength": 1, "maxLength": 7 },
-          "status": { "enum": ["earned", "progress", "planned"] }
+          "status": { "enum": ["earned", "progress", "planned"] },
+          "verify": { "description": "Needs an https:// link, like your Credly badge, or leave it empty.", "anyOf": [{ "const": "" }, { "$ref": "#/$defs/httpsUrl" }] }
         }
       }
     },

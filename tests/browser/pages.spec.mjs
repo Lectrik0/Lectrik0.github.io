@@ -81,6 +81,12 @@ test.describe("search engines and link previews", () => {
 // What the pages must show is worked out from the content, never typed in here, so editing the
 // content (e.g. adding a language in Backstage) can't make these tests fail.
 const filled = (list, key) => list.filter(x => String(x[key] ?? "").trim());
+// Earned certifications with a proof link get a Verify link, on the home page and the CV.
+async function expectVerifyLinks(page, d, scope) {
+  const verified = filled(d.certs, "name").filter(c => c.status === "earned" && /^https:\/\//.test(c.verify ?? ""));
+  await expect(page.locator(`${scope} a.verify`)).toHaveCount(verified.length);
+  for (const c of verified) await expect(page.locator(scope).getByRole("link", { name: `Verify ${c.name}` })).toHaveAttribute("href", c.verify);
+}
 const month = d => new Date(d).toLocaleDateString("en-GB", { month: "short", year: "numeric", timeZone: "UTC" });
 
 async function expectCompleteHome(page, d) {
@@ -106,7 +112,8 @@ async function expectCompleteCV(page, d) {
 // as Backstage's Add buttons make), one with optional parts emptied out.
 const more = () => {
   const d = copyOfData();
-  d.certs.push({ name: "Test certificate", short: "TST", status: "earned" }, { name: "", short: "", status: "earned" });
+  d.certs.push({ name: "Test certificate", short: "TST", status: "earned", verify: "https://www.credly.com/badges/test" }, { name: "", short: "", status: "earned" },
+    { name: "Planned with a link", short: "PWL", status: "planned", verify: "https://www.credly.com/badges/later" });
   d.cv.languages.push("German (basic)", "");
   d.cv.projects.push({ title: "Home lab", dates: "2027", bullets: ["Built a lab"] }, { title: "" });
   d.skills.push({ group: "", note: "", color: "teal", items: [] });
@@ -150,8 +157,10 @@ test.describe("without JavaScript", () => {
       try {
         await page.goto(site.origin + "/");
         await expectCompleteHome(page, d);
+        await expectVerifyLinks(page, d, "#certs");
         await page.goto(site.origin + "/cv.html");
         await expectCompleteCV(page, d);
+        await expectVerifyLinks(page, d, ".cv-side");
       } finally {
         site.close();
       }

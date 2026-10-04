@@ -16,7 +16,8 @@
     "lint": "html-validate \"*.html\" \"writeups/*.html\" \"backstage/*.html\"",
     "test": "node --test tests/unit/*.test.mjs",
     "test:browser": "playwright test",
-    "og": "node scripts/og.mjs"
+    "og": "node scripts/og.mjs",
+    "pdf": "node scripts/cv-pdf.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

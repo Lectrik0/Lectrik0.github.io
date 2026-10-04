@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
-import { PAGES } from "./helpers.mjs";
+import { PAGES, copyOfData, siteFrom } from "./helpers.mjs";
 
 // axe injects its own script, which the site's CSP would rightly block, so these runs bypass CSP.
 test.use({ bypassCSP: true });
@@ -22,6 +22,20 @@ for (const scheme of ["light", "dark"]) {
       expect(problems, problems.join("\n")).toEqual([]);
     });
   }
+
+  test(`an earned certification with a Verify link is accessible (${scheme})`, async ({ page }) => {
+    const d = copyOfData();
+    d.certs.unshift({ name: "Test certificate", short: "TST", status: "earned", verify: "https://www.credly.com/badges/test" });
+    const site = await siteFrom(d);
+    try {
+      await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+      await page.goto(site.origin + "/");
+      const problems = await seriousProblems(page, "#certs");
+      expect(problems, problems.join("\n")).toEqual([]);
+    } finally {
+      site.close();
+    }
+  });
 
   test(`course list and flag messages are accessible (${scheme})`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });

@@ -2,7 +2,7 @@ name: CI
 
 # Pull requests: check that the pages are built and everything passes.
 # Pushes to main (including Backstage edits of data/site.json): rebuild the pages, test them, and
-# commit the rebuilt pages so GitHub Pages serves them. If anything fails, nothing is published
+# commit the rebuilt pages (and the CV as a PDF) so GitHub Pages serves them. If anything fails, nothing is published
 # and the live site stays as it was.
 on:
   pull_request:
@@ -52,8 +52,22 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
 
-      - name: Browser tests (errors, CSP, links, no-JS, accessibility, XSS)
+      - name: Browser tests (errors, CSP, links, no-JS, accessibility, XSS, CV PDF)
         run: npm run test:browser
+
+      # The CV's "Download PDF" file, rendered from the pages just tested. The publish job commits it.
+      - name: Render the CV as a PDF
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: npm run pdf
+
+      - name: Hand the PDF to the publish job
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: cv-pdf
+          path: cv.pdf
+          if-no-files-found: error
+          retention-days: 1
 
   publish:
     needs: test
@@ -66,6 +80,11 @@ jobs:
     steps:
       - name: Check out
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Get the CV PDF
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: cv-pdf
 
       - name: Commit rebuilt pages
         id: commit

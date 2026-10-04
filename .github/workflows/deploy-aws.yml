@@ -39,11 +39,16 @@ jobs:
           npm run build
           npm test
 
+      - name: Render the CV as a PDF
+        run: |
+          npx playwright install --with-deps chromium
+          npm run pdf
+
       - name: Collect the public files
         run: |
           set -euo pipefail
           mkdir _site
-          cp -r index.html cv.html 404.html robots.txt sitemap.xml feed.xml assets writeups backstage .well-known _site/
+          cp -r index.html cv.html cv.pdf 404.html robots.txt sitemap.xml feed.xml assets writeups backstage .well-known _site/
 
       - name: Get short-lived AWS credentials
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0
@@ -57,15 +62,17 @@ jobs:
         run: |
           set -euo pipefail
           # Assets first (cached for a day; pages link them with ?v= stamps, so a changed file is fetched fresh),
-          # then pages, feeds and text files, which browsers revalidate on every visit.
+          # then pages, feeds, text files and the CV PDF, which browsers revalidate on every visit.
           aws s3 sync . "s3://${SITE_BUCKET}" --delete --only-show-errors \
-            --exclude "*.html" --exclude "*.xml" --exclude "*.txt" --cache-control "public, max-age=86400"
+            --exclude "*.html" --exclude "*.xml" --exclude "*.txt" --exclude "*.pdf" --cache-control "public, max-age=86400"
           aws s3 sync . "s3://${SITE_BUCKET}" --only-show-errors \
             --exclude "*" --include "*.html" --cache-control "no-cache" --content-type "text/html; charset=utf-8"
           aws s3 sync . "s3://${SITE_BUCKET}" --only-show-errors \
             --exclude "*" --include "*.xml" --cache-control "no-cache" --content-type "application/xml; charset=utf-8"
           aws s3 sync . "s3://${SITE_BUCKET}" --only-show-errors \
             --exclude "*" --include "*.txt" --cache-control "no-cache" --content-type "text/plain; charset=utf-8"
+          aws s3 sync . "s3://${SITE_BUCKET}" --only-show-errors \
+            --exclude "*" --include "*.pdf" --cache-control "no-cache" --content-type "application/pdf"
 
       - name: Refresh CloudFront
         run: aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths "/*" --query Invalidation.Id --output text
