@@ -164,6 +164,8 @@ svg *{transition:fill .5s,stroke .5s}
 .cert.progress .hex{stroke-dasharray:10 6}
 .cert.planned .hex{stroke-dasharray:3 6}
 .cert .hex-t{font:700 15px var(--f-display);fill:var(--c);text-anchor:middle}
+.cert .hex-t.long{font-size:13px}
+.cert .hex-t.longer{font-size:11px}
 .cert.earned .hex-t{fill:var(--panel)}
 
 /* write-ups */

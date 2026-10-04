@@ -74,7 +74,7 @@ test("Backstage's checker and CI's checker agree on every kind of edit", () => {
 
 test("problems come with plain-language messages", () => {
   const data = clone(base);
-  data.certs.push({ name: "", short: "TOOLONG", status: "earned" });
+  data.certs.push({ name: "", short: "TOO-LONG", status: "earned" });
   data.posts[0].date = "2026-13-01";
   data.posts[0].url = "javascript:alert(1)";
   data.profile.email = "not an email";
@@ -84,7 +84,7 @@ test("problems come with plain-language messages", () => {
   const got = Object.fromEntries(validate(schema, data).map(p => [formatPath(p.path), p.message]));
   assert.deepEqual(got, {
     [`certs › #${n + 1} › name`]: "Can't be empty.",
-    [`certs › #${n + 1} › short`]: "Can be at most 4 characters.",
+    [`certs › #${n + 1} › short`]: "Can be at most 7 characters.",
     "posts › #1 › date": "Needs a date, like 2026-10-04.",
     "posts › #1 › url": "Needs an https:// link, or a page on this site such as cv.html or writeups/my-lab.html.",
     "profile › email": "Needs a valid email address, or leave it empty to hide it.",
