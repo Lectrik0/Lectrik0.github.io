@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Hardening a static site – Ali Ahmed</title>
+<meta name="description" content="Issue #1: how this static site blocks XSS with CSP and Trusted Types, and how it was tested.">
+<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+<script src="../assets/main.js" defer></script>
+</head>
+<body>
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="../index.html">Ali Ahmed</a>
+    <ul>
+      <li><a href="../index.html#story">Story</a></li>
+      <li><a href="../index.html#skills">Skills</a></li>
+      <li><a href="../index.html#writeups">Write-ups</a></li>
+      <li><a href="../index.html#flags">Flags</a></li>
+      <li><a href="../cv.html">CV</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+    </ul>
+    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode">
+      <svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"/></svg>
+      <span id="toggle-label">Night</span>
+    </button>
+  </div>
+</nav>
+<main>
+  <header class="page-head wrap">
+    <a class="back" href="../index.html#writeups">Back to write-ups</a>
+    <span class="caption">Issue #1 &nbsp;/&nbsp; <time datetime="2026-10-04">4 October 2026</time></span>
+    <h1>Hardening a static site</h1>
+    <p class="lede">This site has no backend, no login and no database. It can still be attacked. Here's what could go wrong, what I changed, and how I tested it.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="strip">
+      <figure class="frame cut-a"><div class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="A web page with a script tag sneaking into it">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="40" y="30" width="200" height="170" class="f-panel ink"/>
+          <rect x="40" y="30" width="200" height="24" class="mid ink"/>
+          <g class="win"><circle cx="56" cy="42" r="4"/><circle cx="70" cy="42" r="4"/><circle cx="84" cy="42" r="4"/></g>
+          <path d="M60 80 h150 M60 100 h150 M60 120 h110 M60 140 h140" class="ink-thin" stroke-width="4"/>
+          <g transform="rotate(-8 270 150)">
+            <rect x="196" y="132" width="132" height="40" class="f-purple ink"/>
+            <text x="262" y="158" class="mono-t" text-anchor="middle" fill="var(--panel)">&lt;script&gt;</text>
+          </g>
+          <path d="M330 120 l-22 8 l6 -20" fill="none" class="ink" stroke-width="3"/>
+          <text x="300" y="104" class="sfx" text-anchor="middle">sneak</text>
+        </svg>
+        <figcaption class="cap"><b>The problem</b><span>Any text that gets into the page as HTML can run code in a visitor's browser.</span></figcaption>
+      </div></figure>
+
+      <figure class="frame cut-b"><div class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Attack payloads flying toward the page">
+          <rect width="360" height="230" class="sky-b"/>
+          <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
+          <path d="M246 70 h68 M246 90 h68 M246 110 h48" class="ink-thin" stroke-width="4"/>
+          <g class="ink">
+            <rect x="20" y="40" width="150" height="34" class="cloud"/>
+            <rect x="40" y="100" width="150" height="34" class="cloud"/>
+            <rect x="16" y="160" width="150" height="34" class="cloud"/>
+          </g>
+          <text x="95" y="63" class="mono-t" text-anchor="middle" fill="var(--purple)">&lt;img onerror&gt;</text>
+          <text x="115" y="123" class="mono-t" text-anchor="middle" fill="var(--purple)">javascript:</text>
+          <text x="91" y="183" class="mono-t" text-anchor="middle" fill="var(--purple)">&lt;svg onload&gt;</text>
+          <path d="M176 57 h40 M196 117 h28 M172 177 h44" class="ink" stroke-width="3" stroke-dasharray="6 6"/>
+        </svg>
+        <figcaption class="cap"><b>The attack</b><span>I fed classic XSS payloads into the site's own content to see what would run.</span></figcaption>
+      </div></figure>
+
+      <figure class="frame cut-c"><div class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="A shield labelled CSP blocking the payloads">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
+          <path d="M246 70 h68 M246 90 h68 M246 110 h48" class="ink-thin" stroke-width="4"/>
+          <path d="M150 40 l52 20 v46 c0 38 -24 60 -52 72 c-28 -12 -52 -34 -52 -72 v-46z" class="f-teal ink"/>
+          <text x="150" y="122" text-anchor="middle" font-family="var(--f-display)" font-weight="700" font-size="26" fill="var(--panel)">CSP</text>
+          <g class="ink" stroke-width="4"><path d="M30 60 l30 30 M60 60 l-30 30"/><path d="M40 150 l30 30 M70 150 l-30 30"/></g>
+          <text x="150" y="214" class="sfx" text-anchor="middle">blocked.</text>
+        </svg>
+        <figcaption class="cap"><b>The fix</b><span>Render everything as text, and let the browser enforce it with CSP and Trusted Types.</span></figcaption>
+      </div></figure>
+    </div>
+
+    <article class="prose">
+      <h2>Why a static site still needs security</h2>
+      <p>It's easy to think a static site has nothing to attack. There's no server code to exploit and no database to dump. But the page runs JavaScript in every visitor's browser, and that's where cross-site scripting (XSS) happens.</p>
+      <p>My site builds parts of the page from data: skills, certifications and the list of write-ups. The first version inserted that data with <code>innerHTML</code>. That's fine while I write all the data myself, but one bad title or link copied from somewhere else would run as code for everyone who opens the page.</p>
+
+      <h2>What could go wrong</h2>
+      <ul>
+        <li><b>XSS through content:</b> a write-up title like <code>&lt;img src=x onerror=...&gt;</code> runs as soon as the page renders it.</li>
+        <li><b>Malicious links:</b> a <code>javascript:</code> or <code>data:</code> URL in a link runs code when someone clicks it.</li>
+        <li><b>Third-party code:</b> fonts or scripts loaded from other domains can change, track visitors, or be compromised.</li>
+        <li><b>Reverse tabnabbing:</b> a site opened in a new tab can redirect my original tab.</li>
+      </ul>
+
+      <h2>What I changed</h2>
+      <p><b>1. Content is always text, never HTML.</b> Every element is built with <code>createElement</code> and filled with <code>textContent</code>. The browser treats the data as text, so markup inside it is shown, not run.</p>
+      <p><b>2. A strict Content Security Policy.</b> The browser only loads scripts, styles, fonts and images from my own site. Inline scripts, <code>eval</code>, plugins and forms are all blocked.</p>
+<pre><code>default-src 'none'; script-src 'self'; style-src 'self';
+font-src 'self'; img-src 'self'; connect-src 'none';
+object-src 'none'; base-uri 'none'; form-action 'none';
+require-trusted-types-for 'script'; trusted-types 'none'</code></pre>
+      <p><b>3. Trusted Types.</b> The last two lines of the policy make the browser refuse any raw HTML assignment, such as <code>innerHTML</code>. Even if a future edit of mine reintroduced the old pattern, it would throw an error instead of creating a hole.</p>
+      <p><b>4. A URL allow-list.</b> Every link goes through one function before it reaches the page. Only <code>https:</code> links and paths on my own site get through.</p>
+<pre><code>function safeUrl(value) {
+  const u = new URL(value, location.href);
+  if (u.protocol === "https:") return u.href;
+  if (u.origin === location.origin) return u.href;
+  return null; // javascript:, data:, anything else is dropped
+}</code></pre>
+      <p><b>5. No third parties.</b> The fonts are self-hosted, and the site makes no requests to any other domain. There's no outside code to trust and no tracking of visitors.</p>
+      <p><b>6. The small things.</b> Outbound links use <code>rel="noopener noreferrer"</code>, the referrer policy is <code>no-referrer</code>, and <code>/.well-known/security.txt</code> tells people how to report a problem.</p>
+
+      <h2>How I tested it</h2>
+      <p>I put real payloads into the site's data, served it locally, and loaded it in Chromium with the policy active.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Payload</th><th>Where</th><th>Result</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;img src=x onerror=...&gt;</code></td><td>Write-up title</td><td class="ok">Shown as text</td></tr>
+          <tr><td><code>&lt;script&gt;...&lt;/script&gt;</code></td><td>Write-up tag</td><td class="ok">Shown as text</td></tr>
+          <tr><td><code>"&gt;&lt;svg onload=...&gt;</code></td><td>Write-up summary</td><td class="ok">Shown as text</td></tr>
+          <tr><td><code>javascript:...</code></td><td>Write-up link and CV link</td><td class="ok">Link removed</td></tr>
+          <tr><td><code>data:text/html,...</code></td><td>Write-up link</td><td class="ok">Link removed</td></tr>
+          <tr><td>Inline <code>&lt;script&gt;</code> in the HTML</td><td>Page source</td><td class="ok">Blocked by CSP</td></tr>
+          <tr><td><code>eval()</code></td><td>Site script</td><td class="ok">Blocked by CSP</td></tr>
+          <tr><td><code>innerHTML</code> assignment</td><td>Live page</td><td class="ok">Blocked by Trusted Types</td></tr>
+        </tbody>
+      </table></div>
+      <p>None of the payloads ran. I repeated the last check on the live site after deploying it.</p>
+
+      <h2>What's still missing</h2>
+      <p>GitHub Pages doesn't let you set HTTP response headers. Some protections only work as headers, not as a <code>&lt;meta&gt;</code> tag: <code>frame-ancestors</code> against clickjacking, <code>Strict-Transport-Security</code> and <code>Permissions-Policy</code>. The risk is low because the site has nothing to click-trick anyone into, but it's still a gap.</p>
+      <p>The fix is to serve the site from somewhere I control the headers. That's the next issue.</p>
+    </article>
+
+    <div class="frame cut-b next"><div class="in">
+      <h3>Next: Issue #2, moving this site to AWS</h3>
+      <p>S3 and CloudFront with security response headers, deployed from GitHub Actions without any stored AWS keys.</p>
+    </div></div>
+  </div>
+</main>
+
+<footer><div class="wrap"><span>Ali Ahmed, Cairo</span><span id="year">2026</span></div></footer>
+</body>
+</html>
