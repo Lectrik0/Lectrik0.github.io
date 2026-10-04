@@ -1,24 +1,78 @@
-# lectrik0.github.io
+<p align="center">
+  <a href="https://lectrik0.github.io"><img src="assets/og.png" width="760" alt="Ali Ahmed: cybersecurity student building toward a career in cloud security. lectrik0.github.io"></a>
+</p>
 
-Personal site of **Ali Ahmed**, a cybersecurity student building toward cloud security.
-Live at https://lectrik0.github.io
+<p align="center">
+  <a href="https://lectrik0.github.io"><b>Visit the site</b></a> ·
+  <a href="https://lectrik0.github.io/cv.html"><b>CV</b></a> ·
+  <a href="https://lectrik0.github.io/writeups/hardening-this-site.html"><b>Latest write-up</b></a>
+</p>
 
-It's a static site with no backend, no third-party scripts and no tracking. All content lives in one file, [`data/site.json`](data/site.json). A small build script with no dependencies renders it into plain HTML, so every page works (and is readable by search engines and link previews) without JavaScript.
+<p align="center">
+  <a href="https://github.com/Lectrik0/Lectrik0.github.io/actions/workflows/ci.yml"><img src="https://github.com/Lectrik0/Lectrik0.github.io/actions/workflows/ci.yml/badge.svg" alt="Automated checks"></a>
+  <img src="https://img.shields.io/badge/trackers-0-157A4B" alt="Trackers: 0">
+  <img src="https://img.shields.io/badge/third--party_requests-0-157A4B" alt="Third-party requests: 0">
+  <img src="https://img.shields.io/badge/works_without-JavaScript-0B706D" alt="Works without JavaScript">
+</p>
 
-## How it's built
+## 👋 In plain words
 
+This is the personal website of **Ali Ahmed**, a final-year cybersecurity student in Cairo. It tells the story so far: university, an internship at a bank, and the road to cloud security, with skills, certifications, write-ups and a printable CV.
+
+The site is also a security project in its own right. It was built from scratch, locked down the way a real company would protect its website, and every change is tested automatically before it goes live.
+
+## 🗺️ What's on the site
+
+| Page | What you'll find |
+|---|---|
+| [Home](https://lectrik0.github.io) | The story so far (open Chapter 1 for every university course), skills, certifications, write-ups, hidden flags and contact links |
+| [CV](https://lectrik0.github.io/cv.html) | A one-page CV that prints cleanly or saves as a PDF |
+| [Write-ups](https://lectrik0.github.io/#writeups) | Hands-on security projects, each told as a comic-book "issue" |
+
+## ✨ What makes it different
+
+- ⚡ **Fast and light.** Plain web pages with no frameworks and nothing heavy to download.
+- 🕶️ **Private.** No tracking, no ads, and no requests to any other website. Even the fonts come from this site.
+- 🛡️ **Secure by design.** Even if harmful code slipped into the content, the browser is told never to run it. Real attack examples are thrown at the site on every change to prove it.
+- ♿ **Works for everyone.** Day and night mode, readable with JavaScript turned off, and checked automatically for accessibility problems.
+- 🔗 **Looks good when shared.** Links posted on LinkedIn, Slack or X show a preview card like the picture above.
+- ✏️ **Easy to update.** A private, password-locked editing page called *Backstage* lets Ali change the content from a browser, with no code.
+
+## 🔄 How an update goes live
+
+```mermaid
+flowchart LR
+    edit["✏️ Ali edits the content<br>in Backstage"] --> check{"Content<br>checks pass?"}
+    check -- "no: shows what to fix" --> edit
+    check -- yes --> save["💾 Saved to GitHub"]
+    save --> tests{"🤖 About 70<br>automated tests"}
+    tests -- pass --> live["🌐 Site rebuilt and<br>live in minutes"]
+    tests -- fail --> same["🔒 Live site stays<br>as it was"]
 ```
-data/site.json ──► scripts/build.mjs ──► index.html, cv.html, writeups/*.html, 404.html   (content filled in)
-   (Backstage                         ├► sitemap.xml, feed.xml, robots.txt
-    or by hand)                       └► .well-known/security.txt                          (Contact lines)
-```
 
-- The HTML files stay hand-written: the drawings, layout and write-ups are edited directly. The build only rewrites what comes from data:
-  - regions between `<!-- build:name -->` and `<!-- /build:name -->` (nav, footer, `<head>` meta tags, skills, certifications, write-ups, course list, CV),
-  - the text of elements marked `data-bind="..."` (story chapters, tagline, CV headline),
-  - `?v=` version stamps on CSS/JS/image links, so a browser never mixes a new page with an old cached stylesheet.
-- The output is committed, so GitHub Pages serves the repo as-is. The build is deterministic: run it twice and nothing changes.
-- [`assets/main.js`](assets/main.js) only adds behaviour on top: day/night toggle, flag checker, internship countdown, motion. Without it, the toggle and flag checker are hidden ([`assets/nojs.css`](assets/nojs.css)) and the course list still opens through the buttons' `command` attributes in current browsers.
+A mistake can't break the live site: if any check fails, nothing is published and GitHub sends an email about the failed check.
+
+## 🛡️ Security in plain words
+
+| The risk | What stops it |
+|---|---|
+| Someone sneaks harmful code into the page (XSS) | All content is treated as plain text, and the browser is told to block any script that isn't part of the site. |
+| A dangerous link gets added | Only safe kinds of links are allowed: secure web links, email, and pages on this site. |
+| A website it depends on gets hacked | It depends on none: no outside scripts, fonts or trackers. |
+| Someone tries to use the editing page | The editing key is encrypted with a password, kept only on Ali's own device, and forgotten after 30 idle minutes. |
+| A broken edit goes live | About 70 automated tests run first. If any fail, the live site stays as it was. |
+
+Found a security problem? [`security.txt`](.well-known/security.txt) says how to report it.
+
+## 🚩 Hidden flags
+
+Four flags are hidden around the site, capture-the-flag style. Found one? Enter it in the flag checker on the home page. The checker only stores fingerprints (SHA-256 hashes) of the answers, so reading its code won't give them away.
+
+---
+
+## 🧰 For developers
+
+All content lives in one file, [`data/site.json`](data/site.json). A small build script with no dependencies renders it into plain HTML, so every page is complete without JavaScript (and readable by search engines and link previews). GitHub Pages serves the repo as-is.
 
 ```sh
 npm install            # dev tools only; the build itself needs nothing but Node.js 20+
@@ -32,9 +86,26 @@ npm run test:browser   # Playwright: errors, CSP, links, no-JS, accessibility, X
 npm run og             # re-render assets/og.png, the link preview image
 ```
 
-## Security
+<details>
+<summary><b>How the build works</b></summary>
 
-Even a static site can be attacked through XSS, malicious links or third-party scripts. This one is hardened like this:
+```
+data/site.json ──► scripts/build.mjs ──► index.html, cv.html, writeups/*.html, 404.html   (content filled in)
+   (Backstage                         ├► sitemap.xml, feed.xml, robots.txt
+    or by hand)                       └► .well-known/security.txt                          (Contact lines)
+```
+
+- The HTML files stay hand-written: the drawings, layout and write-ups are edited directly. The build only rewrites what comes from data:
+  - regions between `<!-- build:name -->` and `<!-- /build:name -->` (nav, footer, `<head>` meta tags, skills, certifications, write-ups, course list, CV),
+  - the text of elements marked `data-bind="..."` (story chapters, tagline, CV headline),
+  - `?v=` version stamps on CSS/JS/image links, so a browser never mixes a new page with an old cached stylesheet.
+- The output is committed. The build is deterministic: run it twice and nothing changes.
+- [`assets/main.js`](assets/main.js) only adds behaviour on top: day/night toggle, flag checker, internship countdown, motion. Without it, the toggle and flag checker are hidden ([`assets/nojs.css`](assets/nojs.css)) and the course list still opens through the buttons' `command` attributes in current browsers.
+
+</details>
+
+<details>
+<summary><b>Security controls in detail</b></summary>
 
 | Control | How it's done here |
 |---|---|
@@ -52,7 +123,10 @@ Even a static site can be attacked through XSS, malicious links or third-party s
 
 **Known limitation on GitHub Pages:** it doesn't allow custom HTTP response headers, so `frame-ancestors` / `X-Frame-Options`, `Permissions-Policy`, HSTS and `X-Content-Type-Options` can't be set there. The AWS setup below adds all of them.
 
-## Checks (CI)
+</details>
+
+<details>
+<summary><b>Automated checks (CI)</b></summary>
 
 [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every pull request and every push to `main`:
 
@@ -65,7 +139,29 @@ Even a static site can be attacked through XSS, malicious links or third-party s
 
 The tests check the site *against* the content rather than freezing today's content: what each page must show is worked out from `data/site.json`, and the content checks also run on copies of the site built from edited content (more entries, fewer entries, half-filled entries, write-ups stored out of order). So editing the content can't make a test fail unless the edit itself is a problem.
 
-## Hosting on AWS (`infra/`)
+</details>
+
+<details>
+<summary><b>Editing content and Backstage</b></summary>
+
+Edit [`data/site.json`](data/site.json), run `npm run build`, and commit both. Or use the private editor page, which needs no server and keeps no secrets in this repo:
+
+- The real key is a GitHub fine-grained token that can only write to this repo's contents.
+- On first use the token is encrypted in the browser (AES-GCM-256, key from the password via PBKDF2-SHA256 with 600,000 rounds, username bound as authenticated data) and stored only on that device. The username, password and token are never stored in plain text or sent anywhere except the token to GitHub's API.
+- Unlocking decrypts the token into memory; locking, closing the tab or 30 idle minutes forgets it. Wrong attempts are slowed down.
+- Before publishing, Backstage checks the content with the same rules CI uses ([`assets/content-check.js`](assets/content-check.js) + the schema, and asks GitHub whether linked pages exist). Problems are listed by field, with a *Show* button that jumps to it, and nothing is published until they're fixed.
+- Publishing commits `data/site.json` through the GitHub API. CI then checks it again, rebuilds the pages and publishes them, usually within a few minutes; Backstage links to the run. If a check still fails there, GitHub emails the failed run and the live site doesn't change.
+- Half-filled entries never break a page: the build leaves out an entry whose name or title is empty, and write-ups are always listed newest first by date.
+- The editor page has its own CSP that only allows connections to `api.github.com`, and Trusted Types like the rest of the site.
+
+Anyone can load the editor page, but without the encrypted token on their own device and the password, it can't do anything.
+
+A new write-up is a new HTML page in `writeups/` (copy the existing one, keeping its `build:` markers) plus an entry in the Write-ups list. The build adds it to the home page, the feed and the sitemap, and gives it link-preview tags.
+
+</details>
+
+<details>
+<summary><b>Hosting on AWS (<code>infra/</code>)</b></summary>
 
 [`infra/site.yaml`](infra/site.yaml) is a CloudFormation template for serving the same site from AWS:
 
@@ -79,11 +175,10 @@ The tests check the site *against* the content rather than freezing today's cont
 
 The editor page gets its own header policy (CSP that also allows `api.github.com`, no caching, `noindex`). The template passes `cfn-lint`.
 
-## Hidden flags
+</details>
 
-There are four flags hidden on the site. The checker on the home page compares SHA-256 hashes in the browser, so the flags aren't readable from the code that checks them.
-
-## Pages
+<details>
+<summary><b>Every page and file</b></summary>
 
 | Path | What |
 |---|---|
@@ -94,19 +189,7 @@ There are four flags hidden on the site. The checker on the home page compares S
 | `/feed.xml` | Atom feed of the write-ups |
 | `/sitemap.xml`, `/robots.txt` | For search engines |
 | `/assets/og.png` | Link preview image (1200×630) used by LinkedIn, Slack, X and others |
+| `/.well-known/security.txt` | How to report a security issue |
+| `/backstage/` | The private editor (not indexed by search engines) |
 
-## Editing content
-
-All content (profile, story text, courses, skills, certifications, write-ups, CV) lives in [`data/site.json`](data/site.json). Edit it, run `npm run build`, and commit both. Or use the private editor page, which needs no server and keeps no secrets in this repo:
-
-- The real key is a GitHub fine-grained token that can only write to this repo's contents.
-- On first use the token is encrypted in the browser (AES-GCM-256, key from the password via PBKDF2-SHA256 with 600,000 rounds, username bound as authenticated data) and stored only on that device. The username, password and token are never stored in plain text or sent anywhere except the token to GitHub's API.
-- Unlocking decrypts the token into memory; locking, closing the tab or 30 idle minutes forgets it. Wrong attempts are slowed down.
-- Before publishing, Backstage checks the content with the same rules CI uses ([`assets/content-check.js`](assets/content-check.js) + the schema, and asks GitHub whether linked pages exist). Problems are listed by field, with a *Show* button that jumps to it, and nothing is published until they're fixed.
-- Publishing commits `data/site.json` through the GitHub API. CI then checks it again, rebuilds the pages and publishes them, usually within a few minutes; Backstage links to the run. If a check still fails there, GitHub emails the failed run and the live site doesn't change.
-- Half-filled entries never break a page: the build leaves out an entry whose name or title is empty, and write-ups are always listed newest first by date.
-- The editor page has its own CSP that only allows connections to `api.github.com`, and Trusted Types like the rest of the site.
-
-Anyone can load the editor page, but without the encrypted token on their own device and the password, it can't do anything.
-
-A new write-up is a new HTML page in `writeups/` (copy the existing one, keeping its `build:` markers) plus an entry in the Write-ups list. The build adds it to the home page, the feed and the sitemap, and gives it link-preview tags.
+</details>
