@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>CV – Ali Ahmed</title>
@@ -31,14 +31,12 @@
 </nav>
 <main>
   <header class="page-head wrap">
-    <h1>Ali Ahmed</h1>
-    <p class="lede">Final-year cybersecurity student focused on cloud security.</p>
-    <ul class="contact-list">
+    <h1 id="cv-name">Ali Ahmed</h1>
+    <p class="lede" id="cv-headline">Final-year cybersecurity student focused on cloud security.</p>
+    <ul class="contact-list" id="cv-contact">
       <li>Cairo, Egypt</li>
-      <li><a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer" data-print="">linkedin.com/in/aliahmed255</a></li>
-      <li><a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer" data-print="">github.com/Lectrik0</a></li>
-      <li><a href="index.html" data-print="">lectrik0.github.io</a></li>
-      <!-- Add your email here when you want it public, e.g. <li>you@example.com</li> -->
+      <li><a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer">linkedin.com/in/aliahmed255</a></li>
+      <li><a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer">github.com/Lectrik0</a></li>
     </ul>
     <div class="btns no-print">
       <button class="btn" id="print-cv" type="button">Print or save as PDF</button>
@@ -46,65 +44,10 @@
   </header>
 
   <div class="wrap cv">
-    <div class="frame cut-a cv-main"><div class="in">
-      <section>
-        <h2>Profile</h2>
-        <p>Final-year B.Sc. Cybersecurity student building toward a career in cloud security. Studying for AWS Certified Cloud Practitioner and documenting hands-on cloud and web security work publicly on my site and GitHub.</p>
-      </section>
-
-      <section>
-        <h2>Education</h2>
-        <div class="item">
-          <div class="item-top"><b>B.Sc. Cybersecurity, GIU</b><span>Expected 2027</span></div>
-          <p>Final year. Networks, operating systems, cryptography and secure systems.</p>
-          <!-- Add: full university name, graduation month, GPA if strong, relevant courses or graduation project -->
-        </div>
-      </section>
-
-      <section>
-        <h2>Experience</h2>
-        <div class="item">
-          <div class="item-top"><b>Intern, Ebank</b><span>Jul 2026 – Jan 2027</span></div>
-          <p>Six-month internship in a banking IT environment.</p>
-          <!-- Add 2–3 bullets on what you did or learned there, e.g.
-          <ul><li>...</li></ul> -->
-        </div>
-      </section>
-
-      <section>
-        <h2>Projects</h2>
-        <div class="item">
-          <div class="item-top"><b>Personal site: lectrik0.github.io</b><span>2026</span></div>
-          <ul>
-            <li>Built a static portfolio with a strict Content Security Policy and Trusted Types, blocking XSS by design.</li>
-            <li>Tested it against XSS payloads (event-handler, script and <code>javascript:</code> URL injection); none executed.</li>
-            <li>Self-hosted all assets (zero third-party requests) and published an RFC 9116 <code>security.txt</code>.</li>
-            <li>Wrote AWS infrastructure as code (S3, CloudFront, security headers) with keyless GitHub Actions deploys via OIDC.</li>
-          </ul>
-        </div>
-      </section>
+    <div class="frame cut-a cv-main"><div class="in" id="cv-main">
+      <section><h2>Profile</h2><p id="cv-summary">Loading…</p></section>
     </div></div>
-
-    <aside class="frame cut-b cv-side"><div class="in">
-      <section>
-        <h2>Certifications</h2>
-        <ul class="side-list">
-          <li><b>AWS Certified Cloud Practitioner</b><br>In progress</li>
-          <li><b>AWS Solutions Architect – Associate</b><br>Planned</li>
-          <li><b>AWS Certified Security – Specialty</b><br>Planned</li>
-        </ul>
-      </section>
-      <section>
-        <h2>Skills</h2>
-        <ul class="side-list">
-          <li><b>Security:</b> fundamentals, web security (XSS, CSP), cryptography basics</li>
-          <li><b>Cloud:</b> AWS core services, IAM, S3, CloudFront</li>
-          <li><b>Systems:</b> networking, Linux</li>
-          <li><b>Code &amp; tools:</b> Python, Git, GitHub Actions, CloudFormation</li>
-        </ul>
-      </section>
-      <!-- Add a Languages section, e.g. Arabic (native), English (fluent) -->
-    </div></aside>
+    <aside class="frame cut-b cv-side"><div class="in" id="cv-side"></div></aside>
   </div>
 </main>
 

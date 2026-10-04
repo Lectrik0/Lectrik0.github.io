@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ali Ahmed</title>
@@ -78,10 +78,10 @@
         <use href="#me" x="860" y="430" width="44" height="92"/>
       </svg>
       <div class="hero-copy">
-        <span class="caption">Cairo, Egypt</span>
+        <span class="caption" id="hero-location">Cairo, Egypt</span>
         <h1>Ali<br>Ahmed</h1>
         <div class="hero-card">
-          <p class="lede">Cybersecurity student building toward a career in cloud security.</p>
+          <p class="lede" id="hero-tagline">Cybersecurity student building toward a career in cloud security.</p>
           <div class="btns" id="hero-btns"></div>
         </div>
       </div>
@@ -97,7 +97,7 @@
     </div>
     <div class="story">
       <!-- 1: GIU / Cairo -->
-      <article class="frame cut-a panel p1 reveal">
+      <article class="frame cut-a panel p1 reveal clickable" id="chapter-1">
         <div class="in">
           <div class="art">
             <svg viewBox="0 0 640 300" role="img" aria-label="A student looking at the Cairo skyline">
@@ -114,8 +114,9 @@
             <span class="chap">Chapter 1</span>
           </div>
           <div class="txt">
-            <h3>Studying cybersecurity at GIU</h3>
-            <p>Final year of a B.Sc. in Cybersecurity in Egypt. Networks, operating systems, cryptography, and how all of it breaks.</p>
+            <h3 data-story-title="0">Studying cybersecurity at GIU</h3>
+            <p data-story-text="0">Final year of a B.Sc. in Cybersecurity in Egypt. Networks, operating systems, cryptography, and how all of it breaks.</p>
+            <button class="btn ghost courses-btn" id="open-courses" type="button" aria-haspopup="dialog">See all my courses</button>
           </div>
         </div>
       </article>
@@ -141,8 +142,8 @@
             <span class="chap">Chapter 2</span>
           </div>
           <div class="txt">
-            <h3>Six months inside a bank</h3>
-            <p>Interning at Ebank, seeing how a financial institution runs its IT and security.</p>
+            <h3 data-story-title="1">Six months inside a bank</h3>
+            <p data-story-text="1">Interning at Ebank, seeing how a financial institution runs its IT and security.</p>
             <div class="meter">
               <div class="meter-top"><span>Internship</span><span id="intern-left">—</span></div>
               <div class="bar" role="progressbar" aria-label="Internship progress" aria-valuemin="0" aria-valuemax="100" id="intern-bar"><i id="intern-fill"></i></div>
@@ -171,8 +172,8 @@
             <span class="chap">Chapter 3</span>
           </div>
           <div class="txt">
-            <h3>Up into the cloud</h3>
-            <p>Studying for AWS Certified Cloud Practitioner. Cloud is where I want to specialise: identity, data and infrastructure that defend themselves.</p>
+            <h3 data-story-title="2">Up into the cloud</h3>
+            <p data-story-text="2">Studying for AWS Certified Cloud Practitioner. Cloud is where I want to specialise: identity, data and infrastructure that defend themselves.</p>
           </div>
         </div>
       </article>
@@ -198,8 +199,8 @@
             <span class="chap">Chapter 4</span>
           </div>
           <div class="txt">
-            <h3>Next steps</h3>
-            <p>AWS Solutions Architect – Associate to learn how secure systems are designed, then AWS Certified Security – Specialty.</p>
+            <h3 data-story-title="3">Next steps</h3>
+            <p data-story-text="3">AWS Solutions Architect – Associate to learn how secure systems are designed, then AWS Certified Security – Specialty.</p>
           </div>
         </div>
       </article>
@@ -227,8 +228,8 @@
             <span class="chap">Chapter 5</span>
           </div>
           <div class="txt">
-            <h3>Cloud Security Architect</h3>
-            <p>Where this road leads.</p>
+            <h3 data-story-title="4">Cloud Security Architect</h3>
+            <p data-story-text="4">Where this road leads.</p>
           </div>
         </div>
       </article>
@@ -312,6 +313,21 @@
     </div>
   </section>
 </main>
+<dialog class="courses-dialog" id="courses-dialog" aria-labelledby="courses-h">
+  <div class="frame cut-b dlg-frame"><div class="in">
+    <div class="dlg-head">
+      <div>
+        <span class="caption" id="courses-uni">German International University (GIU)</span>
+        <h2 id="courses-h">My courses</h2>
+        <p id="courses-sub">B.Sc. Informatics and Computer Science, IT Security major</p>
+      </div>
+      <button class="btn ghost dlg-close" id="close-courses" type="button">Close</button>
+    </div>
+    <div class="dlg-summary" id="courses-summary"></div>
+    <div class="semesters" id="semesters"></div>
+  </div></div>
+</dialog>
+
 <footer><div class="wrap"><span>Ali Ahmed, Cairo</span><span id="year">2026</span></div></footer>
 </body>
 </html>
