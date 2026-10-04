@@ -8,37 +8,9 @@
  * - External links open with rel="noopener noreferrer".
  * - Stored values (theme, found flags) are checked against allow-lists before use.
  * - Flags are compared as SHA-256 hashes, so this file doesn't give them away.
+ *
+ * All content lives in data/site.json. Edit it there, or use the admin page.
  */
-
-/* ============ Edit your content here ============ */
-const PROFILE = {
-  github: "https://github.com/Lectrik0",
-  linkedin: "https://www.linkedin.com/in/aliahmed255",
-  cv: "cv.html",                  // set to "" to hide the CV buttons
-  internshipStart: "2026-07-16",
-  internshipEnd: "2027-01-16"
-};
-const SKILLS = [
-  { group: "Comfortable with", note: "Used in coursework and projects.", color: "teal",
-    items: ["Networking", "Linux", "Security fundamentals", "Cryptography basics"] },
-  { group: "Using now", note: "Working knowledge, getting better every week.", color: "blue",
-    items: ["Python", "AWS core services", "Git & GitHub"] },
-  { group: "Learning next", note: "On the roadmap for the coming months.", color: "purple",
-    items: ["Cloud IAM", "Terraform", "CloudFormation", "Cloud logging & detection"] }
-];
-// status: "earned" | "progress" | "planned"
-const CERTS = [
-  { name: "AWS Certified Cloud Practitioner", short: "CLF", status: "progress" },
-  { name: "AWS Solutions Architect – Associate", short: "SAA", status: "planned" },
-  { name: "AWS Certified Security – Specialty", short: "SCS", status: "planned" }
-];
-// Newest first. url can be a page on this site (writeups/...) or an https:// link.
-const POSTS = [
-  { title: "Issue #1: Hardening a static site", date: "2026-10-04", tag: "Web security",
-    summary: "A site with no backend can still be attacked. How this one blocks XSS with CSP and Trusted Types, and how I tested it.",
-    url: "writeups/hardening-this-site.html" }
-];
-/* ================================================ */
 
 (() => {
   const root = document.documentElement;
@@ -46,6 +18,9 @@ const POSTS = [
   const $ = id => document.getElementById(id);
   const SVG_NS = "http://www.w3.org/2000/svg";
   const now = new Date();
+  const SCRIPT_URL = document.currentScript ? document.currentScript.src : location.href;
+  const DATA_URL = new URL("../data/site.json", SCRIPT_URL).href;
+  const SITE_ROOT = new URL("../", SCRIPT_URL).href;
 
   /* ---------- safe building blocks ---------- */
   function el(tag, attrs = {}, ...children) {
@@ -69,10 +44,10 @@ const POSTS = [
     return node;
   }
   // Only https: links or paths on this same site. Everything else is dropped.
-  function safeUrl(value) {
+  function safeUrl(value, base = SITE_ROOT) {
     if (typeof value !== "string" || !value.trim()) return null;
     try {
-      const u = new URL(value, location.href);
+      const u = new URL(value, base);
       if (u.protocol === "https:") return u.href;
       if (u.origin === location.origin && (u.protocol === "http:" || u.protocol === "file:")) return u.href;
     } catch (e) { /* invalid URL */ }
@@ -84,6 +59,8 @@ const POSTS = [
     const external = new URL(url).origin !== location.origin;
     return el("a", { href: url, ...(external ? { target: "_blank", rel: "noopener noreferrer" } : {}), ...attrs }, ...children);
   }
+  const str = v => (typeof v === "string" || typeof v === "number") ? String(v) : "";
+  const arr = v => Array.isArray(v) ? v : [];
   const COLORS = { teal: "var(--teal)", blue: "var(--blue)", purple: "var(--purple)", green: "var(--green)", muted: "var(--muted)" };
 
   /* ---------- icons (static path data, no HTML parsing) ---------- */
@@ -94,70 +71,170 @@ const POSTS = [
   };
   const icon = name => svg("svg", { viewBox: "0 0 16 16", "aria-hidden": "true" }, svg("path", { fill: "currentColor", "fill-rule": "evenodd", d: ICON_PATHS[name] }));
 
-  /* ---------- buttons ---------- */
-  function buttonRow(primary) {
-    const cv = link(PROFILE.cv, { class: primary === "cv" ? "btn" : "btn ghost" }, icon("cv"), "View CV");
-    const li = link(PROFILE.linkedin, { class: primary === "li" ? "btn" : "btn ghost" }, icon("li"), "LinkedIn");
-    const gh = link(PROFILE.github, { class: "btn ghost" }, icon("gh"), "GitHub");
-    return (primary === "li" ? [li, gh, cv] : [cv, li, gh]).filter(Boolean);
-  }
-  if ($("hero-btns")) $("hero-btns").replaceChildren(...buttonRow("cv"));
-  if ($("end-btns")) $("end-btns").replaceChildren(...buttonRow("li"));
-  if ($("year")) $("year").textContent = String(now.getFullYear());
+  /* ================= rendering from data ================= */
+  function render(data) {
+    const P = data.profile || {};
 
-  /* ---------- internship meter ---------- */
-  if ($("intern-bar")) {
-    const s = new Date(PROFILE.internshipStart), e = new Date(PROFILE.internshipEnd);
-    const p = Math.max(0, Math.min(100, Math.round((now - s) / (e - s) * 100))) || 0;
-    const days = Math.max(0, Math.ceil((e - now) / 864e5));
-    $("intern-left").textContent = p >= 100 ? "Complete" : `${days} days left`;
-    $("intern-bar").setAttribute("aria-valuenow", String(p));
-    $("intern-fill").style.setProperty("--p", p + "%");
-  }
+    // hero + buttons
+    if ($("hero-location") && str(P.location)) $("hero-location").textContent = str(P.location);
+    if ($("hero-tagline") && str(P.tagline)) $("hero-tagline").textContent = str(P.tagline);
+    const buttonRow = primary => {
+      const cv = link(P.cv, { class: primary === "cv" ? "btn" : "btn ghost" }, icon("cv"), "View CV");
+      const li = link(P.linkedin, { class: primary === "li" ? "btn" : "btn ghost" }, icon("li"), "LinkedIn");
+      const gh = link(P.github, { class: "btn ghost" }, icon("gh"), "GitHub");
+      return (primary === "li" ? [li, gh, cv] : [cv, li, gh]).filter(Boolean);
+    };
+    if ($("hero-btns")) $("hero-btns").replaceChildren(...buttonRow("cv"));
+    if ($("end-btns")) $("end-btns").replaceChildren(...buttonRow("li"));
 
-  /* ---------- skills ---------- */
-  if ($("skills-grid")) $("skills-grid").replaceChildren(...SKILLS.map(g => {
-    const col = el("div", { class: "frame cut-a skill-col" },
-      el("div", { class: "in" },
-        el("h3", {}, el("i"), document.createTextNode(String(g.group))),
-        el("p", { text: g.note }),
-        el("ul", { class: "chips" }, ...g.items.map(i => el("li", { text: i })))
-      ));
-    col.style.setProperty("--c", COLORS[g.color] || COLORS.teal);
-    return col;
-  }));
+    // story text (the drawings stay fixed; titles and text come from data)
+    arr(data.story).forEach((ch, i) => {
+      const t = document.querySelector(`[data-story-title="${i}"]`);
+      const p = document.querySelector(`[data-story-text="${i}"]`);
+      if (t && str(ch.title)) t.textContent = str(ch.title);
+      if (p && str(ch.text)) p.textContent = str(ch.text);
+    });
 
-  /* ---------- certifications ---------- */
-  const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planned" };
-  const CERT_COLOR = { earned: "teal", progress: "blue", planned: "muted" };
-  if ($("certs-grid")) $("certs-grid").replaceChildren(...CERTS.map(c => {
-    const status = CERT_LABEL[c.status] ? c.status : "planned";
-    const card = el("div", { class: `frame cut-c cert ${status}` },
-      el("div", { class: "in" },
-        svg("svg", { viewBox: "0 0 72 80", "aria-hidden": "true" },
-          svg("path", { class: "hex", d: "M36 4 L66 21 V59 L36 76 L6 59 V21z" }),
-          svg("text", { class: "hex-t", x: 36, y: 45, text: c.short })),
-        el("div", {}, el("h3", { text: c.name }), el("p", { text: CERT_LABEL[status] }))
-      ));
-    card.style.setProperty("--c", COLORS[CERT_COLOR[status]]);
-    return card;
-  }));
-
-  /* ---------- write-ups ---------- */
-  if ($("posts")) {
-    const posts = POSTS.map(p => {
-      const d = new Date(p.date);
-      const time = el("time", { datetime: isNaN(d) ? null : d.toISOString().slice(0, 10),
-        text: isNaN(d) ? "" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) });
-      return link(p.url, { class: "post" }, time,
-        el("div", {}, el("h3", { text: p.title }), el("p", { text: p.summary || "" })),
-        el("span", { class: "tag", text: p.tag || "" }));
-    }).filter(Boolean);
-    if (posts.length) {
-      $("posts").replaceChildren(...posts);
-      $("posts").hidden = false;
-      if ($("posts-empty")) $("posts-empty").hidden = true;
+    // internship meter
+    if ($("intern-bar") && data.internship) {
+      const s = new Date(data.internship.start), e = new Date(data.internship.end);
+      const p = Math.max(0, Math.min(100, Math.round((now - s) / (e - s) * 100))) || 0;
+      const days = Math.max(0, Math.ceil((e - now) / 864e5));
+      $("intern-left").textContent = p >= 100 ? "Complete" : `${days} days left`;
+      $("intern-bar").setAttribute("aria-valuenow", String(p));
+      $("intern-fill").style.setProperty("--p", p + "%");
     }
+
+    // skills
+    if ($("skills-grid")) $("skills-grid").replaceChildren(...arr(data.skills).map(g => {
+      const col = el("div", { class: "frame cut-a skill-col" },
+        el("div", { class: "in" },
+          el("h3", {}, el("i"), document.createTextNode(str(g.group))),
+          el("p", { text: str(g.note) }),
+          el("ul", { class: "chips" }, ...arr(g.items).map(i => el("li", { text: str(i) })))
+        ));
+      col.style.setProperty("--c", COLORS[g.color] || COLORS.teal);
+      return col;
+    }));
+
+    // certifications
+    const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planned" };
+    const CERT_COLOR = { earned: "teal", progress: "blue", planned: "muted" };
+    const certStatus = c => CERT_LABEL[c.status] ? c.status : "planned";
+    if ($("certs-grid")) $("certs-grid").replaceChildren(...arr(data.certs).map(c => {
+      const status = certStatus(c);
+      const card = el("div", { class: `frame cut-c cert ${status}` },
+        el("div", { class: "in" },
+          svg("svg", { viewBox: "0 0 72 80", "aria-hidden": "true" },
+            svg("path", { class: "hex", d: "M36 4 L66 21 V59 L36 76 L6 59 V21z" }),
+            svg("text", { class: "hex-t", x: 36, y: 45, text: str(c.short).slice(0, 4) })),
+          el("div", {}, el("h3", { text: str(c.name) }), el("p", { text: CERT_LABEL[status] }))
+        ));
+      card.style.setProperty("--c", COLORS[CERT_COLOR[status]]);
+      return card;
+    }));
+
+    // write-ups
+    if ($("posts")) {
+      const posts = arr(data.posts).map(p => {
+        const d = new Date(p.date);
+        const time = el("time", { datetime: isNaN(d) ? null : d.toISOString().slice(0, 10),
+          text: isNaN(d) ? "" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) });
+        return link(p.url, { class: "post" }, time,
+          el("div", {}, el("h3", { text: str(p.title) }), el("p", { text: str(p.summary) })),
+          el("span", { class: "tag", text: str(p.tag) }));
+      }).filter(Boolean);
+      $("posts").replaceChildren(...posts);
+      $("posts").hidden = posts.length === 0;
+      if ($("posts-empty")) $("posts-empty").hidden = posts.length > 0;
+    }
+
+    // courses dialog
+    if ($("semesters") && data.courses) {
+      const C = data.courses;
+      const STATUS = { completed: "Completed", current: "In progress", upcoming: "Upcoming" };
+      const sems = arr(C.semesters);
+      const total = sems.reduce((a, s) => a + arr(s.courses).reduce((b, c) => b + (Number(c.ects) || 0), 0), 0);
+      const done = sems.filter(s => s.status === "completed").reduce((a, s) => a + arr(s.courses).reduce((b, c) => b + (Number(c.ects) || 0), 0), 0);
+      const count = sems.reduce((a, s) => a + arr(s.courses).length, 0);
+      $("courses-uni").textContent = str(C.university);
+      $("courses-sub").textContent = [str(C.degree), str(C.major) && `${str(C.major)} major`].filter(Boolean).join(", ");
+      $("courses-summary").replaceChildren(
+        el("span", {}, el("b", { text: String(count) }), " courses"),
+        el("span", {}, el("b", { text: String(done) }), ` of ${total} ECTS completed`),
+        el("span", {}, el("b", { text: String(sems.length) }), " semesters"));
+      $("semesters").replaceChildren(...sems.map(s => {
+        const st = STATUS[s.status] ? s.status : "upcoming";
+        const ects = arr(s.courses).reduce((b, c) => b + (Number(c.ects) || 0), 0);
+        return el("section", { class: `sem ${st}` },
+          el("div", { class: "sem-head" }, el("h3", { text: str(s.name) }), el("span", { class: "sem-state", text: STATUS[st] })),
+          el("ul", { class: "sem-list" }, ...arr(s.courses).map(c =>
+            el("li", {}, el("span", { text: str(c.name) }), el("span", { class: "ects", text: c.ects ? `${Number(c.ects)} ECTS` : "" })))),
+          el("p", { class: "sem-total", text: `${ects} ECTS` }));
+      }));
+    }
+
+    // CV page
+    if ($("cv-main")) renderCV(data, certStatus, CERT_LABEL);
+  }
+
+  function renderCV(data, certStatus, CERT_LABEL) {
+    const P = data.profile || {}, CV = data.cv || {};
+    if (str(P.name)) $("cv-name").textContent = str(P.name);
+    if (str(CV.headline)) $("cv-headline").textContent = str(CV.headline);
+    const plain = u => { try { const x = new URL(u); return (x.host + x.pathname).replace(/^www\./, "").replace(/\/$/, ""); } catch (e) { return u; } };
+    const contact = [
+      str(P.location) && el("li", { text: str(P.location) }),
+      str(P.email) && el("li", { class: "selectable", text: str(P.email) }),
+      safeUrl(P.linkedin) && el("li", {}, link(P.linkedin, {}, plain(P.linkedin))),
+      safeUrl(P.github) && el("li", {}, link(P.github, {}, plain(P.github))),
+      el("li", {}, link("index.html", {}, location.host || "lectrik0.github.io"))
+    ].filter(Boolean);
+    $("cv-contact").replaceChildren(...contact);
+
+    const section = (title, ...kids) => el("section", {}, el("h2", { text: title }), ...kids);
+    const item = (title, dates, ...kids) => el("div", { class: "item" },
+      el("div", { class: "item-top" }, el("b", { text: title }), el("span", { text: dates })), ...kids);
+    const bullets = list => arr(list).length ? el("ul", {}, ...arr(list).map(b => el("li", { text: str(b) }))) : null;
+
+    const main = [section("Profile", el("p", { text: str(CV.summary) }))];
+    if (arr(CV.education).length) main.push(section("Education", ...arr(CV.education).map(e =>
+      item([str(e.title), str(e.org)].filter(Boolean).join(", "), str(e.dates), str(e.details) ? el("p", { text: str(e.details) }) : null))));
+    if (arr(CV.experience).length) main.push(section("Experience", ...arr(CV.experience).map(e =>
+      item([str(e.title), str(e.org)].filter(Boolean).join(", "), str(e.dates), bullets(e.bullets)))));
+    if (arr(CV.projects).length) main.push(section("Projects", ...arr(CV.projects).map(p =>
+      item(str(p.title), str(p.dates), bullets(p.bullets)))));
+    $("cv-main").replaceChildren(...main);
+
+    const side = [];
+    if (arr(data.certs).length) side.push(section("Certifications", el("ul", { class: "side-list" },
+      ...arr(data.certs).map(c => el("li", {}, el("b", { text: str(c.name) }), el("br"), CERT_LABEL[certStatus(c)])))));
+    if (arr(CV.skills).length) side.push(section("Skills", el("ul", { class: "side-list" },
+      ...arr(CV.skills).map(s => el("li", {}, el("b", { text: `${str(s.label)}:` }), " ", str(s.text))))));
+    if (arr(CV.languages).length) side.push(section("Languages", el("ul", { class: "side-list" },
+      ...arr(CV.languages).map(l => el("li", { text: str(l) })))));
+    $("cv-side").replaceChildren(...side);
+  }
+
+  fetch(DATA_URL, { cache: "no-cache", credentials: "same-origin" })
+    .then(r => { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+    .then(render)
+    .catch(err => {
+      console.warn("Couldn't load site content:", err.message);
+      if ($("cv-summary")) $("cv-summary").textContent = "The CV couldn't load. Refresh the page to try again.";
+    });
+
+  /* ---------- courses dialog ---------- */
+  const dlg = $("courses-dialog");
+  if (dlg && typeof dlg.showModal === "function") {
+    const open = () => { if (!dlg.open) dlg.showModal(); };
+    $("open-courses").addEventListener("click", e => { e.stopPropagation(); open(); });
+    const ch1 = $("chapter-1");
+    if (ch1) ch1.addEventListener("click", e => { if (!e.target.closest("a, button")) open(); });
+    $("close-courses").addEventListener("click", () => dlg.close());
+    dlg.addEventListener("click", e => { if (e.target === dlg) dlg.close(); });
+  } else if ($("open-courses")) {
+    $("open-courses").hidden = true;
   }
 
   /* ---------- hidden flags ---------- */
@@ -171,13 +248,13 @@ const POSTS = [
       "72795df42713f7e9dceb0f7e6053a97de7cf7f0d8874238c0afea62febf59862"
     ];
     const KEY = "aa-flags";
-    let found = new Set();
+    const found = new Set();
     try {
       const saved = JSON.parse(localStorage.getItem(KEY) || "[]");
       if (Array.isArray(saved)) saved.filter(i => Number.isInteger(i) && i >= 0 && i < HASHES.length).forEach(i => found.add(i));
     } catch (e) { /* storage unavailable or corrupted */ }
     const msg = $("flag-msg");
-    const render = () => {
+    const renderFlags = () => {
       const pips = $("flag-pips").children;
       for (let i = 0; i < pips.length; i++) pips[i].classList.toggle("on", i < found.size);
       $("flag-count").textContent = `${found.size} of ${HASHES.length} found`;
@@ -217,13 +294,14 @@ const POSTS = [
         msg.dataset.state = "ok";
         input.value = "";
       }
-      render();
+      renderFlags();
     });
-    render();
+    renderFlags();
   }
 
   /* ---------- print button (CV page) ---------- */
   if ($("print-cv")) $("print-cv").addEventListener("click", () => window.print());
+  if ($("year")) $("year").textContent = String(now.getFullYear());
 
   /* ---------- day / night ---------- */
   if ($("toggle")) {
