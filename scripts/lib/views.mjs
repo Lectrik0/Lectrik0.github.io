@@ -3,7 +3,7 @@
  * Every function is pure (data in, SafeHtml out) and goes through h()/link(), so nothing from the
  * data is ever written into a page unescaped. Missing or malformed fields are skipped, not fatal.
  */
-import { h, link, raw, safeUrl } from "./html.mjs";
+import { h, isExternal, link, raw, safeUrl } from "./html.mjs";
 
 export const str = v => (typeof v === "string" || typeof v === "number") ? String(v).trim() : "";
 export const arr = v => Array.isArray(v) ? v : [];
@@ -171,6 +171,11 @@ export const skills = data => raw(named(data.skills, "group").map(g => {
 const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planned" };
 const CERT_COLOR = { earned: "teal", progress: "blue", planned: "muted" };
 const certStatus = c => CERT_LABEL[c.status] ? c.status : "planned";
+// The proof link (e.g. Credly) of an earned certification: https only, and only once it's earned.
+const verifyLink = c => {
+  const url = certStatus(c) === "earned" ? safeUrl(c.verify) : null;
+  return url && isExternal(url) ? link(url, { class: "verify", "aria-label": `Verify ${str(c.name)}` }, "Verify", h("span", { "aria-hidden": "true" }, " ↗")) : null;
+};
 // Badge text shrinks to stay inside the hexagon: exam codes like AZ-900 or CLF-C02 fit.
 const badgeClass = text => text.length > 5 ? "hex-t longer" : text.length > 4 ? "hex-t long" : "hex-t";
 
@@ -181,7 +186,7 @@ export const certs = data => raw(named(data.certs, "name").map(c => {
       h("svg", { viewBox: "0 0 72 80", "aria-hidden": "true" },
         h("path", { class: "hex", d: "M36 4 L66 21 V59 L36 76 L6 59 V21z" }),
         h("text", { class: badgeClass(badge), x: "36", y: "45" }, badge)),
-      h("div", {}, h("h3", {}, str(c.name)), h("p", {}, CERT_LABEL[status]))
+      h("div", {}, h("h3", {}, str(c.name)), h("p", {}, CERT_LABEL[status], ...(verifyLink(c) ? [" · ", verifyLink(c)] : [])))
     ])
   ]);
 }).join("\n"));
@@ -285,7 +290,7 @@ const CV_MAIN = {
   Projects: p => item(str(p.title), str(p.dates), bullets(p.bullets))
 };
 const CV_SIDE = {
-  Certifications: c => h("li", {}, h("b", {}, str(c.name)), h("br"), CERT_LABEL[certStatus(c)]),
+  Certifications: c => h("li", {}, h("b", {}, str(c.name)), h("br"), CERT_LABEL[certStatus(c)], ...(verifyLink(c) ? [" · ", verifyLink(c)] : [])),
   Skills: s => h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text)),
   Languages: l => h("li", {}, l)
 };

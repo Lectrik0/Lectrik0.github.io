@@ -166,6 +166,8 @@ svg *{transition:fill .5s,stroke .5s}
 .cert .hex-t{font:700 15px var(--f-display);fill:var(--c);text-anchor:middle}
 .cert .hex-t.long{font-size:13px}
 .cert .hex-t.longer{font-size:11px}
+.verify{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
+.verify:hover{text-decoration-color:var(--teal)}
 .cert.earned .hex-t{fill:var(--panel)}
 
 /* write-ups */

@@ -92,6 +92,22 @@ test("half-filled entries are left out instead of showing up empty", () => {
   assert.equal(out.get("index.html"), renderSite().get("index.html"), "blank entries shouldn't change the home page at all");
 });
 
+test("a Verify link shows only on earned certifications, and only for https links", () => {
+  const data = JSON.parse(read("data/site.json"));
+  data.certs = [
+    { name: "Earned one", short: "E", status: "earned", verify: "https://www.credly.com/badges/abc" },
+    { name: "Not yet", short: "N", status: "progress", verify: "https://www.credly.com/badges/def" },
+    { name: "Bad link", short: "B", status: "earned", verify: "javascript:alert(1)" },
+    { name: "Same site", short: "S", status: "earned", verify: "cv.html" },
+    { name: "No link", short: "L", status: "earned", verify: "" }
+  ];
+  const out = renderSite({ data });
+  for (const f of ["index.html", "cv.html"]) {
+    const links = [...out.get(f).matchAll(/<a [^>]*class="verify"[^>]*>/g)].map(m => m[0]);
+    assert.deepEqual(links, ['<a href="https://www.credly.com/badges/abc" target="_blank" rel="noopener noreferrer" class="verify" aria-label="Verify Earned one">'], f);
+  }
+});
+
 test("CV sections appear when they get content and disappear when emptied", () => {
   const data = JSON.parse(read("data/site.json"));
   data.cv.languages = ["Arabic (native)"];
