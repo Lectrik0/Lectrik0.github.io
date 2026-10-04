@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Ali Ahmed: write-ups</title>
+  <subtitle>Cybersecurity student building toward a career in cloud security.</subtitle>
+  <link href="https://lectrik0.github.io/feed.xml" rel="self" type="application/atom+xml"/>
+  <link href="https://lectrik0.github.io/" rel="alternate" type="text/html"/>
+  <id>https://lectrik0.github.io/</id>
+  <updated>2026-10-04T00:00:00Z</updated>
+  <author><name>Ali Ahmed</name><uri>https://lectrik0.github.io/</uri></author>
+  <entry>
+    <title>Issue #1: Hardening a static site</title>
+    <link href="https://lectrik0.github.io/writeups/hardening-this-site.html" rel="alternate" type="text/html"/>
+    <id>https://lectrik0.github.io/writeups/hardening-this-site.html</id>
+    <published>2026-10-04T00:00:00Z</published>
+    <updated>2026-10-04T00:00:00Z</updated>
+    <category term="Web security"/>
+    <summary>A site with no backend can still be attacked. How this one blocks XSS with CSP and Trusted Types, and how I tested it.</summary>
+  </entry>
+</feed>

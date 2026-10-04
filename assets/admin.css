@@ -23,7 +23,7 @@
 .bs-bar h1{margin:0;font-size:1.6rem}
 .bs-status{font:600 .92rem/1 var(--f-display);color:var(--muted)}
 .bs-status[data-state="dirty"]{color:var(--purple)}
-.bs-status[data-state="clean"]{color:var(--green)}
+.bs-status[data-state="clean"]{color:var(--green-text)}
 .bs-bar .btn{border:0}
 .bs-bar .btn[disabled]{opacity:.45;cursor:not-allowed}
 .bs-tabs{display:flex;flex-wrap:wrap;gap:6px}

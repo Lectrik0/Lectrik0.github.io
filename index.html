@@ -2,15 +2,32 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Ali Ahmed</title>
 <meta name="description" content="Ali Ahmed, cybersecurity student in Cairo building toward a career in cloud security.">
-<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/">
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="Ali Ahmed">
+<meta property="og:description" content="Ali Ahmed, cybersecurity student in Cairo building toward a career in cloud security.">
+<meta property="og:url" content="https://lectrik0.github.io/">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: Cybersecurity student building toward a career in cloud security.">
+<meta property="og:locale" content="en_GB">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Ali Ahmed","url":"https://lectrik0.github.io/","description":"Cybersecurity student building toward a career in cloud security.","address":{"@type":"PostalAddress","addressLocality":"Cairo, Egypt"},"alumniOf":{"@type":"CollegeOrUniversity","name":"German International University (GIU)"},"sameAs":["https://www.linkedin.com/in/aliahmed255","https://github.com/Lectrik0"]}</script>
+<!-- /build:meta -->
+<link rel="icon" href="assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/style.css">
-<script src="assets/main.js" defer></script>
+<link rel="stylesheet" href="assets/style.css?v=12478461dd">
+<noscript><link rel="stylesheet" href="assets/nojs.css?v=02f3f7d7dd"></noscript>
+<script src="assets/main.js?v=2d0b68fb62" defer></script>
 </head>
 <body>
 <!-- Hi, curious one. You found flag 1 of 4: AA{v13w_s0urc3_f1rst} -->
@@ -30,6 +47,7 @@
   </defs>
 </svg>
 
+<!-- build:nav -->
 <nav class="nav" aria-label="Main">
   <div class="wrap">
     <a class="brand" href="#top">Ali Ahmed</a>
@@ -39,15 +57,13 @@
       <li><a href="#certs">Certifications</a></li>
       <li><a href="#writeups">Write-ups</a></li>
       <li><a href="#flags">Flags</a></li>
-      <li><a href="cv.html">CV</a></li>
+      <li><a href="/cv.html">CV</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"/></svg>
-      <span id="toggle-label">Night</span>
-    </button>
+    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">Night</span></button>
   </div>
 </nav>
+<!-- /build:nav -->
 
 <header class="hero wrap" id="top">
   <div class="frame splash cut-b anim-gate">
@@ -80,11 +96,17 @@
         <svg class="hc hc2" viewBox="976 255 168 49"><path d="M980 300 a30 30 0 0 1 54 -16 a40 40 0 0 1 74 10 a26 26 0 0 1 26 28 h-160z" class="cloud ink"/></svg>
       </div>
       <div class="hero-copy">
-        <span class="caption" id="hero-location">Cairo, Egypt</span>
+        <span class="caption" data-bind="profile.location">Cairo, Egypt</span>
         <h1>Ali<br>Ahmed</h1>
         <div class="hero-card">
-          <p class="lede" id="hero-tagline">Cybersecurity student building toward a career in cloud security.</p>
-          <div class="btns" id="hero-btns"></div>
+          <p class="lede" data-bind="profile.tagline">Cybersecurity student building toward a career in cloud security.</p>
+          <div class="btns">
+            <!-- build:hero-buttons -->
+            <a href="/cv.html" class="btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M3 0h7l3 3v13H3zM9 1v3h3M5 7h6v1.5H5zm0 3h6v1.5H5zm0 3h4v1.5H5z"></path></svg>View CV</a>
+            <a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer" class="btn ghost"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01zM6.27 13.4h2.4V9.36c0-.22.02-.43.08-.59.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.88h2.4V9.25c0-2.22-1.18-3.25-2.76-3.25-1.28 0-1.84.7-2.16 1.2v.03h-.02l.02-.03V6.17h-2.4c.03.68 0 7.23 0 7.23z"></path></svg>LinkedIn</a>
+            <a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer" class="btn ghost"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>GitHub</a>
+            <!-- /build:hero-buttons -->
+          </div>
         </div>
       </div>
     </div>
@@ -116,9 +138,9 @@
             <span class="chap">Chapter 1</span>
           </div>
           <div class="txt">
-            <h3 data-story-title="0">Studying cybersecurity at GIU</h3>
-            <p data-story-text="0">Final year of a B.Sc. in Cybersecurity in Egypt. Networks, operating systems, cryptography, and how all of it breaks.</p>
-            <button class="btn ghost courses-btn" id="open-courses" type="button" aria-haspopup="dialog">See all my courses</button>
+            <h3 data-bind="story.0.title">Studying cybersecurity at GIU</h3>
+            <p data-bind="story.0.text">Final year of a B.Sc. at the German International University, majoring in IT Security. Networks, operating systems, cryptography, and how all of it breaks.</p>
+            <button class="btn ghost courses-btn" id="open-courses" type="button" aria-haspopup="dialog" commandfor="courses-dialog" command="show-modal">See all my courses</button>
           </div>
         </div>
       </article>
@@ -144,12 +166,14 @@
             <span class="chap">Chapter 2</span>
           </div>
           <div class="txt">
-            <h3 data-story-title="1">Six months inside a bank</h3>
-            <p data-story-text="1">Interning at Ebank, seeing how a financial institution runs its IT and security.</p>
+            <h3 data-bind="story.1.title">Six months inside a bank</h3>
+            <p data-bind="story.1.text">Interning at Ebank, seeing how a financial institution runs its IT and security.</p>
+            <!-- build:internship -->
             <div class="meter">
-              <div class="meter-top"><span>Internship</span><span id="intern-left">—</span></div>
-              <div class="bar" role="progressbar" aria-label="Internship progress" aria-valuemin="0" aria-valuemax="100" id="intern-bar"><i id="intern-fill"></i></div>
+              <div class="meter-top"><span>Internship</span><span id="intern-left">Jul 2026 – Jan 2027</span></div>
+              <div class="bar" role="progressbar" aria-label="Internship progress" aria-valuemin="0" aria-valuemax="100" id="intern-bar" data-start="2026-07-16" data-end="2027-01-16"><i id="intern-fill"></i></div>
             </div>
+            <!-- /build:internship -->
           </div>
         </div>
       </article>
@@ -174,8 +198,8 @@
             <span class="chap">Chapter 3</span>
           </div>
           <div class="txt">
-            <h3 data-story-title="2">Up into the cloud</h3>
-            <p data-story-text="2">Studying for AWS Certified Cloud Practitioner. Cloud is where I want to specialise: identity, data and infrastructure that defend themselves.</p>
+            <h3 data-bind="story.2.title">Up into the cloud</h3>
+            <p data-bind="story.2.text">Studying for AWS Certified Cloud Practitioner. Cloud is where I want to specialise: identity, data and infrastructure that defend themselves.</p>
           </div>
         </div>
       </article>
@@ -201,8 +225,8 @@
             <span class="chap">Chapter 4</span>
           </div>
           <div class="txt">
-            <h3 data-story-title="3">Next steps</h3>
-            <p data-story-text="3">AWS Solutions Architect – Associate to learn how secure systems are designed, then AWS Certified Security – Specialty.</p>
+            <h3 data-bind="story.3.title">Next steps</h3>
+            <p data-bind="story.3.text">AWS Solutions Architect – Associate to learn how secure systems are designed, then AWS Certified Security – Specialty.</p>
           </div>
         </div>
       </article>
@@ -230,8 +254,8 @@
             <span class="chap">Chapter 5</span>
           </div>
           <div class="txt">
-            <h3 data-story-title="4">Cloud Security Architect</h3>
-            <p data-story-text="4">Where this road leads.</p>
+            <h3 data-bind="story.4.title">Cloud Security Architect</h3>
+            <p data-bind="story.4.text">Where this road leads.</p>
           </div>
         </div>
       </article>
@@ -243,7 +267,31 @@
       <h2 id="skills-h">Skills</h2>
       <p>Grouped by where I am with each one.</p>
     </div>
-    <div class="skills" id="skills-grid"></div>
+    <div class="skills">
+      <!-- build:skills -->
+      <div class="frame cut-a skill-col c-teal">
+        <div class="in">
+          <h3><i></i>Comfortable with</h3>
+          <p>Used in coursework and projects.</p>
+          <ul class="chips"><li>Networking</li><li>Linux</li><li>Security fundamentals</li><li>Cryptography basics</li></ul>
+        </div>
+      </div>
+      <div class="frame cut-a skill-col c-blue">
+        <div class="in">
+          <h3><i></i>Using now</h3>
+          <p>Working knowledge, getting better every week.</p>
+          <ul class="chips"><li>Python</li><li>AWS core services</li><li>Git &amp; GitHub</li></ul>
+        </div>
+      </div>
+      <div class="frame cut-a skill-col c-purple">
+        <div class="in">
+          <h3><i></i>Learning next</h3>
+          <p>On the roadmap for the coming months.</p>
+          <ul class="chips"><li>Cloud IAM</li><li>Terraform</li><li>CloudFormation</li><li>Cloud logging &amp; detection</li></ul>
+        </div>
+      </div>
+      <!-- /build:skills -->
+    </div>
   </section>
 
   <section class="sec wrap" id="certs" aria-labelledby="certs-h">
@@ -251,7 +299,28 @@
       <h2 id="certs-h">Certifications</h2>
       <p>Earned badges fill in. Dashed ones are in progress or planned.</p>
     </div>
-    <div class="certs anim-gate" id="certs-grid"></div>
+    <div class="certs anim-gate">
+      <!-- build:certs -->
+      <div class="frame cut-c cert progress c-blue">
+        <div class="in">
+          <svg viewBox="0 0 72 80" aria-hidden="true"><path class="hex" d="M36 4 L66 21 V59 L36 76 L6 59 V21z"></path><text class="hex-t" x="36" y="45">CLF</text></svg>
+          <div><h3>AWS Certified Cloud Practitioner</h3><p>In progress</p></div>
+        </div>
+      </div>
+      <div class="frame cut-c cert planned c-muted">
+        <div class="in">
+          <svg viewBox="0 0 72 80" aria-hidden="true"><path class="hex" d="M36 4 L66 21 V59 L36 76 L6 59 V21z"></path><text class="hex-t" x="36" y="45">SAA</text></svg>
+          <div><h3>AWS Solutions Architect – Associate</h3><p>Planned</p></div>
+        </div>
+      </div>
+      <div class="frame cut-c cert planned c-muted">
+        <div class="in">
+          <svg viewBox="0 0 72 80" aria-hidden="true"><path class="hex" d="M36 4 L66 21 V59 L36 76 L6 59 V21z"></path><text class="hex-t" x="36" y="45">SCS</text></svg>
+          <div><h3>AWS Certified Security – Specialty</h3><p>Planned</p></div>
+        </div>
+      </div>
+      <!-- /build:certs -->
+    </div>
   </section>
 
   <section class="sec wrap" id="writeups" aria-labelledby="writeups-h">
@@ -259,17 +328,11 @@
       <h2 id="writeups-h">Write-ups</h2>
       <p>Notes from labs, CTFs and cloud security topics I'm learning.</p>
     </div>
-    <div class="posts" id="posts" hidden></div>
-    <div class="frame cut-b empty" id="posts-empty"><div class="in">
-      <div><h3>First write-up coming soon</h3>
-      <p>AWS labs, CTF notes and cloud security write-ups will show up here as I finish them. In the meantime, my work in progress is on GitHub.</p></div>
-      <svg viewBox="0 0 200 140" aria-hidden="true">
-        <rect x="20" y="16" width="120" height="110" class="f-panel ink"/>
-        <path d="M38 44 h84 M38 64 h84 M38 84 h56" class="ink-thin" stroke-width="3"/>
-        <path d="M150 40 l20 20 l-60 60 h-20 v-20z" class="f-purple ink"/>
-        <path d="M144 46 l20 20" class="ink"/>
-      </svg>
-    </div></div>
+    <!-- build:posts -->
+    <div class="posts">
+      <a href="/writeups/hardening-this-site.html" class="post"><time datetime="2026-10-04">4 Oct 2026</time><div><h3>Issue #1: Hardening a static site</h3><p>A site with no backend can still be attacked. How this one blocks XSS with CSP and Trusted Types, and how I tested it.</p></div><span class="tag">Web security</span></a>
+    </div>
+    <!-- /build:posts -->
   </section>
 
   <section class="sec wrap" id="flags" aria-labelledby="flags-h">
@@ -289,16 +352,17 @@
       </div></div>
       <div class="frame cut-b ctf-check"><div class="in">
         <h3>Check a flag</h3>
-        <form id="flag-form" class="flag-form" novalidate>
+        <noscript><p class="flag-msg">The checker runs in your browser, so it needs JavaScript. The hints work without it.</p></noscript>
+        <form id="flag-form" class="flag-form needs-js" novalidate>
           <label for="flag-input">Flag</label>
           <div class="flag-row">
             <input id="flag-input" name="flag" type="text" autocomplete="off" spellcheck="false" maxlength="64" placeholder="AA{...}">
             <button class="btn" type="submit">Check flag</button>
           </div>
         </form>
-        <p class="flag-msg" id="flag-msg" role="status" aria-live="polite">Flags are checked in your browser. Nothing is sent anywhere.</p>
-        <div class="flag-progress" aria-label="Flags found">
-          <span class="pips" id="flag-pips"><i></i><i></i><i></i><i></i></span>
+        <p class="flag-msg needs-js" id="flag-msg" role="status" aria-live="polite">Flags are checked in your browser. Nothing is sent anywhere.</p>
+        <div class="flag-progress needs-js">
+          <span class="pips" id="flag-pips" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
           <span id="flag-count">0 of 4 found</span>
         </div>
       </div></div>
@@ -310,26 +374,142 @@
       <div class="in">
         <h2 id="contact-h">To be continued…</h2>
         <p>I'm looking for cloud security internships and junior roles. If your team works on cloud security, I'd like to hear from you.</p>
-        <div class="btns" id="end-btns"></div>
+        <div class="btns">
+          <!-- build:contact-buttons -->
+          <a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer" class="btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01zM6.27 13.4h2.4V9.36c0-.22.02-.43.08-.59.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.88h2.4V9.25c0-2.22-1.18-3.25-2.76-3.25-1.28 0-1.84.7-2.16 1.2v.03h-.02l.02-.03V6.17h-2.4c.03.68 0 7.23 0 7.23z"></path></svg>LinkedIn</a>
+          <a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer" class="btn ghost"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>GitHub</a>
+          <a href="/cv.html" class="btn ghost"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M3 0h7l3 3v13H3zM9 1v3h3M5 7h6v1.5H5zm0 3h6v1.5H5zm0 3h4v1.5H5z"></path></svg>View CV</a>
+          <!-- /build:contact-buttons -->
+        </div>
       </div>
     </div>
   </section>
 </main>
-<dialog class="courses-dialog" id="courses-dialog" aria-labelledby="courses-h">
+<dialog class="courses-dialog" id="courses-dialog" aria-labelledby="courses-h" closedby="any">
   <div class="frame cut-b dlg-frame"><div class="in">
     <div class="dlg-head">
       <div>
-        <span class="caption" id="courses-uni">German International University (GIU)</span>
+        <span class="caption" data-bind="courses.university">German International University (GIU)</span>
         <h2 id="courses-h">My courses</h2>
-        <p id="courses-sub">B.Sc. Informatics and Computer Science, IT Security major</p>
+        <p data-bind="courses.subtitle">B.Sc. Informatics and Computer Science, IT Security major</p>
       </div>
-      <button class="btn ghost dlg-close" id="close-courses" type="button">Close</button>
+      <button class="btn ghost dlg-close" id="close-courses" type="button" commandfor="courses-dialog" command="close">Close</button>
     </div>
-    <div class="dlg-summary" id="courses-summary"></div>
-    <div class="semesters" id="semesters"></div>
+    <div class="dlg-summary">
+      <!-- build:courses-summary -->
+      <span><b>46</b> courses</span>
+      <span><b>180</b> of 240 ECTS completed</span>
+      <span><b>8</b> semesters</span>
+      <!-- /build:courses-summary -->
+    </div>
+    <div class="semesters">
+      <!-- build:semesters -->
+      <section class="sem completed">
+        <div class="sem-head"><h3>Semester 1</h3><span class="sem-state">Completed</span></div>
+        <ul class="sem-list">
+          <li><span>Mathematics I</span><span class="ects">8 ECTS</span></li>
+          <li><span>Programming I</span><span class="ects">6 ECTS</span></li>
+          <li><span>Physics</span><span class="ects">5 ECTS</span></li>
+          <li><span>Digital Logic Design</span><span class="ects">5 ECTS</span></li>
+          <li><span>English for Academic Purposes and Study Skills</span><span class="ects">2 ECTS</span></li>
+          <li><span>German 1</span><span class="ects">2 ECTS</span></li>
+        </ul>
+        <p class="sem-total">28 ECTS</p>
+      </section>
+      <section class="sem completed">
+        <div class="sem-head"><h3>Semester 2</h3><span class="sem-state">Completed</span></div>
+        <ul class="sem-list">
+          <li><span>Mathematics II</span><span class="ects">4 ECTS</span></li>
+          <li><span>Programming II</span><span class="ects">7 ECTS</span></li>
+          <li><span>Computer Networks</span><span class="ects">5 ECTS</span></li>
+          <li><span>Theoretical Computer Science</span><span class="ects">5 ECTS</span></li>
+          <li><span>Computer Organization</span><span class="ects">5 ECTS</span></li>
+          <li><span>Scientific Methods</span><span class="ects">2 ECTS</span></li>
+          <li><span>German 2</span><span class="ects">2 ECTS</span></li>
+        </ul>
+        <p class="sem-total">30 ECTS</p>
+      </section>
+      <section class="sem completed">
+        <div class="sem-head"><h3>Semester 3</h3><span class="sem-state">Completed</span></div>
+        <ul class="sem-list">
+          <li><span>Mathematics III</span><span class="ects">4 ECTS</span></li>
+          <li><span>Programming III</span><span class="ects">7 ECTS</span></li>
+          <li><span>Operating Systems</span><span class="ects">5 ECTS</span></li>
+          <li><span>Databases</span><span class="ects">6 ECTS</span></li>
+          <li><span>Data Structures &amp; Algorithms</span><span class="ects">6 ECTS</span></li>
+          <li><span>Communication and Presentation Skills</span><span class="ects">2 ECTS</span></li>
+          <li><span>German 3</span><span class="ects">2 ECTS</span></li>
+        </ul>
+        <p class="sem-total">32 ECTS</p>
+      </section>
+      <section class="sem completed">
+        <div class="sem-head"><h3>Semester 4</h3><span class="sem-state">Completed</span></div>
+        <ul class="sem-list">
+          <li><span>Mathematics IV</span><span class="ects">4 ECTS</span></li>
+          <li><span>Software Engineering</span><span class="ects">4 ECTS</span></li>
+          <li><span>Analysis and Design of Algorithms</span><span class="ects">4 ECTS</span></li>
+          <li><span>Information Security</span><span class="ects">4 ECTS</span></li>
+          <li><span>Introduction to Data Science</span><span class="ects">4 ECTS</span></li>
+          <li><span>Introduction to Media Informatics</span><span class="ects">4 ECTS</span></li>
+          <li><span>Research Paper Writing</span><span class="ects">2 ECTS</span></li>
+          <li><span>German 4</span><span class="ects">2 ECTS</span></li>
+        </ul>
+        <p class="sem-total">28 ECTS</p>
+      </section>
+      <section class="sem completed">
+        <div class="sem-head"><h3>Semester 5</h3><span class="sem-state">Completed</span></div>
+        <ul class="sem-list">
+          <li><span>Cryptography</span><span class="ects">5 ECTS</span></li>
+          <li><span>Software and Mobile Devices Security</span><span class="ects">5 ECTS</span></li>
+          <li><span>Digital Forensics</span><span class="ects">5 ECTS</span></li>
+          <li><span>Software Project I</span><span class="ects">5 ECTS</span></li>
+          <li><span>Machine Learning</span><span class="ects">5 ECTS</span></li>
+          <li><span>Database Programming</span><span class="ects">5 ECTS</span></li>
+        </ul>
+        <p class="sem-total">30 ECTS</p>
+      </section>
+      <section class="sem completed">
+        <div class="sem-head"><h3>Semester 6</h3><span class="sem-state">Completed</span></div>
+        <ul class="sem-list">
+          <li><span>Network Security</span><span class="ects">6 ECTS</span></li>
+          <li><span>Ethical Hacking and Penetration Testing</span><span class="ects">6 ECTS</span></li>
+          <li><span>Business Continuity and Risk Management</span><span class="ects">6 ECTS</span></li>
+          <li><span>Project Management</span><span class="ects">2 ECTS</span></li>
+          <li><span>Big Data and NoSQL</span><span class="ects">6 ECTS</span></li>
+          <li><span>Mobile Software Development</span><span class="ects">6 ECTS</span></li>
+        </ul>
+        <p class="sem-total">32 ECTS</p>
+      </section>
+      <section class="sem current">
+        <div class="sem-head"><h3>Semester 7</h3><span class="sem-state">In progress</span></div>
+        <ul class="sem-list">
+          <li><span>Bachelor Thesis and Colloquium</span><span class="ects">20 ECTS</span></li>
+          <li><span>Research Methodology</span><span class="ects">5 ECTS</span></li>
+          <li><span>Workplace &amp; Internship Readiness</span><span class="ects">5 ECTS</span></li>
+        </ul>
+        <p class="sem-total">30 ECTS</p>
+      </section>
+      <section class="sem current">
+        <div class="sem-head"><h3>Semester 8</h3><span class="sem-state">In progress</span></div>
+        <ul class="sem-list">
+          <li><span>Internship</span><span class="ects">20 ECTS</span></li>
+          <li><span>Internship-accompanying Seminar</span><span class="ects">5 ECTS</span></li>
+          <li><span>Business Ethics</span><span class="ects">5 ECTS</span></li>
+        </ul>
+        <p class="sem-total">30 ECTS</p>
+      </section>
+      <!-- /build:semesters -->
+    </div>
   </div></div>
 </dialog>
 
-<footer><div class="wrap"><span>Ali Ahmed, Cairo</span><span id="year">2026</span></div></footer>
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, Cairo</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
 </body>
 </html>

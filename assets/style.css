@@ -19,6 +19,8 @@
   --teal:#0D8784;
   --purple:#6A4BC8;
   --green:#1C9A5F;
+  /* the same hues, dark enough for small text on --panel and --bg (WCAG AA) */
+  --green-text:#157A4B; --teal-text:#0B706D;
   /* scene colours */
   --sky-a:#BFE5E8; --sky-b:#A3D6DE; --orb:#FBF6DF; --cloud:#FFFFFF;
   --far:#8DBCD0; --mid:#4C88B0; --near:#1F4F80; --ground:#2B5F8E;
@@ -31,6 +33,7 @@
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#09101F; --panel:#101B32; --line:#9FBCE3; --text:#E2EBF7; --muted:#9AAECA;
   --blue:#78A8EC; --teal:#45D4C8; --purple:#A991FF; --green:#5FE3A2;
+  --green-text:#5FE3A2; --teal-text:#45D4C8;
   --sky-a:#121F3C; --sky-b:#18294D; --orb:#E4ECF7; --cloud:#24365F;
   --far:#22355E; --mid:#1A2B4E; --near:#0C1630; --ground:#0F1B38;
   --win:#6EF0BC; --star-o:1; --dots:rgba(159,188,227,.14);
@@ -39,6 +42,7 @@
 :root[data-theme="dark"]{
   --bg:#09101F; --panel:#101B32; --line:#9FBCE3; --text:#E2EBF7; --muted:#9AAECA;
   --blue:#78A8EC; --teal:#45D4C8; --purple:#A991FF; --green:#5FE3A2;
+  --green-text:#5FE3A2; --teal-text:#45D4C8;
   --sky-a:#121F3C; --sky-b:#18294D; --orb:#E4ECF7; --cloud:#24365F;
   --far:#22355E; --mid:#1A2B4E; --near:#0C1630; --ground:#0F1B38;
   --win:#6EF0BC; --star-o:1; --dots:rgba(159,188,227,.14);
@@ -94,7 +98,6 @@ svg *{transition:fill .5s,stroke .5s}
 .btn:hover{background:var(--teal);color:var(--bg)}
 .btn.ghost{background:transparent;color:var(--text);box-shadow:inset 0 0 0 2px var(--line)}
 .btn.ghost:hover{background:var(--panel);box-shadow:inset 0 0 0 2px var(--teal)}
-.btn[aria-disabled="true"]{background:transparent;color:var(--muted);box-shadow:inset 0 0 0 2px var(--muted);cursor:default;opacity:.85}
 .btn svg{width:17px;height:17px;flex:none}
 
 /* hero splash */
@@ -133,9 +136,12 @@ svg *{transition:fill .5s,stroke .5s}
 .bar{height:12px;border:2px solid var(--line);position:relative;overflow:hidden;transform:skewX(-20deg)}
 .bar i{position:absolute;inset:0 auto 0 0;width:var(--p,0%);background:var(--teal);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 
-/* reveal: panels are fully visible at rest; JS only adds a gentle settle */
-.js .reveal{transform:translateY(26px) rotate(-.4deg);transition:transform .9s cubic-bezier(.2,.8,.2,1)}
-.js .reveal.seen{transform:none}
+/* reveal: panels are fully visible at rest; JS only makes the ones below the fold settle in as they arrive */
+.reveal{transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.reveal.wait{transform:translateY(26px) rotate(-.4deg)}
+
+/* accent colour for skill groups and certification badges */
+.c-teal{--c:var(--teal)} .c-blue{--c:var(--blue)} .c-purple{--c:var(--purple)} .c-green{--c:var(--green)} .c-muted{--c:var(--muted)}
 
 /* skills */
 .skills{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
@@ -152,6 +158,7 @@ svg *{transition:fill .5s,stroke .5s}
 .cert svg{width:72px;height:80px}
 .cert h3{margin:0;font-size:1.1rem;line-height:1.2}
 .cert p{margin:4px 0 0;font:600 .9rem/1.2 var(--f-display);color:var(--c)}
+.cert.earned p{color:var(--teal-text)}
 .cert .hex{stroke:var(--c);stroke-width:3;fill:transparent}
 .cert.earned .hex{fill:var(--c)}
 .cert.progress .hex{stroke-dasharray:10 6}
@@ -187,7 +194,7 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;p
 
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
-  .js .reveal{transform:none;transition:none}
+  .reveal{transform:none;transition:none}
   .bar i{transition:none}
 }
 @media (max-width:900px){
@@ -225,7 +232,7 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
 .flag-row input:focus-visible{outline:3px solid var(--teal);outline-offset:2px}
 .flag-row .btn{border:0}
 .flag-msg{margin:0;color:var(--muted);min-height:3em}
-.flag-msg[data-state="ok"]{color:var(--green)}
+.flag-msg[data-state="ok"]{color:var(--green-text)}
 .flag-msg[data-state="bad"]{color:var(--purple)}
 .flag-progress{display:flex;align-items:center;gap:12px;font:600 .95rem/1 var(--f-display)}
 .pips{display:flex;gap:6px}
@@ -238,6 +245,7 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
 .page-head .lede{margin:0;max-width:56ch;font-size:clamp(1.05rem,1.6vw,1.2rem);color:var(--muted)}
 .back{font:600 1rem/1 var(--f-display);text-decoration:none;color:var(--muted)}
 .back:hover{color:var(--text)}
+.strip figure{margin:0}
 .strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 .strip .in{display:flex;flex-direction:column}
 .strip svg{display:block;width:100%;height:auto;border-bottom:var(--frame) solid var(--line)}
@@ -258,7 +266,8 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
 .tbl th,.tbl td{text-align:left;padding:10px 12px;border-bottom:1px solid color-mix(in srgb,var(--line) 30%,transparent);vertical-align:top}
 .tbl th{font:700 .95rem/1.2 var(--f-display)}
 .tbl tr:last-child td{border-bottom:0}
-.ok{color:var(--green);font-weight:600}
+.ok{color:var(--green-text);font-weight:600}
+.next{margin-top:40px}
 .next .in{padding:22px 24px;display:grid;gap:8px}
 .next h3{margin:0;font-size:1.25rem}
 .next p{margin:0;color:var(--muted)}
@@ -294,12 +303,10 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
   .cv{grid-template-columns:1fr 34%;gap:14pt;padding:0}
   .cv section h2{font-size:12pt;border-bottom-width:1px}
   .contact-list a{border:0}
-  .contact-list a::after{content:" (" attr(data-print) ")";font-weight:400}
-  .contact-list a[data-print=""]::after{content:none}
   a{color:#000}
 }
-figure.frame{margin:0}
-.next{margin-top:40px}
+
+/* 404 */
 .notfound{margin-block:clamp(24px,5vw,56px)}
 .notfound .in{display:grid}
 .notfound svg{display:block;width:100%;height:auto;border-bottom:var(--frame) solid var(--line)}
@@ -330,13 +337,12 @@ figure.frame{margin:0}
 .sem-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
 .sem-head h3{margin:0;font-size:1.1rem}
 .sem-state{font:600 .82rem/1 var(--f-display);color:var(--muted)}
-.sem.completed .sem-state{color:var(--green)}
-.sem.current .sem-state{color:var(--teal)}
+.sem.completed .sem-state{color:var(--green-text)}
+.sem.current .sem-state{color:var(--teal-text)}
 .sem-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .sem-list li{display:flex;justify-content:space-between;gap:10px;font-size:.95rem;line-height:1.3}
 .sem-list .ects{flex:none;font:600 .82rem/1.3 var(--f-display);color:var(--muted);font-variant-numeric:tabular-nums}
 .sem-total{margin:0;padding-top:8px;border-top:1px solid color-mix(in srgb,var(--line) 35%,transparent);font:600 .85rem/1 var(--f-display);color:var(--muted);text-align:right}
-.selectable{user-select:all}
 @media (max-width:560px){.dlg-head{flex-direction:column}}
 /* courses dialog: the inner panel is the scroller (fix: it used to grow and get clipped) */
 .dlg-frame>.in{min-height:0;max-height:calc(100dvh - 32px - 2*var(--frame));overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}

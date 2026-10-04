@@ -2,36 +2,54 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'self'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hardening a static site – Ali Ahmed</title>
 <meta name="description" content="Issue #1: how this static site blocks XSS with CSP and Trusted Types, and how it was tested.">
-<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/style.css">
-<script src="../assets/main.js" defer></script>
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/writeups/hardening-this-site.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="Hardening a static site – Ali Ahmed">
+<meta property="og:description" content="Issue #1: how this static site blocks XSS with CSP and Trusted Types, and how it was tested.">
+<meta property="og:url" content="https://lectrik0.github.io/writeups/hardening-this-site.html">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: Cybersecurity student building toward a career in cloud security.">
+<meta property="og:locale" content="en_GB">
+<meta property="article:published_time" content="2026-10-04">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<!-- /build:meta -->
+<link rel="icon" href="../assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css?v=12478461dd">
+<noscript><link rel="stylesheet" href="../assets/nojs.css?v=02f3f7d7dd"></noscript>
+<script src="../assets/main.js?v=2d0b68fb62" defer></script>
 </head>
 <body>
+<!-- build:nav -->
 <nav class="nav" aria-label="Main">
   <div class="wrap">
-    <a class="brand" href="../index.html">Ali Ahmed</a>
+    <a class="brand" href="/">Ali Ahmed</a>
     <ul>
-      <li><a href="../index.html#story">Story</a></li>
-      <li><a href="../index.html#skills">Skills</a></li>
-      <li><a href="../index.html#writeups">Write-ups</a></li>
-      <li><a href="../index.html#flags">Flags</a></li>
-      <li><a href="../cv.html">CV</a></li>
-      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a href="/#story">Story</a></li>
+      <li><a href="/#skills">Skills</a></li>
+      <li><a href="/#certs">Certifications</a></li>
+      <li><a href="/#writeups">Write-ups</a></li>
+      <li><a href="/#flags">Flags</a></li>
+      <li><a href="/cv.html">CV</a></li>
+      <li><a href="/#contact">Contact</a></li>
     </ul>
-    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode">
-      <svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"/></svg>
-      <span id="toggle-label">Night</span>
-    </button>
+    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">Night</span></button>
   </div>
 </nav>
+<!-- /build:nav -->
 <main>
   <header class="page-head wrap">
-    <a class="back" href="../index.html#writeups">Back to write-ups</a>
+    <a class="back" href="/#writeups">Back to write-ups</a>
     <span class="caption">Issue #1 &nbsp;/&nbsp; <time datetime="2026-10-04">4 October 2026</time></span>
     <h1>Hardening a static site</h1>
     <p class="lede">This site has no backend, no login and no database. It can still be attacked. Here's what could go wrong, what I changed, and how I tested it.</p>
@@ -39,7 +57,7 @@
 
   <div class="wrap">
     <div class="strip">
-      <figure class="frame cut-a"><div class="in">
+      <div class="frame cut-a"><figure class="in">
         <svg viewBox="0 0 360 230" role="img" aria-label="A web page with a script tag sneaking into it">
           <rect width="360" height="230" class="sky-a"/>
           <rect x="40" y="30" width="200" height="170" class="f-panel ink"/>
@@ -54,9 +72,9 @@
           <text x="300" y="104" class="sfx" text-anchor="middle">sneak</text>
         </svg>
         <figcaption class="cap"><b>The problem</b><span>Any text that gets into the page as HTML can run code in a visitor's browser.</span></figcaption>
-      </div></figure>
+      </figure></div>
 
-      <figure class="frame cut-b"><div class="in">
+      <div class="frame cut-b"><figure class="in">
         <svg viewBox="0 0 360 230" role="img" aria-label="Attack payloads flying toward the page">
           <rect width="360" height="230" class="sky-b"/>
           <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
@@ -72,9 +90,9 @@
           <path d="M176 57 h40 M196 117 h28 M172 177 h44" class="ink" stroke-width="3" stroke-dasharray="6 6"/>
         </svg>
         <figcaption class="cap"><b>The attack</b><span>I fed classic XSS payloads into the site's own content to see what would run.</span></figcaption>
-      </div></figure>
+      </figure></div>
 
-      <figure class="frame cut-c"><div class="in">
+      <div class="frame cut-c"><figure class="in">
         <svg viewBox="0 0 360 230" role="img" aria-label="A shield labelled CSP blocking the payloads">
           <rect width="360" height="230" class="sky-a"/>
           <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
@@ -85,7 +103,7 @@
           <text x="150" y="214" class="sfx" text-anchor="middle">blocked.</text>
         </svg>
         <figcaption class="cap"><b>The fix</b><span>Render everything as text, and let the browser enforce it with CSP and Trusted Types.</span></figcaption>
-      </div></figure>
+      </figure></div>
     </div>
 
     <article class="prose">
@@ -148,6 +166,13 @@ require-trusted-types-for 'script'; trusted-types 'none'</code></pre>
   </div>
 </main>
 
-<footer><div class="wrap"><span>Ali Ahmed, Cairo</span><span id="year">2026</span></div></footer>
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, Cairo</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
 </body>
 </html>

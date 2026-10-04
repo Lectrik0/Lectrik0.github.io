@@ -7,10 +7,10 @@
 <meta name="robots" content="noindex, nofollow, noarchive">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Backstage</title>
-<link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/style.css">
-<link rel="stylesheet" href="../assets/admin.css">
-<script src="../assets/admin.js" defer></script>
+<link rel="icon" href="../assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css?v=12478461dd">
+<link rel="stylesheet" href="../assets/admin.css?v=3a17924c83">
+<script src="../assets/admin.js?v=e541796abd" defer></script>
 </head>
 <body class="bs">
 <main class="wrap bs-wrap">
@@ -27,6 +27,7 @@
       <label for="setup-pass2">Repeat password</label>
       <input id="setup-pass2" type="password" autocomplete="new-password" required>
       <label for="setup-token">GitHub token</label>
+      <!-- [html-validate-disable-next autocomplete-password: an API token, not a password; it shouldn't be offered to password managers] -->
       <input id="setup-token" type="password" autocomplete="off" spellcheck="false" required placeholder="github_pat_…">
       <details class="bs-help">
         <summary>How to make the token</summary>
