@@ -196,11 +196,11 @@
       "ects": 5
      },
      {
-      "name": "Elective I",
+      "name": "Machine Learning",
       "ects": 5
      },
      {
-      "name": "Elective II",
+      "name": "Database Programming",
       "ects": 5
      }
     ]
@@ -226,11 +226,11 @@
       "ects": 2
      },
      {
-      "name": "Elective III",
+      "name": "Big Data and NoSQL",
       "ects": 6
      },
      {
-      "name": "Elective IV",
+      "name": "Mobile Software Development",
       "ects": 6
      }
     ]
