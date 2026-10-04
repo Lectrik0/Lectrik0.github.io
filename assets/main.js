@@ -6,14 +6,15 @@
  * - Every link is checked by safeUrl(): only https: or same-site paths are allowed,
  *   so a "javascript:" or "data:" URL can never end up in an href.
  * - External links open with rel="noopener noreferrer".
- * - The only stored value (theme) is checked against an allow-list before use.
+ * - Stored values (theme, found flags) are checked against allow-lists before use.
+ * - Flags are compared as SHA-256 hashes, so this file doesn't give them away.
  */
 
 /* ============ Edit your content here ============ */
 const PROFILE = {
   github: "https://github.com/Lectrik0",
   linkedin: "https://www.linkedin.com/in/aliahmed255",
-  cv: "",                         // put "cv.pdf" here after you upload your CV next to index.html
+  cv: "cv.html",                  // set to "" to hide the CV buttons
   internshipStart: "2026-07-16",
   internshipEnd: "2027-01-16"
 };
@@ -31,8 +32,12 @@ const CERTS = [
   { name: "AWS Solutions Architect – Associate", short: "SAA", status: "planned" },
   { name: "AWS Certified Security – Specialty", short: "SCS", status: "planned" }
 ];
-// Add write-ups like: { title: "...", date: "2026-11-02", tag: "AWS lab", summary: "...", url: "https://..." }
-const POSTS = [];
+// Newest first. url can be a page on this site (writeups/...) or an https:// link.
+const POSTS = [
+  { title: "Issue #1: Hardening a static site", date: "2026-10-04", tag: "Web security",
+    summary: "A site with no backend can still be attacked. How this one blocks XSS with CSP and Trusted Types, and how I tested it.",
+    url: "writeups/hardening-this-site.html" }
+];
 /* ================================================ */
 
 (() => {
@@ -85,26 +90,23 @@ const POSTS = [];
   const ICON_PATHS = {
     gh: "M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z",
     li: "M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01zM6.27 13.4h2.4V9.36c0-.22.02-.43.08-.59.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.88h2.4V9.25c0-2.22-1.18-3.25-2.76-3.25-1.28 0-1.84.7-2.16 1.2v.03h-.02l.02-.03V6.17h-2.4c.03.68 0 7.23 0 7.23z",
-    cv: "M7 1h2v7.6l2.3-2.3 1.4 1.4L8 12.4 3.3 7.7l1.4-1.4L7 8.6zM2 13h12v2H2z"
+    cv: "M3 0h7l3 3v13H3zM9 1v3h3M5 7h6v1.5H5zm0 3h6v1.5H5zm0 3h4v1.5H5z"
   };
-  const icon = name => svg("svg", { viewBox: "0 0 16 16", "aria-hidden": "true" }, svg("path", { fill: "currentColor", d: ICON_PATHS[name] }));
+  const icon = name => svg("svg", { viewBox: "0 0 16 16", "aria-hidden": "true" }, svg("path", { fill: "currentColor", "fill-rule": "evenodd", d: ICON_PATHS[name] }));
 
   /* ---------- buttons ---------- */
   function buttonRow(primary) {
-    const cvUrl = safeUrl(PROFILE.cv);
-    const cv = cvUrl
-      ? link(cvUrl, { class: primary === "cv" ? "btn" : "btn ghost", download: "" }, icon("cv"), "Download CV")
-      : el("span", { class: "btn", "aria-disabled": "true" }, icon("cv"), "CV coming soon");
+    const cv = link(PROFILE.cv, { class: primary === "cv" ? "btn" : "btn ghost" }, icon("cv"), "View CV");
     const li = link(PROFILE.linkedin, { class: primary === "li" ? "btn" : "btn ghost" }, icon("li"), "LinkedIn");
     const gh = link(PROFILE.github, { class: "btn ghost" }, icon("gh"), "GitHub");
-    return primary === "li" ? [li, gh, cv] : [cv, li, gh];
+    return (primary === "li" ? [li, gh, cv] : [cv, li, gh]).filter(Boolean);
   }
-  $("hero-btns").replaceChildren(...buttonRow(safeUrl(PROFILE.cv) ? "cv" : "li").filter(Boolean));
-  $("end-btns").replaceChildren(...buttonRow("li").filter(Boolean));
-  $("year").textContent = String(now.getFullYear());
+  if ($("hero-btns")) $("hero-btns").replaceChildren(...buttonRow("cv"));
+  if ($("end-btns")) $("end-btns").replaceChildren(...buttonRow("li"));
+  if ($("year")) $("year").textContent = String(now.getFullYear());
 
   /* ---------- internship meter ---------- */
-  {
+  if ($("intern-bar")) {
     const s = new Date(PROFILE.internshipStart), e = new Date(PROFILE.internshipEnd);
     const p = Math.max(0, Math.min(100, Math.round((now - s) / (e - s) * 100))) || 0;
     const days = Math.max(0, Math.ceil((e - now) / 864e5));
@@ -114,7 +116,7 @@ const POSTS = [];
   }
 
   /* ---------- skills ---------- */
-  $("skills-grid").replaceChildren(...SKILLS.map(g => {
+  if ($("skills-grid")) $("skills-grid").replaceChildren(...SKILLS.map(g => {
     const col = el("div", { class: "frame cut-a skill-col" },
       el("div", { class: "in" },
         el("h3", {}, el("i"), document.createTextNode(String(g.group))),
@@ -128,7 +130,7 @@ const POSTS = [];
   /* ---------- certifications ---------- */
   const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planned" };
   const CERT_COLOR = { earned: "teal", progress: "blue", planned: "muted" };
-  $("certs-grid").replaceChildren(...CERTS.map(c => {
+  if ($("certs-grid")) $("certs-grid").replaceChildren(...CERTS.map(c => {
     const status = CERT_LABEL[c.status] ? c.status : "planned";
     const card = el("div", { class: `frame cut-c cert ${status}` },
       el("div", { class: "in" },
@@ -142,22 +144,89 @@ const POSTS = [];
   }));
 
   /* ---------- write-ups ---------- */
-  const posts = POSTS.map(p => {
-    const d = new Date(p.date);
-    const time = el("time", { datetime: isNaN(d) ? null : d.toISOString().slice(0, 10),
-      text: isNaN(d) ? "" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) });
-    return link(p.url, { class: "post" }, time,
-      el("div", {}, el("h3", { text: p.title }), el("p", { text: p.summary || "" })),
-      el("span", { class: "tag", text: p.tag || "" }));
-  }).filter(Boolean);
-  if (posts.length) {
-    $("posts").replaceChildren(...posts);
-    $("posts").hidden = false;
-    $("posts-empty").hidden = true;
+  if ($("posts")) {
+    const posts = POSTS.map(p => {
+      const d = new Date(p.date);
+      const time = el("time", { datetime: isNaN(d) ? null : d.toISOString().slice(0, 10),
+        text: isNaN(d) ? "" : d.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" }) });
+      return link(p.url, { class: "post" }, time,
+        el("div", {}, el("h3", { text: p.title }), el("p", { text: p.summary || "" })),
+        el("span", { class: "tag", text: p.tag || "" }));
+    }).filter(Boolean);
+    if (posts.length) {
+      $("posts").replaceChildren(...posts);
+      $("posts").hidden = false;
+      if ($("posts-empty")) $("posts-empty").hidden = true;
+    }
   }
 
+  /* ---------- hidden flags ---------- */
+  console.log("%cHey, you opened the console.", "font:600 14px sans-serif;color:#0D8784");
+  console.log("Flag 2 of 4: AA{d3vt00ls_4r3_fr13nds}");
+  if ($("flag-form")) {
+    const HASHES = [
+      "f058793998de95d9e9877b7e92108f914f8fa96c240003471df902344c9b2274",
+      "adf672b700d5f6aca0e5d7c7d2b020c9719eebb2e0974bb37827aeee8d7a95d6",
+      "cc42772e75a3717889546c90366411a5c98b7d9dbab654f7a6113745d57961a0",
+      "72795df42713f7e9dceb0f7e6053a97de7cf7f0d8874238c0afea62febf59862"
+    ];
+    const KEY = "aa-flags";
+    let found = new Set();
+    try {
+      const saved = JSON.parse(localStorage.getItem(KEY) || "[]");
+      if (Array.isArray(saved)) saved.filter(i => Number.isInteger(i) && i >= 0 && i < HASHES.length).forEach(i => found.add(i));
+    } catch (e) { /* storage unavailable or corrupted */ }
+    const msg = $("flag-msg");
+    const render = () => {
+      const pips = $("flag-pips").children;
+      for (let i = 0; i < pips.length; i++) pips[i].classList.toggle("on", i < found.size);
+      $("flag-count").textContent = `${found.size} of ${HASHES.length} found`;
+      document.querySelectorAll("#hints li").forEach(li => li.classList.toggle("done", found.has(Number(li.dataset.flag))));
+    };
+    async function sha256(text) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+      return Array.from(new Uint8Array(buf), b => b.toString(16).padStart(2, "0")).join("");
+    }
+    $("flag-form").addEventListener("submit", async ev => {
+      ev.preventDefault();
+      const input = $("flag-input");
+      const value = input.value.trim().slice(0, 64);
+      if (!/^AA\{[A-Za-z0-9_]{1,56}\}$/.test(value)) {
+        msg.textContent = "Flags look like AA{...} with letters, numbers and underscores inside.";
+        msg.dataset.state = "bad";
+        return;
+      }
+      if (!window.crypto || !crypto.subtle) {
+        msg.textContent = "Your browser can't check flags here. Try a recent Chrome, Firefox or Safari.";
+        msg.dataset.state = "bad";
+        return;
+      }
+      const idx = HASHES.indexOf(await sha256(value));
+      if (idx === -1) {
+        msg.textContent = "That's not one of the flags. Check for typos and try again.";
+        msg.dataset.state = "bad";
+      } else if (found.has(idx)) {
+        msg.textContent = `You already found flag ${idx + 1}.`;
+        msg.dataset.state = "ok";
+      } else {
+        found.add(idx);
+        try { localStorage.setItem(KEY, JSON.stringify([...found])); } catch (e) { /* ignore */ }
+        msg.textContent = found.size === HASHES.length
+          ? "All four flags found. Message me on LinkedIn and tell me which one took longest."
+          : `Flag ${idx + 1} found. ${HASHES.length - found.size} to go.`;
+        msg.dataset.state = "ok";
+        input.value = "";
+      }
+      render();
+    });
+    render();
+  }
+
+  /* ---------- print button (CV page) ---------- */
+  if ($("print-cv")) $("print-cv").addEventListener("click", () => window.print());
+
   /* ---------- day / night ---------- */
-  {
+  if ($("toggle")) {
     const btn = $("toggle");
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
     const MOON = "M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z";
@@ -186,16 +255,18 @@ const POSTS = [];
   /* ---------- motion: hero parallax + panels settle in ---------- */
   if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
     const layers = Array.from(document.querySelectorAll(".layer"));
-    let ticking = false;
-    addEventListener("scroll", () => {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(() => {
-        const y = Math.min(scrollY, 900);
-        layers.forEach(l => { l.style.transform = `translateY(${y * Number(l.dataset.depth || 0)}px)`; });
-        ticking = false;
-      });
-    }, { passive: true });
+    if (layers.length) {
+      let ticking = false;
+      addEventListener("scroll", () => {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(() => {
+          const y = Math.min(scrollY, 900);
+          layers.forEach(l => { l.style.transform = `translateY(${y * Number(l.dataset.depth || 0)}px)`; });
+          ticking = false;
+        });
+      }, { passive: true });
+    }
     const io = new IntersectionObserver(entries => entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add("seen"); io.unobserve(e.target); }
     }), { rootMargin: "0px 0px -8% 0px" });
