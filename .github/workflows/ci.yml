@@ -1,0 +1,92 @@
+name: CI
+
+# Pull requests: check that the pages are built and everything passes.
+# Pushes to main (including Backstage edits of data/site.json): rebuild the pages, test them, and
+# commit the rebuilt pages so GitHub Pages serves them. If anything fails, nothing is published
+# and the live site stays as it was.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      # Actions are pinned to full commit SHAs so a moved tag can't change what runs.
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Install tools
+        run: npm ci --no-audit --no-fund
+
+      - name: Build pages from data/site.json
+        run: |
+          if [ "$GITHUB_EVENT_NAME" = "pull_request" ]; then
+            npm run check   # a PR must include its rebuilt pages
+          else
+            npm run build   # main may have a fresh Backstage edit; the publish job commits the result
+          fi
+
+      - name: Validate HTML
+        run: npm run lint
+
+      - name: Unit tests (content schema, escaping, build output)
+        run: npm test
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Browser tests (errors, CSP, links, no-JS, accessibility, XSS)
+        run: npm run test:browser
+
+  publish:
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write   # commit the rebuilt pages
+      pages: write      # ask GitHub Pages to redeploy
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Commit rebuilt pages
+        id: commit
+        run: |
+          set -euo pipefail
+          node scripts/build.mjs
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Pages are already up to date."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Rebuild pages from data/site.json"
+          git fetch origin main
+          if [ "$(git rev-parse origin/main)" != "$GITHUB_SHA" ]; then
+            echo "::notice::main has moved on since this run started; the run for the newer commit will publish."
+            exit 0
+          fi
+          git push origin HEAD:main
+          echo "pushed=true" >> "$GITHUB_OUTPUT"
+
+      # Commits pushed with the workflow token may not start a Pages build on their own.
+      - name: Ask GitHub Pages to redeploy
+        if: steps.commit.outputs.pushed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds" --silent || echo "::warning::Couldn't request a Pages build; it will update on the next push."

@@ -1,0 +1,3 @@
+/* Loaded only when JavaScript is off (from a <noscript> in each page's head).
+   All content is already in the HTML; this just hides the controls that can't work without a script. */
+.toggle,.needs-js,.meter .bar{display:none!important}

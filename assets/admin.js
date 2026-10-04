@@ -8,7 +8,8 @@
  *   from the password with PBKDF2-SHA256 (600,000 rounds); the username is bound in as
  *   authenticated data. Only the ciphertext, salt and IV are stored, in this browser only.
  * - Unlocking decrypts the token into memory. Locking, closing the tab or 30 idle minutes forgets it.
- * - Edits are saved by committing data/site.json through the GitHub API. GitHub Pages then rebuilds.
+ * - Edits are saved by committing data/site.json through the GitHub API. The CI workflow then checks
+ *   the content, renders it into the pages and publishes them (.github/workflows/ci.yml).
  * - Like the public pages: no innerHTML, CSP + Trusted Types, and connect-src limited to GitHub's API.
  */
 (() => {
@@ -119,7 +120,7 @@
       ["profile", { type: "object", label: "Profile", fields: {
         name: T("Name"), tagline: A("Tagline under your name"), location: T("Location"),
         linkedin: T("LinkedIn URL", { kind: "url" }), github: T("GitHub URL", { kind: "url" }),
-        email: T("Email (shown on the CV; leave empty to hide)", { kind: "email" }), cv: T("CV link", { help: "cv.html, or a PDF like cv.pdf" }) } }],
+        email: T("Email (shown on the home page, the CV and in security.txt; leave empty to hide)", { kind: "email" }), cv: T("CV link", { help: "cv.html, or a PDF like cv.pdf" }) } }],
       ["internship", { type: "object", label: "Internship progress bar", fields: {
         start: T("Start date", { kind: "date" }), end: T("End date", { kind: "date" }) } }]
     ] },
@@ -425,7 +426,7 @@
     try {
       await publish();
       changed();
-      toast("Published. The live site updates in about a minute.");
+      toast("Published. The site is checked and rebuilt, then goes live in a few minutes.");
     } catch (e) {
       b.disabled = false;
       $("status").textContent = "Unsaved changes";

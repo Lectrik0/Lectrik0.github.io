@@ -1,0 +1,161 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lectrik0.github.io/data/site.schema.json",
+  "title": "Site content",
+  "description": "Everything the build renders into the pages. Checked in CI (tests/unit/data.test.mjs), so a bad edit from Backstage fails the build instead of reaching the live site.",
+  "type": "object",
+  "required": ["profile", "internship", "story", "courses", "skills", "certs", "posts", "cv"],
+  "additionalProperties": false,
+  "properties": {
+    "profile": {
+      "type": "object",
+      "required": ["name", "tagline", "location", "github", "linkedin", "email", "cv"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "$ref": "#/$defs/text" },
+        "tagline": { "$ref": "#/$defs/text" },
+        "location": { "$ref": "#/$defs/text" },
+        "github": { "$ref": "#/$defs/httpsUrl" },
+        "linkedin": { "$ref": "#/$defs/httpsUrl" },
+        "email": { "description": "Shown on the home page, the CV and in security.txt. Empty hides it.", "anyOf": [{ "const": "" }, { "type": "string", "format": "email" }] },
+        "cv": { "$ref": "#/$defs/link" }
+      }
+    },
+    "internship": {
+      "type": "object",
+      "required": ["start", "end"],
+      "additionalProperties": false,
+      "properties": { "start": { "$ref": "#/$defs/date" }, "end": { "$ref": "#/$defs/date" } }
+    },
+    "story": {
+      "description": "One entry per drawn chapter on the home page, so exactly five.",
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["title", "text"],
+        "additionalProperties": false,
+        "properties": { "title": { "$ref": "#/$defs/text" }, "text": { "$ref": "#/$defs/text" } }
+      }
+    },
+    "courses": {
+      "type": "object",
+      "required": ["university", "degree", "major", "semesters"],
+      "additionalProperties": false,
+      "properties": {
+        "university": { "$ref": "#/$defs/text" },
+        "degree": { "$ref": "#/$defs/text" },
+        "major": { "type": "string" },
+        "semesters": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name", "status", "courses"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "$ref": "#/$defs/text" },
+              "status": { "enum": ["completed", "current", "upcoming"] },
+              "courses": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["name", "ects"],
+                  "additionalProperties": false,
+                  "properties": { "name": { "$ref": "#/$defs/text" }, "ects": { "type": "number", "minimum": 0, "maximum": 60 } }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["group", "note", "color", "items"],
+        "additionalProperties": false,
+        "properties": {
+          "group": { "$ref": "#/$defs/text" },
+          "note": { "type": "string" },
+          "color": { "enum": ["teal", "blue", "purple", "green"] },
+          "items": { "type": "array", "items": { "$ref": "#/$defs/text" } }
+        }
+      }
+    },
+    "certs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "short", "status"],
+        "additionalProperties": false,
+        "properties": {
+          "name": { "$ref": "#/$defs/text" },
+          "short": { "type": "string", "minLength": 1, "maxLength": 4 },
+          "status": { "enum": ["earned", "progress", "planned"] }
+        }
+      }
+    },
+    "posts": {
+      "description": "Write-ups, newest first.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "date", "tag", "summary", "url"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "$ref": "#/$defs/text" },
+          "date": { "$ref": "#/$defs/date" },
+          "tag": { "type": "string" },
+          "summary": { "type": "string" },
+          "url": { "$ref": "#/$defs/link" }
+        }
+      }
+    },
+    "cv": {
+      "type": "object",
+      "required": ["headline", "summary", "education", "experience", "projects", "skills", "languages"],
+      "additionalProperties": false,
+      "properties": {
+        "headline": { "$ref": "#/$defs/text" },
+        "summary": { "$ref": "#/$defs/text" },
+        "education": { "type": "array", "items": { "$ref": "#/$defs/cvEntry" } },
+        "experience": { "type": "array", "items": { "$ref": "#/$defs/cvEntry" } },
+        "projects": { "type": "array", "items": { "$ref": "#/$defs/cvEntry" } },
+        "skills": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["label", "text"],
+            "additionalProperties": false,
+            "properties": { "label": { "$ref": "#/$defs/text" }, "text": { "$ref": "#/$defs/text" } }
+          }
+        },
+        "languages": { "type": "array", "items": { "$ref": "#/$defs/text" } }
+      }
+    }
+  },
+  "$defs": {
+    "text": { "type": "string", "minLength": 1, "pattern": "\\S" },
+    "date": { "type": "string", "format": "date" },
+    "httpsUrl": { "type": "string", "pattern": "^https://[^\\s/]+\\.[^\\s]+$" },
+    "link": {
+      "description": "An https:// link, or a path on this site such as cv.html or writeups/my-lab.html.",
+      "type": "string",
+      "pattern": "^(https://[^\\s/]+\\.[^\\s]+|(?![A-Za-z][A-Za-z0-9+.-]*:)(?!//)[^\\s]+)$"
+    },
+    "cvEntry": {
+      "type": "object",
+      "required": ["title"],
+      "additionalProperties": false,
+      "properties": {
+        "title": { "$ref": "#/$defs/text" },
+        "org": { "type": "string" },
+        "dates": { "type": "string" },
+        "details": { "type": "string" },
+        "bullets": { "type": "array", "items": { "$ref": "#/$defs/text" } }
+      }
+    }
+  }
+}
