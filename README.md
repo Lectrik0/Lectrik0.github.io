@@ -25,6 +25,7 @@ npm install            # dev tools only; the build itself needs nothing but Node
 npm run build          # render data/site.json into the pages
 npm start              # preview at http://127.0.0.1:4173 (behaves like GitHub Pages, incl. the 404 page)
 npm run check          # fail if the pages are out of date
+npm run check:content  # check data/site.json against the content rules
 npm run lint           # validate the HTML
 npm test               # unit tests: content schema, escaping, build output
 npm run test:browser   # Playwright: errors, CSP, links, no-JS, accessibility, XSS
@@ -60,9 +61,9 @@ Even a static site can be attacked through XSS, malicious links or third-party s
 3. **HTML validation** with html-validate.
 4. **Unit tests:** escaping, URL filtering, deterministic build, meta tags, sitemap, feed, security.txt, and that Backstage's content checker agrees with Ajv on over a thousand edited versions of the content.
 5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker and course list work; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated).
+6. **Publish** (`main` only, after everything passes): if the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
 
 The tests check the site *against* the content rather than freezing today's content: what each page must show is worked out from `data/site.json`, and the content checks also run on copies of the site built from edited content (more entries, fewer entries, half-filled entries, write-ups stored out of order). So editing the content can't make a test fail unless the edit itself is a problem.
-6. **Publish** (`main` only, after everything passes): if the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
 
 ## Hosting on AWS (`infra/`)
 
@@ -88,7 +89,7 @@ There are four flags hidden on the site. The checker on the home page compares S
 |---|---|
 | `/` | The story (Chapter 1 opens the full GIU course list), skills, certifications, write-ups, flags |
 | `/cv.html` | CV, prints cleanly to one A4 page |
-| `/writeups/` | Write-ups, each told as a comic "issue" |
+| `/writeups/*.html` | Write-ups, each told as a comic "issue" (listed on the home page) |
 | `/404.html` | Not-found page |
 | `/feed.xml` | Atom feed of the write-ups |
 | `/sitemap.xml`, `/robots.txt` | For search engines |
