@@ -266,6 +266,12 @@ export function cvContact(data, site) {
   return raw(items.join(`\n${h("span", { class: "sep", "aria-hidden": "true" }, " | ")}\n`));
 }
 
+// Personal details under the contact line (as Egyptian employers expect), only when filled in.
+export const cvPersonal = data => {
+  const military = str(obj(data.cv).military);
+  return raw(military ? h("p", { class: "sheet-personal" }, `Military status: ${military}`) : "");
+};
+
 const section = (title, ...kids) => block("section", {}, [h("h2", {}, title), ...kids]);
 // A line with text on the left and, optionally, on the right (dates, location, status).
 const row = (cls, left, right) => h("div", { class: cls }, left, right ? h("span", {}, right) : "");
@@ -307,7 +313,8 @@ const CV_SECTION = {
     row("row", h("span", {}, h("b", {}, str(p.title)), ...(str(p.stack) ? [" | ", h("i", {}, str(p.stack))] : [])), str(p.dates))
   ], bullets(p.bullets))),
   Certifications: items => [block("div", { class: "entry" }, items.map(c =>
-    row("row", h("span", {}, h("b", {}, str(c.name)), ...(verifyLink(c) ? [" | ", verifyLink(c)] : [])), CERT_LABEL[certStatus(c)])))],
+    row("row", h("span", {}, h("b", {}, str(c.name)), ...(verifyLink(c) ? [" | ", verifyLink(c)] : [])),
+      certStatus(c) === "earned" && str(c.issued) ? str(c.issued) : CERT_LABEL[certStatus(c)])))],
   Skills: items => [block("ul", { class: "skills" }, items.map(s => h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text))))]
 };
 
@@ -320,6 +327,7 @@ export function bindings(data) {
     "profile.name": str(P.name),
     "profile.location": str(P.location),
     "profile.tagline": str(P.tagline),
+    "cv.name": str(CV.fullName) || str(P.name),
     "cv.headline": str(CV.headline),
     "courses.university": str(C.university),
     "courses.subtitle": [str(C.degree), str(C.major) && `${str(C.major)} major`].filter(Boolean).join(", ")
