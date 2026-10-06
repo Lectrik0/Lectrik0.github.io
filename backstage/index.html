@@ -8,10 +8,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Backstage</title>
 <link rel="icon" href="../assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
-<link rel="stylesheet" href="../assets/style.css?v=fc324e770a">
-<link rel="stylesheet" href="../assets/admin.css?v=e97567080d">
+<link rel="stylesheet" href="../assets/style.css?v=d628340847">
+<link rel="stylesheet" href="../assets/admin.css?v=75fcdcef9e">
 <script src="../assets/content-check.js?v=40052dcc00" defer></script>
-<script src="../assets/admin.js?v=837f7ddfd5" defer></script>
+<script src="../assets/cv-layout.js?v=1120192684" defer></script>
+<script src="../assets/admin.js?v=a0efcc0c51" defer></script>
 </head>
 <body class="bs">
 <main class="wrap bs-wrap">
@@ -30,6 +31,9 @@
       <label for="setup-token">GitHub token</label>
       <!-- [html-validate-disable-next autocomplete-password: an API token, not a password; it shouldn't be offered to password managers] -->
       <input id="setup-token" type="password" autocomplete="off" spellcheck="false" required placeholder="github_pat_…">
+      <label for="setup-expires">Token expiry date (optional)</label>
+      <input id="setup-expires" type="date">
+      <small class="bs-hint">GitHub shows it when you make the token. Backstage reminds you before it runs out.</small>
       <details class="bs-help">
         <summary>How to make the token</summary>
         <ol>
@@ -66,15 +70,25 @@
         <span class="bs-status" id="status">Loading…</span>
       </div>
       <div class="btns">
+        <button class="btn ghost" id="history-btn" type="button">History</button>
         <button class="btn ghost" id="discard" type="button" disabled>Discard changes</button>
         <button class="btn" id="publish" type="button" disabled>Publish changes</button>
         <button class="btn ghost" id="lock" type="button">Lock</button>
       </div>
     </header>
+    <p class="bs-token" id="token-note" hidden></p>
     <section class="frame cut-b bs-problems" id="problems" aria-labelledby="problems-h" hidden><div class="in">
       <h2 id="problems-h" tabindex="-1">Fix these before publishing</h2>
       <p class="muted">The live site only changes when the content passes these checks. They're the same checks GitHub runs.</p>
       <ul id="problems-list"></ul>
+    </div></section>
+    <section class="frame cut-a bs-history" id="history" aria-labelledby="history-h" hidden><div class="in">
+      <div class="bs-history-head">
+        <h2 id="history-h" tabindex="-1">Earlier versions</h2>
+        <button class="linkish" id="history-close" type="button">Close</button>
+      </div>
+      <p class="muted">Every publish is kept on GitHub. Loading a version puts it in the editor; the site only changes when you publish it.</p>
+      <ol id="history-list"></ol>
     </div></section>
     <nav class="bs-tabs" id="tabs" aria-label="Sections"></nav>
     <div class="bs-panel" id="panel"></div>

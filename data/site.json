@@ -179,6 +179,7 @@
    {
     "name": "Semester 5",
     "status": "completed",
+    "abroad": "GIU Berlin, Germany",
     "courses": [
      {
       "name": "Cryptography",

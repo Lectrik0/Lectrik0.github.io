@@ -353,6 +353,9 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
 .sem-head h3{margin:0;font-size:1.1rem}
 .sem-state{font:600 .82rem/1 var(--f-display);color:var(--muted)}
 .sem.completed .sem-state{color:var(--green-text)}
+.sem.abroad{border-color:var(--purple);box-shadow:4px 4px 0 var(--purple)}
+.sem-abroad{margin:0;display:flex;align-items:center;gap:8px;padding:6px 10px;border-left:4px solid var(--purple);background:color-mix(in srgb,var(--purple) 16%,var(--bg));font:600 .88rem/1.25 var(--f-display);color:var(--text)}
+.sem-abroad svg{flex:none;width:16px;height:16px;color:var(--purple)}
 .sem.current .sem-state{color:var(--teal-text)}
 .sem-list{list-style:none;margin:0;padding:0;display:grid;gap:6px}
 .sem-list li{display:flex;justify-content:space-between;gap:10px;font-size:.95rem;line-height:1.3}

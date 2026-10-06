@@ -17,6 +17,7 @@
   const CHECKS_URL = `https://github.com/${OWNER}/${REPO}/actions`;
   const API = `https://api.github.com/repos/${OWNER}/${REPO}`;
   const VAULT_KEY = "aa-backstage-vault";
+  const EXPIRES_KEY = "aa-backstage-token-expires";   // the token's expiry date (not secret), for the reminder
   const ITERATIONS = 600000;
   const IDLE_MS = 30 * 60 * 1000;
 
@@ -31,6 +32,7 @@
   let sha = null;          // blob sha for optimistic concurrency
   let schema = null;       // data/site.schema.json, the rules CI checks the content with
   let problems = null;     // what the last check found (null = no check shown yet)
+  let fitProblem = null;   // set when the CV was found too long for one page, until it fits again
   let tab = "profile";
   let idleTimer = null;
 
@@ -140,6 +142,7 @@
         university: T("University"), degree: T("Degree"), major: T("Major"),
         semesters: LIST("Semesters", {
           name: T("Name"), status: SEL("Status", [["completed", "Completed"], ["current", "In progress"], ["upcoming", "Upcoming"]], { default: "upcoming" }),
+          abroad: T("Studied abroad at (optional)", { help: "e.g. GIU Berlin, Germany. That semester gets its own look in the course list." }),
           courses: LIST("Courses", { name: T("Course"), ects: T("ECTS", { kind: "number" }) }, { name: it => it.name || "New course", compact: true })
         }, { name: it => it.name || "New semester" }) } }]
     ] },
@@ -308,8 +311,10 @@
       if (!data[key] || typeof data[key] !== "object") data[key] = {};
       return el("div", { class: "frame cut-a bs-block" }, el("div", { class: "in" }, el("h2", { text: f.label }), renderObject(data[key], f.fields)));
     });
+    if (tab === "cv") blocks.unshift(el("p", { class: "bs-fit", id: "cv-fit", "aria-live": "polite" }));
     $("panel").replaceChildren(...blocks);
     markInvalid();
+    if (tab === "cv") showFit();
   }
 
   /* ================= checks before publishing =================
@@ -353,7 +358,7 @@
   function contentProblems() {
     const found = [...(schema ? ContentCheck.validate(schema, data) : []), ...ContentCheck.crossCheck(data)];
     // a link problem stays until that link is edited (it's re-checked on the next publish)
-    return [...found, ...linkProblems.filter(p => valueAt(p.path) === p.value)];
+    return [...found, ...linkProblems.filter(p => valueAt(p.path) === p.value), ...(fitProblem ? [fitProblem] : [])];
   }
 
   // Asks GitHub whether each link to a page on this site points at a file that exists.
@@ -388,6 +393,107 @@
     if (n) n.focus();
   }
 
+  /* ================= does the CV still fit on one A4 page? =================
+     CI refuses a CV that runs onto a second page (it renders the PDF and counts the pages), so
+     Backstage measures first: the CV's own layout (assets/cv-layout.js, shared with the build) with
+     the site's styles, laid out off screen at the printed width (.bs-measure in admin.css). */
+  const PRINT_HEIGHT = (297 - 2 * 11) * 96 / 25.4;   // A4 minus the @page margins in style.css, in CSS px
+  const DOM = {
+    h: (tag, attrs, ...kids) => el(tag, attrs, ...kids.flat(Infinity).filter(k => k !== "" && k !== null && k !== undefined && k !== false)),
+    block: (tag, attrs, kids) => DOM.h(tag, attrs, ...kids),
+    link: (href, attrs, ...kids) => href ? DOM.h("a", attrs, ...kids) : null
+  };
+  async function cvFill() {
+    await document.fonts.ready;
+    const sheet = el("article", { class: "sheet bs-measure", "aria-hidden": "true" },
+      CvLayout.header(data, DOM, location.host), ...CvLayout.body(data, DOM));
+    document.body.append(sheet);
+    const fill = sheet.getBoundingClientRect().height / PRINT_HEIGHT;
+    sheet.remove();
+    return Math.round(fill * 100);
+  }
+  const tooLong = pct => ({ path: ["cv"], message: `The CV no longer fits on one A4 page (it's ${pct}% of a page). Shorten the profile summary or a bullet point.` });
+
+  // The gauge at the top of the CV tab, updated as you type.
+  let fitTimer = null;
+  function showFit() {
+    clearTimeout(fitTimer);
+    fitTimer = setTimeout(async () => {
+      if (!data || !$("cv-fit")) return;
+      const pct = await cvFill(), out = $("cv-fit");
+      if (!out) return;
+      out.textContent = pct > 100 ? `The CV is ${pct}% of one A4 page: it no longer fits. Shorten something before publishing.`
+        : `The CV fills ${pct}% of one A4 page.`;
+      out.dataset.state = pct > 100 ? "bad" : pct > 95 ? "warn" : "ok";
+      const was = fitProblem;
+      fitProblem = pct > 100 && fitProblem ? tooLong(pct) : null;
+      if (problems && was !== fitProblem) { problems = contentProblems(); showProblems(); }
+    }, 250);
+  }
+
+  /* ================= earlier versions =================
+     Every publish is a commit of data/site.json, so GitHub keeps every version. Loading one puts it in
+     the editor like any other edit: nothing changes on the site until it's published again. */
+  const when = iso => new Date(iso).toLocaleString("en-GB", { day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit" });
+  async function showHistory() {
+    const list = $("history-list");
+    $("history").hidden = false;
+    list.replaceChildren(el("li", { text: "Loading from GitHub…" }));
+    $("history-h").focus();
+    try {
+      const commits = await gh(`/commits?path=${encodeURIComponent(PATH)}&sha=${BRANCH}&per_page=20`);
+      list.replaceChildren(...commits.map((c, i) => el("li", {},
+        el("b", { text: when(c.commit.committer.date) }), " ",
+        el("span", { class: "muted", text: c.commit.message.split("\n")[0] }), " ",
+        i === 0 ? el("span", { class: "bs-tag", text: "live now" })
+          : el("button", { type: "button", class: "linkish", text: "Load this version", on: { click: e => loadVersion(c, e.currentTarget) } }))));
+    } catch (e) {
+      list.replaceChildren(el("li", { text: "Couldn't load the history from GitHub. Check your connection and try again." }));
+    }
+  }
+  async function loadVersion(c, button) {
+    if (!$("publish").disabled && button.dataset.armed !== "1") {
+      button.dataset.armed = "1"; button.textContent = "Replace your unsaved changes with this version?";
+      return;
+    }
+    button.textContent = "Loading…";
+    try {
+      const f = await gh(`/contents/${PATH}?ref=${encodeURIComponent(c.sha)}`);
+      data = JSON.parse(fromB64Utf8(f.content));   // sha stays the live file's, so publishing replaces it
+    } catch (e) {
+      button.textContent = "Couldn't load it. Try again";
+      return;
+    }
+    problems = null; linkProblems = []; fitProblem = null;
+    showProblems(); renderTab(); changed();
+    $("history").hidden = true;
+    toast(`Loaded the version from ${when(c.commit.committer.date)}. Check it, then publish to make it live again, or discard the changes.`);
+  }
+
+  /* ================= token expiry reminder =================
+     GitHub doesn't let web pages read a token's expiry date, so it's entered once (at setup, or here)
+     and kept in this browser. A week or two before, Backstage says so, instead of just stopping. */
+  const readExpiry = () => { try { const v = localStorage.getItem(EXPIRES_KEY) || ""; return /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : ""; } catch (e) { return ""; } };
+  const saveExpiry = v => { try { if (v) localStorage.setItem(EXPIRES_KEY, v); else localStorage.removeItem(EXPIRES_KEY); } catch (e) { /* not stored */ } };
+  function showTokenNote() {
+    const note = $("token-note"), exp = readExpiry();
+    const input = el("input", { type: "date", id: "token-expires", "aria-label": "Token expiry date", value: exp });
+    const save = el("button", { type: "button", class: "linkish", text: "Save", on: { click: () => { saveExpiry(input.value); showTokenNote(); } } });
+    note.hidden = false;
+    if (!exp) {
+      note.dataset.state = "warn";
+      note.replaceChildren("Add your GitHub token's expiry date to get a reminder before it stops working: ", input, " ", save);
+      return;
+    }
+    const now = new Date(), days = Math.round((Date.parse(exp) - Date.UTC(now.getFullYear(), now.getMonth(), now.getDate())) / 86400000);
+    const date = new Date(`${exp}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+    note.dataset.state = days <= 14 ? "warn" : "ok";
+    const change = el("button", { type: "button", class: "linkish", text: "Change date", on: { click: () => note.replaceChildren("Token expiry date: ", input, " ", save) } });
+    note.replaceChildren(days < 0 ? `Your GitHub token expired on ${date}. Make a new one, then use Lock → Forget this device to set it up again. `
+      : days <= 14 ? `Your GitHub token expires ${days === 0 ? "today" : `in ${days} day${days === 1 ? "" : "s"}`} (${date}). Make a new one soon, then use Lock → Forget this device to set it up again. `
+      : `GitHub token valid until ${date}. `, change);
+  }
+
   /* ================= state + status ================= */
   function changed() {
     const dirty = JSON.stringify(data, null, 1) !== original;
@@ -396,6 +502,7 @@
     $("status").textContent = dirty ? "Unsaved changes" : "Up to date with the live site";
     $("status").dataset.state = dirty ? "dirty" : "clean";
     if (problems) { problems = contentProblems(); showProblems(); }   // keep the list current while fixing
+    if (tab === "cv") showFit();
   }
   let toastTimer = null;
   function toast(text, undo, link) {
@@ -409,8 +516,9 @@
   }
 
   function lock(reason) {
-    token = null; data = null; original = ""; sha = null; schema = null; problems = null; linkProblems = [];
+    token = null; data = null; original = ""; sha = null; schema = null; problems = null; linkProblems = []; fitProblem = null;
     showProblems();
+    $("history").hidden = true;
     $("panel").replaceChildren();
     $("login-pass").value = "";
     say("login-msg", reason || "");
@@ -430,6 +538,7 @@
       await load();
       renderTab();
       changed();
+      showTokenNote();
       touch();
     } catch (e) {
       lock(e.status === 401 ? "GitHub rejected the token. It may have expired: use “Forget this device” and set it up with a new token."
@@ -467,6 +576,7 @@
       token = null;
       return say("setup-msg", "This browser won't store data for this site (private window?). Use a normal window.", "bad");
     }
+    saveExpiry($("setup-expires").value);
     $("setup-form").reset();
     say("setup-msg", "");
     enterEditor();
@@ -499,6 +609,7 @@
     const b = $("forget-device");
     if (b.dataset.armed !== "1") { b.dataset.armed = "1"; b.textContent = "Click again to remove the saved token from this browser"; return; }
     try { localStorage.removeItem(VAULT_KEY); } catch (e) { /* ignore */ }
+    saveExpiry("");
     b.dataset.armed = ""; b.textContent = "Forget this device";
     lock();
   });
@@ -511,8 +622,11 @@
     lock();
   });
 
+  $("history-btn").addEventListener("click", showHistory);
+  $("history-close").addEventListener("click", () => { $("history").hidden = true; $("history-btn").focus(); });
+
   $("discard").addEventListener("click", () => {
-    data = JSON.parse(original); problems = null; linkProblems = [];
+    data = JSON.parse(original); problems = null; linkProblems = []; fitProblem = null;
     showProblems(); renderTab(); changed(); toast("Changes discarded.");
   });
 
@@ -521,7 +635,12 @@
     b.disabled = true;
     $("status").textContent = "Checking…";
     await checkLinks();
-    problems = contentProblems();
+    problems = contentProblems().filter(p => p !== fitProblem);
+    if (!problems.length) {
+      const pct = await cvFill();
+      fitProblem = pct > 100 ? tooLong(pct) : null;
+      if (fitProblem) problems = [fitProblem];
+    }
     showProblems();
     if (problems.length) {
       b.disabled = false;
