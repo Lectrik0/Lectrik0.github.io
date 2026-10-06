@@ -100,16 +100,6 @@
     if (FORMATS.date(String(i.start)) && FORMATS.date(String(i.end)) && i.end <= i.start) {
       problems.push({ path: ["internship", "end"], message: "Needs to be after the start date." });
     }
-    // each CV version gets its own PDF, named after it (cv-<name>.pdf), so names must differ in letters/numbers
-    const seen = new Map();
-    ((data && data.cv && Array.isArray(data.cv.versions)) ? data.cv.versions : []).forEach((v, n) => {
-      const name = v && typeof v.name === "string" ? v.name.trim() : "";
-      if (!name) return;
-      const key = name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-      if (!key) problems.push({ path: ["cv", "versions", n, "name"], message: "Needs at least one letter or number (it names the PDF)." });
-      else if (seen.has(key)) problems.push({ path: ["cv", "versions", n, "name"], message: `Needs a different name from version #${seen.get(key) + 1}.` });
-      else seen.set(key, n);
-    });
     return problems;
   }
 

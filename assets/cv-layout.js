@@ -119,21 +119,5 @@
     return sections(data).map(([title, items]) => f.block("section", {}, [f.h("h2", {}, title), ...SECTION[title](items)]));
   }
 
-  /* ---------- other versions of the CV ----------
-     The main CV is the default. Each other version (e.g. one for SOC roles) replaces the headline,
-     profile summary and skills lines where it fills them in; everything else is shared. Each gets its
-     own PDF, cv-<slug>.pdf. */
-  const slug = name => str(name).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-  function applyVersion(data, v) {
-    const cv = { ...obj(data.cv) };
-    if (str(v.headline)) cv.headline = v.headline;
-    if (str(v.summary)) cv.summary = v.summary;
-    if (named(v.skills, "label").length) cv.skills = v.skills;
-    return { ...data, cv };
-  }
-  const versions = data => named(obj(data.cv).versions, "name")
-    .map((v, i) => ({ index: i, name: str(v.name), slug: slug(v.name), data: applyVersion(data, v) }))
-    .filter((v, i, all) => v.slug && all.findIndex(o => o.slug === v.slug) === i);
-
-  root.CvLayout = { slug, versions, applyVersion, email, plainUrl, contact, separator, personal, header, sections, body, certStatus, verifyLink, CERT_LABEL };
+  root.CvLayout = { email, plainUrl, contact, separator, personal, header, sections, body, certStatus, verifyLink, CERT_LABEL };
 })(globalThis);
