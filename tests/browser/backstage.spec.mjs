@@ -71,7 +71,7 @@ test("a half-filled certification is caught before publishing, then published on
   expect(published).toEqual([]);
 
   await item.getByLabel("Name").fill("Test certificate");
-  await item.getByLabel("Badge text (max 7 characters, e.g. AZ-900)").fill("TC");
+  await item.getByLabel("Badge text", { exact: true }).fill("TC");
   await expect(problems).toBeHidden(); // the list updates while fixing
 
   await page.locator("#publish").click();
@@ -97,7 +97,7 @@ test("a write-up linking to a page that doesn't exist yet is caught", async ({ p
 test("'Show' jumps to the field with the problem, on another tab", async ({ page }) => {
   await fakeGitHub(page);
   await unlock(page);
-  await page.getByLabel("Email (shown on the home page, the CV and in security.txt; leave empty to hide)").fill("not an email");
+  await page.getByLabel("Email", { exact: true }).fill("not an email");
   await page.getByRole("button", { name: "Certifications" }).click();
   await page.locator("#publish").click();
   await expect(page.locator("#problems li")).toHaveText(["Profile › Email Needs a valid email address, or leave it empty to hide it. Show"]);

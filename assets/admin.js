@@ -49,6 +49,23 @@
     for (const c of children) if (c !== null && c !== undefined && c !== false) n.append(c);
     return n;
   }
+  const ICONS = {
+    profile: "M8 8a3.2 3.2 0 100-6.4A3.2 3.2 0 008 8zm-5.5 6.4C2.5 11.6 5 9.6 8 9.6s5.5 2 5.5 4.8V15h-11z",
+    story: "M1.5 2.6C3.4 2 5.6 2.3 7.2 3.5V14c-1.6-1.1-3.8-1.4-5.7-.8zm13 0c-1.9-.6-4.1-.3-5.7.9V14c1.6-1.1 3.8-1.4 5.7-.8z",
+    courses: "M8 1.5 0 5.5l8 4 6.2-3.1v4.1h1.6V5.5zM3.4 8.8v3c1.2 1.3 2.8 2 4.6 2s3.4-.7 4.6-2v-3L8 11.1z",
+    skills: "M9.4 0 2.6 9.2h4.3L5.8 16l7.6-9.6H9z",
+    certs: "M8 0a5.2 5.2 0 110 10.4A5.2 5.2 0 018 0zm0 2.4a2.8 2.8 0 100 5.6 2.8 2.8 0 000-5.6zM4.4 11.3 3.4 16 8 13.9l4.6 2.1-1-4.7A6.7 6.7 0 018 12.2c-1.3 0-2.5-.3-3.6-.9z",
+    posts: "M11.4.8 15.2 4.6 5.6 14.2 1 15.2 2 10.6zM3.5 11.4l-.4 1.7 1.7-.4z",
+    cv: "M3 0h7l3 3v13H3zM9 1v3h3M5 7h6v1.5H5zm0 3h6v1.5H5zm0 3h4v1.5H5z"
+  };
+  function icon(name) {
+    const NS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(NS, "svg"), path = document.createElementNS(NS, "path");
+    svg.setAttribute("viewBox", "0 0 16 16"); svg.setAttribute("aria-hidden", "true");
+    path.setAttribute("d", ICONS[name]); path.setAttribute("fill", "currentColor"); path.setAttribute("fill-rule", "evenodd");
+    svg.append(path);
+    return svg;
+  }
   const show = id => ["view-setup", "view-login", "view-editor"].forEach(v => { $(v).hidden = v !== id; });
   const say = (id, text, state) => { $(id).textContent = text; if (state) $(id).dataset.state = state; else delete $(id).dataset.state; };
 
@@ -125,7 +142,7 @@
   const SEL = (label, options, extra = {}) => ({ type: "select", label, options, ...extra });
 
   const TABS = [
-    { id: "profile", label: "Profile", fields: [
+    { id: "profile", label: "Profile", icon: "profile", desc: "Your name, links and contact details. They appear across the site, the CV and security.txt.", fields: [
       ["profile", { type: "object", label: "Profile", fields: {
         name: T("Name"), tagline: A("Tagline under your name"), location: T("Location"),
         linkedin: T("LinkedIn URL", { kind: "url" }), github: T("GitHub URL", { kind: "url" }),
@@ -134,10 +151,10 @@
       ["internship", { type: "object", label: "Internship progress bar", fields: {
         start: T("Start date", { kind: "date" }), end: T("End date", { kind: "date" }) } }]
     ] },
-    { id: "story", label: "Story", fields: [
+    { id: "story", label: "Story", icon: "story", desc: "The five chapters on the home page, from GIU to cloud security.", fields: [
       ["story", LIST("Chapters", { title: T("Title"), text: A("Text") }, { fixed: true, name: (it, i) => `Chapter ${i + 1}`, help: "The five drawings are fixed, so chapters can be edited but not added or removed." })]
     ] },
-    { id: "courses", label: "Courses", fields: [
+    { id: "courses", label: "Courses", icon: "courses", desc: "Every semester and course, shown when someone opens “See all my courses”.", fields: [
       ["courses", { type: "object", label: "University", fields: {
         university: T("University"), degree: T("Degree"), major: T("Major"),
         semesters: LIST("Semesters", {
@@ -146,25 +163,25 @@
           courses: LIST("Courses", { name: T("Course"), ects: T("ECTS", { kind: "number" }) }, { name: it => it.name || "New course", compact: true })
         }, { name: it => it.name || "New semester" }) } }]
     ] },
-    { id: "skills", label: "Skills", fields: [
+    { id: "skills", label: "Skills", icon: "skills", desc: "The skill groups on the home page.", fields: [
       ["skills", LIST("Skill groups", {
         group: T("Group name"), note: T("Short note"),
         color: SEL("Colour", [["teal", "Teal"], ["blue", "Blue"], ["purple", "Purple"], ["green", "Green"]]),
         items: STR_LIST("Skills", { placeholder: "Add a skill" }) }, { name: it => it.group || "New group" })]
     ] },
-    { id: "certs", label: "Certifications", fields: [
+    { id: "certs", label: "Certifications", icon: "certs", desc: "Certifications on the home page, the CV and your GitHub profile.", fields: [
       ["certs", LIST("Certifications", {
         name: T("Name"), short: T("Badge text (max 7 characters, e.g. AZ-900)", { max: 7 }),
         status: SEL("Status", [["earned", "Earned"], ["progress", "In progress"], ["planned", "Planned"]], { default: "planned" }),
         issued: T("Issued (optional, e.g. Sep 2026)", { help: "Shown on the CV instead of \"Earned\"." }),
         verify: T("Verify link (optional)", { help: "Your Credly badge link, like https://www.credly.com/badges/…. Shown as a Verify button once the status is Earned." }) }, { name: it => it.name || "New certification" })]
     ] },
-    { id: "posts", label: "Write-ups", fields: [
+    { id: "posts", label: "Write-ups", icon: "posts", desc: "Write-ups on the home page and in the feed, newest first.", fields: [
       ["posts", LIST("Write-ups", {
         title: T("Title"), date: T("Date", { kind: "date" }), tag: T("Tag"), summary: A("Summary"),
         url: T("Link", { help: "A page on this site like writeups/my-lab.html, or an https:// link" }) }, { name: it => it.title || "New write-up", help: "The site lists them newest first, by date." })]
     ] },
-    { id: "cv", label: "CV", fields: [
+    { id: "cv", label: "CV", icon: "cv", desc: "Everything on the CV page and its PDF. It has to fit on one A4 page.", fields: [
       ["cv", { type: "object", label: "CV", fields: {
         fullName: T("Full name on the CV (leave empty to use your name)"), headline: T("Headline"),
         military: T("Military status (e.g. Postponed, Exempted, Completed; leave empty to hide)"), summary: A("Profile summary"),
@@ -203,8 +220,12 @@
       changed();
     });
     bindField(input, obj, key);
+    // "Email (shown on the CV; leave empty to hide)" → label "Email", hint "Shown on the CV; leave empty to hide."
+    const [, label, aside] = /^(.*?)\s*\((.+)\)$/.exec(f.label) || [, f.label, ""];
+    const hint = [aside && `${aside[0].toUpperCase()}${aside.slice(1)}${/[.!?]$/.test(aside) ? "" : "."}`, f.help].filter(Boolean).join(" ");
+    if (hint) input.setAttribute("aria-describedby", `${id}-hint`);
     return el("div", { class: `bs-field${f.type === "textarea" ? " wide" : ""}` },
-      el("label", { for: id, text: f.label }), input, f.help ? el("small", { text: f.help }) : null);
+      el("label", { for: id, text: label }), input, hint ? el("small", { id: `${id}-hint`, text: hint }) : null);
   }
 
   function renderObject(obj, fields) {
@@ -247,12 +268,16 @@
       const items = list.map((it, i) => {
         const titleEl = el("span", { class: "bs-item-title", text: f.name ? f.name(it, i) : `Item ${i + 1}` });
         titleEl._calc = () => (f.name ? f.name(it, i) : `Item ${i + 1}`);
+        const states = f.item.status && f.item.status.options;
+        const badge = states ? el("span", { class: "bs-badge" }) : null;
+        const drawBadge = () => { if (!badge) return; const s = states.find(([v]) => v === it.status) || states[0]; badge.textContent = s[1]; badge.dataset.state = s[0]; };
+        drawBadge();
         const handle = el("button", { type: "button", class: "bs-handle", "aria-label": "Drag to reorder", title: "Drag to reorder", text: "⋮⋮" });
         handle.addEventListener("click", e => e.preventDefault());
         if (f.fixed) handle.hidden = true;
         const body = renderObject(it, f.item);
         const details = el("details", { class: "bs-item", open: list.length <= 3 || f.compact ? true : null },
-          el("summary", {}, handle, titleEl,
+          el("summary", {}, handle, el("span", { class: "bs-num", "aria-hidden": "true", text: String(i + 1) }), titleEl, badge,
             el("span", { class: "bs-item-actions" },
               f.fixed ? null : el("button", { type: "button", class: "bs-icon", "aria-label": "Move up", title: "Move up", text: "↑", on: { click: e => { e.preventDefault(); if (move(list, i, i - 1)) draw(); } } }),
               f.fixed ? null : el("button", { type: "button", class: "bs-icon", "aria-label": "Move down", title: "Move down", text: "↓", on: { click: e => { e.preventDefault(); if (move(list, i, i + 1)) draw(); } } }),
@@ -260,7 +285,7 @@
           body);
         if (!f.fixed) makeDraggable(details, handle, list, i, draw);
         // keep titles live while typing
-        body.querySelectorAll("input, textarea, select").forEach(inp => inp.addEventListener("input", () => { titleEl.textContent = titleEl._calc(); }));
+        body.querySelectorAll("input, textarea, select").forEach(inp => inp.addEventListener("input", () => { titleEl.textContent = titleEl._calc(); drawBadge(); }));
         return details;
       });
       const add = f.fixed ? null : el("button", { type: "button", class: "btn ghost bs-add", text: `Add ${singular(f.label)}`, on: { click: () => { list.push(blankFor(f.item)); changed(); draw(); const last = box.querySelectorAll(":scope > .bs-items > details"); if (last.length) { last[last.length - 1].open = true; last[last.length - 1].querySelector("input, textarea")?.focus(); } } } });
@@ -303,8 +328,8 @@
   const singular = label => ({ "Chapters": "chapter", "Semesters": "semester", "Courses": "course", "Skill groups": "skill group", "Certifications": "certification", "Write-ups": "write-up", "Education": "education entry", "Experience": "role", "Projects": "project", "Skills lines": "skills line" }[label] || "item");
 
   function renderTab() {
-    $("tabs").replaceChildren(...TABS.map(t => el("button", { type: "button", class: "bs-tab", "aria-current": t.id === tab ? "page" : null, text: t.label,
-      on: { click: () => { tab = t.id; renderTab(); } } })));
+    $("tabs").replaceChildren(...TABS.map(t => el("button", { type: "button", class: "bs-tab", "aria-current": t.id === tab ? "page" : null,
+      on: { click: () => { tab = t.id; renderTab(); } } }, icon(t.icon), el("span", { text: t.label }))));
     const t = TABS.find(x => x.id === tab);
     const blocks = t.fields.map(([key, f]) => {
       if (f.type === "list") { if (!Array.isArray(data[key])) data[key] = []; return el("div", { class: "frame cut-a bs-block" }, el("div", { class: "in" }, renderList(data[key], f))); }
@@ -312,6 +337,7 @@
       return el("div", { class: "frame cut-a bs-block" }, el("div", { class: "in" }, el("h2", { text: f.label }), renderObject(data[key], f.fields)));
     });
     if (tab === "cv") blocks.unshift(el("p", { class: "bs-fit", id: "cv-fit", "aria-live": "polite" }));
+    blocks.unshift(el("p", { class: "bs-intro", text: t.desc }));
     $("panel").replaceChildren(...blocks);
     markInvalid();
     if (tab === "cv") showFit();
@@ -617,7 +643,8 @@
   $("lock").addEventListener("click", () => {
     if (!$("publish").disabled) {
       const b = $("lock");
-      if (b.dataset.armed !== "1") { b.dataset.armed = "1"; b.textContent = "Lock and lose changes?"; setTimeout(() => { b.dataset.armed = ""; b.textContent = "Lock"; }, 4000); return; }
+      const say = text => { b.lastChild.nodeValue = text; };   // the label after the icon
+      if (b.dataset.armed !== "1") { b.dataset.armed = "1"; say("Lock and lose changes?"); setTimeout(() => { b.dataset.armed = ""; say("Lock"); }, 4000); return; }
     }
     lock();
   });
