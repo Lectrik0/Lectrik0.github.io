@@ -9,16 +9,17 @@
 <title>Backstage</title>
 <link rel="icon" href="../assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/style.css?v=36845fe0d1">
-<link rel="stylesheet" href="../assets/admin.css?v=75fcdcef9e">
+<link rel="stylesheet" href="../assets/admin.css?v=31dd85848f">
 <script src="../assets/content-check.js?v=40052dcc00" defer></script>
 <script src="../assets/cv-layout.js?v=f95b130192" defer></script>
-<script src="../assets/admin.js?v=a0efcc0c51" defer></script>
+<script src="../assets/admin.js?v=dbff1d4435" defer></script>
 </head>
 <body class="bs">
 <main class="wrap bs-wrap">
 
   <!-- 1. First time on a device: encrypt the GitHub token with your password -->
   <section class="frame cut-a bs-card" id="view-setup" hidden><div class="in">
+    <span class="bs-seal" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M4 7V5a4 4 0 118 0v2h1v9H3V7zm1.6 0h4.8V5a2.4 2.4 0 10-4.8 0zM8 9.5a1.3 1.3 0 00-.6 2.4V14h1.2v-2.1A1.3 1.3 0 008 9.5z"></path></svg></span>
     <h1>Set up this device</h1>
     <p class="muted">Your GitHub token is encrypted with your password and stored only in this browser. The password itself is never stored or sent anywhere.</p>
     <form id="setup-form" class="bs-form" novalidate autocomplete="off">
@@ -50,7 +51,9 @@
 
   <!-- 2. Normal visit: unlock -->
   <section class="frame cut-b bs-card" id="view-login" hidden><div class="in">
+    <span class="bs-seal" aria-hidden="true"><svg viewBox="0 0 16 16"><path fill="currentColor" fill-rule="evenodd" d="M4 7V5a4 4 0 118 0v2h1v9H3V7zm1.6 0h4.8V5a2.4 2.4 0 10-4.8 0zM8 9.5a1.3 1.3 0 00-.6 2.4V14h1.2v-2.1A1.3 1.3 0 008 9.5z"></path></svg></span>
     <h1>Backstage</h1>
+    <p class="muted">The private editor for lectrik0.github.io.</p>
     <form id="login-form" class="bs-form" novalidate>
       <label for="login-user">Username</label>
       <input id="login-user" type="text" autocomplete="username" required>
@@ -66,14 +69,15 @@
   <section id="view-editor" hidden>
     <header class="bs-bar">
       <div class="bs-bar-left">
+        <img class="bs-logo" src="../assets/favicon.svg?v=a036ab01e4" alt="" width="34" height="34">
         <h1>Backstage</h1>
         <span class="bs-status" id="status">Loading…</span>
       </div>
       <div class="btns">
-        <button class="btn ghost" id="history-btn" type="button">History</button>
-        <button class="btn ghost" id="discard" type="button" disabled>Discard changes</button>
-        <button class="btn" id="publish" type="button" disabled>Publish changes</button>
-        <button class="btn ghost" id="lock" type="button">Lock</button>
+        <button class="btn ghost" id="history-btn" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M8 0a8 8 0 110 16A8 8 0 018 0zm0 1.6a6.4 6.4 0 100 12.8A6.4 6.4 0 008 1.6zM7.2 3.5h1.6v4.2l2.9 1.7-.8 1.4-3.7-2.2z"></path></svg>History</button>
+        <button class="btn ghost" id="discard" type="button" disabled><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M5.5 2 1 6l4.5 4V7.2h4a3.4 3.4 0 010 6.8H6V16h3.5a5.2 5.2 0 000-10.4h-4z"></path></svg>Discard changes</button>
+        <button class="btn" id="publish" type="button" disabled><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M8 0 3 5.4h3.2v5.4h3.6V5.4H13zM1 12.4h14V16H1z"></path></svg>Publish changes</button>
+        <button class="btn ghost" id="lock" type="button"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M4 7V5a4 4 0 118 0v2h1v9H3V7zm1.6 0h4.8V5a2.4 2.4 0 10-4.8 0z"></path></svg>Lock</button>
       </div>
     </header>
     <p class="bs-token" id="token-note" hidden></p>
@@ -90,8 +94,10 @@
       <p class="muted">Every publish is kept on GitHub. Loading a version puts it in the editor; the site only changes when you publish it.</p>
       <ol id="history-list"></ol>
     </div></section>
-    <nav class="bs-tabs" id="tabs" aria-label="Sections"></nav>
-    <div class="bs-panel" id="panel"></div>
+    <div class="bs-layout">
+      <nav class="bs-tabs" id="tabs" aria-label="Sections"></nav>
+      <div class="bs-panel" id="panel"></div>
+    </div>
     <p class="bs-toast" id="toast" role="status" aria-live="polite" hidden></p>
   </section>
 
