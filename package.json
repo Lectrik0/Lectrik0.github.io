@@ -17,10 +17,12 @@
     "test": "node --test tests/unit/*.test.mjs",
     "test:browser": "playwright test",
     "og": "node scripts/og.mjs",
-    "pdf": "node scripts/cv-pdf.mjs"
+    "pdf": "node scripts/cv-pdf.mjs",
+    "qr": "node scripts/qr.mjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",
+    "@paulmillr/qr": "0.3.0",
     "@playwright/test": "1.56.1",
     "ajv": "8.20.0",
     "ajv-formats": "3.0.1",

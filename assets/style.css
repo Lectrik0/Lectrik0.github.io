@@ -429,3 +429,28 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
 @keyframes twinkle{0%,100%{opacity:1}50%{opacity:.25}}
 @keyframes wave{0%,100%{transform:skewY(0) scaleX(1)}50%{transform:skewY(7deg) scaleX(.92)}}
 @keyframes roll{to{stroke-dashoffset:-28}}
+
+/* job-fair cards (card.html): 85 × 55 mm business cards, black on white like the CV; ten print on an A4 page */
+.cards-page{padding-block:clamp(24px,4vw,40px) clamp(40px,6vw,72px);display:grid;gap:22px;justify-items:center;text-align:center}
+.cards-head{display:grid;gap:12px;justify-items:center}
+.cards-head h1{margin:0;font-size:clamp(2rem,5vw,3rem);line-height:1}
+.cards-head .lede{margin:0;max-width:52ch;color:var(--muted)}
+.cards{display:grid;justify-content:center;page:cards}
+.card{box-sizing:border-box;width:85mm;height:55mm;padding:5mm;display:grid;grid-template-columns:1fr 25mm;gap:3mm;align-items:center;
+  background:#fff;color:#111;text-align:left;font:400 7.5pt/1.3 var(--f-body);letter-spacing:normal;box-shadow:0 0 0 1px var(--line),8px 8px 0 var(--teal)}
+.card *{letter-spacing:normal}
+.card-name{margin:0;font:700 12pt/1.15 var(--f-body)}
+.card-role{margin:1.5mm 0 2.5mm;font-style:italic;color:#3a3a3a}
+.card-contact{margin:0;padding:0;list-style:none;display:grid;gap:.6mm}
+.card-contact li{white-space:nowrap}
+.card-qr{margin:0;display:grid;justify-items:center;gap:1mm}
+.card-qr img{display:block;width:25mm;height:25mm}
+.card-qr figcaption{font:600 6.5pt/1 var(--f-body)}
+.card.extra{display:none}
+@page cards{size:A4;margin:10mm}
+@media print{
+  .cards-head{display:none}
+  .cards-page{display:block;padding:0}
+  .cards{grid-template-columns:repeat(2,85mm);gap:0}
+  .card,.card.extra{display:grid;box-shadow:none;border:.2mm dashed #888}
+}

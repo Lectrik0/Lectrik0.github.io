@@ -84,7 +84,8 @@ npm run lint           # validate the HTML
 npm test               # unit tests: content schema, escaping, build output
 npm run test:browser   # Playwright: errors, CSP, links, no-JS, accessibility, XSS
 npm run og             # re-render assets/og.png, the link preview image
-npm run pdf            # render cv.html into cv.pdf, the CV's Download PDF file
+npm run pdf            # render the CV into cv.pdf (and cv-<version>.pdf for each other version)
+npm run qr             # re-make assets/qr-cv.svg, the job-fair cards' QR code (only if the site's address changes)
 ```
 
 <details>
@@ -152,6 +153,7 @@ Edit [`data/site.json`](data/site.json), run `npm run build`, and commit both. O
 - Unlocking decrypts the token into memory; locking, closing the tab or 30 idle minutes forgets it. Wrong attempts are slowed down.
 - Before publishing, Backstage checks the content with the same rules CI uses ([`assets/content-check.js`](assets/content-check.js) + the schema, and asks GitHub whether linked pages exist). Problems are listed by field, with a *Show* button that jumps to it, and nothing is published until they're fixed.
 - Before publishing, Backstage also lays the CV out as it prints (with the same layout code as the build, [`assets/cv-layout.js`](assets/cv-layout.js)) and refuses an edit that would push it onto a second page. The CV tab shows how full the page is as you type.
+- **Other CV versions** (CV tab): e.g. one for SOC roles next to the main cloud one. Each replaces the headline, profile summary and skills lines it fills in, shares everything else, and gets its own PDF and download button. Each is checked for one page too.
 - **History** lists earlier versions: every publish is a commit, so nothing is lost. Loading one puts it in the editor; publishing makes it live again.
 - If you give it the token's expiry date (at setup, or later in the editor), Backstage reminds you two weeks before the token stops working.
 - Publishing commits `data/site.json` through the GitHub API. CI then checks it again, rebuilds the pages and publishes them, usually within a few minutes; Backstage links to the run. If a check still fails there, GitHub emails the failed run and the live site doesn't change.
@@ -190,7 +192,8 @@ The editor page gets its own header policy (CSP that also allows `api.github.com
 |---|---|
 | `/` | The story (Chapter 1 opens the full GIU course list), skills, certifications, write-ups, flags |
 | `/cv.html` | CV, prints cleanly to one A4 page |
-| `/cv.pdf` | The same CV as a PDF (made by CI with `npm run pdf`) |
+| `/cv.pdf`, `/cv-*.pdf` | The CV as a PDF, and one per other CV version (made by CI with `npm run pdf`) |
+| `/card.html` | Job-fair business cards, ten to an A4 page, with a QR code that opens the CV (not indexed) |
 | `/writeups/*.html` | Write-ups, each told as a comic "issue" (listed on the home page) |
 | `/404.html` | Not-found page |
 | `/feed.xml` | Atom feed of the write-ups |

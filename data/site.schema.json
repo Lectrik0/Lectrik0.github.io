@@ -138,7 +138,29 @@
             "properties": { "label": { "$ref": "#/$defs/text" }, "text": { "$ref": "#/$defs/text" } }
           }
         },
-        "languages": { "type": "array", "items": { "$ref": "#/$defs/text" } }
+        "languages": { "type": "array", "items": { "$ref": "#/$defs/text" } },
+        "versions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "$ref": "#/$defs/text" },
+              "headline": { "type": "string" },
+              "summary": { "type": "string" },
+              "skills": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": ["label", "text"],
+                  "additionalProperties": false,
+                  "properties": { "label": { "$ref": "#/$defs/text" }, "text": { "$ref": "#/$defs/text" } }
+                }
+              }
+            }
+          }
+        }
       }
     }
   },

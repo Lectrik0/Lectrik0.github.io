@@ -115,3 +115,12 @@ test("links to this site's own pages are listed so they can be checked", () => {
     { path: ["posts", 2, "url"], file: "writeups/index.html" }
   ]);
 });
+
+test("CV versions need names that make distinct PDF file names", () => {
+  const data = clone(base);
+  data.cv.versions = [{ name: "SOC" }, { name: "soc!" }, { name: "!!!" }];
+  assert.deepEqual(crossCheck(data).map(p => [formatPath(p.path), p.message]), [
+    ["cv › versions › #2 › name", "Needs a different name from version #1."],
+    ["cv › versions › #3 › name", "Needs at least one letter or number (it names the PDF)."]
+  ]);
+});

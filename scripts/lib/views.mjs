@@ -251,6 +251,33 @@ export const cvContact = (data, site) => raw(CvLayout.contact(data, HTML, new UR
 export const cvPersonal = data => raw(CvLayout.personal(data, HTML) || "");
 export const cvSections = data => CvLayout.sections(data);
 export const cvBody = data => raw(CvLayout.body(data, HTML).join("\n"));
+// The main CV's PDF, then one per other version (cv-<slug>.pdf), named after the person for the download.
+export function cvDownloads(data) {
+  const name = (str(obj(data.cv).fullName) || str(obj(data.profile).name) || "CV").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  return raw([
+    h("a", { class: "btn", href: "cv.pdf", download: `${name}-CV.pdf` }, "Download PDF"),
+    ...CvLayout.versions(data).map(v => h("a", { class: "btn ghost", href: `cv-${v.slug}.pdf`, download: `${name}-CV-${v.name.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "")}.pdf` }, `${v.name} version (PDF)`))
+  ].join("\n"));
+}
+
+/* ---------- job-fair cards (card.html): ten business cards to an A4 page ---------- */
+export function cards(data, site) {
+  const P = obj(data.profile), CV = obj(data.cv), host = new URL(site.url).host;
+  const lines = [CvLayout.email(data), str(P.phone), str(P.linkedin) && CvLayout.plainUrl(str(P.linkedin)), host].filter(Boolean);
+  // the first card shows on screen; all ten print
+  const card = extra => block("article", { class: extra ? "card extra" : "card" }, [
+    block("div", { class: "card-text" }, [
+      h("p", { class: "card-name" }, str(CV.fullName) || str(P.name)),
+      str(CV.headline) && h("p", { class: "card-role" }, str(CV.headline)),
+      block("ul", { class: "card-contact" }, lines.map(l => h("li", {}, l)))
+    ]),
+    block("figure", { class: "card-qr" }, [
+      h("img", { src: "assets/qr-cv.svg", alt: `QR code that opens the CV at ${host}/cv.html`, width: "96", height: "96" }),
+      h("figcaption", {}, "Scan for the CV")
+    ])
+  ]);
+  return raw(Array.from({ length: 10 }, (_, i) => card(i > 0)).join("\n"));
+}
 
 /* ---------- single text values, for elements marked data-bind="..." ---------- */
 export function bindings(data) {

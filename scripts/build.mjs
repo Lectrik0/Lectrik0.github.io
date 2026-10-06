@@ -37,7 +37,9 @@ const REGIONS = {
   semesters: data => views.semesters(data),
   "cv-contact": (data, page, site) => views.cvContact(data, site),
   "cv-personal": data => views.cvPersonal(data),
-  "cv-body": data => views.cvBody(data)
+  "cv-body": data => views.cvBody(data),
+  "cv-downloads": data => views.cvDownloads(data),
+  cards: (data, page, site) => views.cards(data, site)
 };
 
 export function siteConfig(root = ROOT) {

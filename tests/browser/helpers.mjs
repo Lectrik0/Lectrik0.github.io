@@ -11,6 +11,7 @@ export const SITE = JSON.parse(readFileSync(new URL("../../package.json", import
 export const PAGES = {
   home: "/",
   cv: "/cv.html",
+  cards: "/card.html",
   writeup: "/writeups/hardening-this-site.html",
   notFound: "/no-such-page",
   backstage: "/backstage/"

@@ -1,19 +1,22 @@
 #!/usr/bin/env node
 /**
  * Renders cv.html into cv.pdf (A4, with the print stylesheet), the file behind the CV's
- * "Download PDF" button. Needs the dev tools (npm install) for Chromium; run it after the build.
+ * "Download PDF" button, and each other version of the CV (data/site.json → cv.versions) into
+ * cv-<slug>.pdf. Needs the dev tools (npm install) for Chromium; run it after the build.
  * CI does this on every update of main and publishes the result with the pages.
  *
- *   node scripts/cv-pdf.mjs            write cv.pdf
+ *   node scripts/cv-pdf.mjs            write cv.pdf and cv-*.pdf (and delete PDFs of removed versions)
  *
  * The output is stable: the same CV gives the same bytes, so an unchanged CV never makes a commit.
  */
 import { createHash } from "node:crypto";
-import { writeFileSync } from "node:fs";
+import { cpSync, mkdtempSync, readdirSync, readFileSync, rmSync, unlinkSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { chromium } from "@playwright/test";
-import { siteConfig } from "./build.mjs";
+import { build, siteConfig } from "./build.mjs";
+import "../assets/cv-layout.js";
 import { serve } from "./serve.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
@@ -52,10 +55,34 @@ export function stable(pdf) {
   return Buffer.from(text, "latin1");
 }
 
+// Every version's PDF, as [file name, bytes]: cv.pdf from the site as built, then each other version
+// rendered from a copy of the site built with that version's content.
+export async function cvPdfs({ root = ROOT } = {}) {
+  const data = JSON.parse(readFileSync(join(root, "data/site.json"), "utf8"));
+  const out = [["cv.pdf", await cvPdf({ root })]];
+  for (const v of globalThis.CvLayout.versions(data)) {
+    const dir = mkdtempSync(join(tmpdir(), "cv-version-"));
+    try {
+      cpSync(root, dir, { recursive: true, filter: src => !/[\\/](node_modules|\.git|test-results)([\\/]|$)/.test(src.slice(root.length)) });
+      build({ root: dir, data: v.data });
+      out.push([`cv-${v.slug}.pdf`, await cvPdf({ root: dir })]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  }
+  return out;
+}
+
 export const pageCount = pdf => (Buffer.from(pdf).toString("latin1").match(/\/Type\s*\/Page\b/g) || []).length;
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  const pdf = await cvPdf();
-  writeFileSync(join(ROOT, "cv.pdf"), pdf);
-  console.log(`cv.pdf: ${pageCount(pdf)} page(s), ${Math.round(pdf.length / 1024)} KB`);
+  const pdfs = await cvPdfs();
+  for (const [file, pdf] of pdfs) {
+    writeFileSync(join(ROOT, file), pdf);
+    console.log(`${file}: ${pageCount(pdf)} page(s), ${Math.round(pdf.length / 1024)} KB`);
+  }
+  for (const file of readdirSync(ROOT).filter(f => /^cv-.+\.pdf$/.test(f) && !pdfs.some(([name]) => name === f))) {
+    unlinkSync(join(ROOT, file));
+    console.log(`${file}: removed (no such version any more)`);
+  }
 }
