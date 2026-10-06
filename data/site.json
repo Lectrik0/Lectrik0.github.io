@@ -343,7 +343,7 @@
  ],
  "cv": {
   "fullName": "Ali Ahmed Ismail",
-  "headline": "Final-year cybersecurity student focused on cloud security.",
+  "headline": "Final-year IT Security student focused on cloud security.",
   "military": "Postponed (student)",
   "summary": "Final-year IT Security student with hands-on internship experience at a bank in vulnerability management, governance, risk and compliance (GRC), penetration testing and SOC operations. Building toward a career in cloud security and studying for AWS Certified Cloud Practitioner.",
   "education": [
@@ -414,8 +414,8 @@
     "text": "AWS core services, IAM, S3, CloudFront, CloudFormation"
    },
    {
-    "label": "Systems & code",
-    "text": "Networking, Linux, Python"
+    "label": "Systems",
+    "text": "Networking, Linux"
    },
    {
     "label": "Standards",
