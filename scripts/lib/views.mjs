@@ -288,7 +288,7 @@ export function cvSections(data) {
     ["Education", named(CV.education, "title")],
     ["Experience", named(CV.experience, "title")],
     ["Projects", named(CV.projects, "title")],
-    ["Certifications", named(data.certs, "name").filter(c => certStatus(c) !== "planned")],
+    ["Certifications & Training", named(data.certs, "name").filter(c => certStatus(c) !== "planned")],
     ["Skills", [...named(CV.skills, "label"), ...(languages.length ? [{ label: "Spoken languages", text: languages.join(", ") }] : [])]]
   ].filter(([, items]) => items.length);
 }
@@ -312,7 +312,7 @@ const CV_SECTION = {
   Projects: items => items.map(p => entry([
     row("row", h("span", {}, h("b", {}, str(p.title)), ...(str(p.stack) ? [" | ", h("i", {}, str(p.stack))] : [])), str(p.dates))
   ], bullets(p.bullets))),
-  Certifications: items => [block("div", { class: "entry" }, items.map(c =>
+  "Certifications & Training": items => [block("div", { class: "entry" }, items.map(c =>
     row("row", h("span", {}, h("b", {}, str(c.name)), ...(verifyLink(c) ? [" | ", verifyLink(c)] : [])),
       certStatus(c) === "earned" && str(c.issued) ? str(c.issued) : CERT_LABEL[certStatus(c)])))],
   Skills: items => [block("ul", { class: "skills" }, items.map(s => h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text))))]
