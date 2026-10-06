@@ -172,8 +172,7 @@
   initCourses();
   initFlags();
   initMotion();
-  const print = $("print-cv");
-  if (print) print.addEventListener("click", () => window.print());
+  document.querySelectorAll("#print-cv, [data-print]").forEach(b => b.addEventListener("click", () => window.print()));
   const year = $("year");
   if (year) year.textContent = String(new Date().getFullYear());
 })();

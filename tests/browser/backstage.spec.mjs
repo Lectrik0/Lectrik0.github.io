@@ -112,8 +112,8 @@ test("the CV tab shows how full the page is, and a CV that runs onto a second pa
   await unlock(page);
   await page.getByRole("button", { name: "CV", exact: true }).click();
   const fit = page.locator("#cv-fit");
-  await expect(fit).toHaveText(/^The CV fills \d+% of one A4 page\.$/);
-  const summary = page.getByLabel("Profile summary");
+  await expect(fit).toHaveText(/^The CV fills \d+% of one A4 page( · .+ version fills \d+% of one A4 page)*\.$/);
+  const summary = page.getByLabel("Profile summary", { exact: true });
   const before = await summary.inputValue();
   await summary.fill(Array(8).fill(before).join(" "));
   await expect(fit).toHaveAttribute("data-state", "bad");
@@ -183,4 +183,18 @@ test("without an expiry date, Backstage asks for one and then shows it", async (
   await note.getByRole("button", { name: "Save" }).click();
   await expect(note).toContainText("GitHub token valid until");
   await expect(note).toHaveAttribute("data-state", "ok");
+});
+
+test("each CV version is checked for one page too", async ({ page }) => {
+  const d = copyOfData();
+  d.cv.versions = [{ name: "SOC", headline: "", summary: Array(8).fill(d.cv.summary).join(" "), skills: [] }];
+  const published = await fakeGitHub(page, { content: d });
+  await unlock(page);
+  await page.getByRole("button", { name: "CV", exact: true }).click();
+  await expect(page.locator("#cv-fit")).toHaveAttribute("data-state", "bad");
+  await expect(page.locator("#cv-fit")).toContainText("SOC version is");
+  await page.getByLabel("Headline", { exact: true }).fill(d.cv.headline + " ");   // any edit, so Publish is enabled
+  await page.locator("#publish").click();
+  await expect(page.locator("#problems li")).toHaveText([/^CV › Other CV versions › #1 \(SOC\) The SOC version of the CV no longer fits on one A4 page/]);
+  expect(published).toEqual([]);
 });

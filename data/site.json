@@ -426,6 +426,35 @@
   "languages": [
    "English (full professional proficiency)",
    "Arabic (native)"
+  ],
+  "versions": [
+   {
+    "name": "SOC",
+    "headline": "Final-year IT Security student focused on security operations.",
+    "summary": "Final-year IT Security student with hands-on internship experience at a bank in SOC operations (IBM QRadar), vulnerability management (Tenable), governance, risk and compliance (ISO/IEC 27001) and supervised penetration testing. Studying for AWS Certified Cloud Practitioner.",
+    "skills": [
+     {
+      "label": "Tools",
+      "text": "IBM QRadar (SIEM), Tenable, Git, GitHub Actions"
+     },
+     {
+      "label": "Security",
+      "text": "Security monitoring, vulnerability scanning, network penetration testing, phishing simulation, risk assessment, web security (XSS, CSP), cryptography"
+     },
+     {
+      "label": "Standards",
+      "text": "ISO/IEC 27001"
+     },
+     {
+      "label": "Systems",
+      "text": "Networking, Linux"
+     },
+     {
+      "label": "Cloud",
+      "text": "AWS core services, IAM, S3, CloudFront, CloudFormation"
+     }
+    ]
+   }
   ]
  }
 }

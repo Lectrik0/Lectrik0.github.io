@@ -108,6 +108,25 @@ test("a Verify link shows only on earned certifications, and only for https link
   }
 });
 
+test("each CV version gets a download button and its own headline, summary and skills", () => {
+  const data = JSON.parse(read("data/site.json"));
+  data.cv.versions = [
+    { name: "SOC", headline: "SOC headline", summary: "", skills: [{ label: "Tools", text: "QRadar" }] },
+    { name: "Cloud & AWS!", headline: "", summary: "", skills: [] }
+  ];
+  const html = renderSite({ data }).get("cv.html");
+  assert.deepEqual([...html.matchAll(/<a class="btn[^"]*" href="([^"]+)" download="([^"]+)">([^<]+)<\/a>/g)].map(m => m.slice(1)), [
+    ["/cv.pdf", "Ali-Ahmed-Ismail-CV.pdf", "Download PDF"],
+    ["/cv-soc.pdf", "Ali-Ahmed-Ismail-CV-SOC.pdf", "SOC version (PDF)"],
+    ["/cv-cloud-aws.pdf", "Ali-Ahmed-Ismail-CV-Cloud-AWS.pdf", "Cloud &amp; AWS! version (PDF)"]
+  ]);
+  const [soc, cloud] = globalThis.CvLayout.versions(data);
+  assert.equal(soc.data.cv.headline, "SOC headline");
+  assert.equal(soc.data.cv.summary, data.cv.summary);              // empty: the main one
+  assert.deepEqual(soc.data.cv.skills, [{ label: "Tools", text: "QRadar" }]);
+  assert.deepEqual(cloud.data.cv, data.cv);                          // nothing filled in: same as the main CV
+});
+
 test("a semester studied abroad is marked in the course list", () => {
   const data = JSON.parse(read("data/site.json"));
   data.courses.semesters.forEach((s, i) => { s.abroad = i === 0 ? "GIU Berlin, Germany" : ""; });
