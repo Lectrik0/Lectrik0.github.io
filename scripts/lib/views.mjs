@@ -251,13 +251,10 @@ export const cvContact = (data, site) => raw(CvLayout.contact(data, HTML, new UR
 export const cvPersonal = data => raw(CvLayout.personal(data, HTML) || "");
 export const cvSections = data => CvLayout.sections(data);
 export const cvBody = data => raw(CvLayout.body(data, HTML).join("\n"));
-// The main CV's PDF, then one per other version (cv-<slug>.pdf), named after the person for the download.
+// The CV's PDF, saved under the person's name.
 export function cvDownloads(data) {
   const name = (str(obj(data.cv).fullName) || str(obj(data.profile).name) || "CV").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");
-  return raw([
-    h("a", { class: "btn", href: "cv.pdf", download: `${name}-CV.pdf` }, "Download PDF"),
-    ...CvLayout.versions(data).map(v => h("a", { class: "btn ghost", href: `cv-${v.slug}.pdf`, download: `${name}-CV-${v.name.replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "")}.pdf` }, `${v.name} version (PDF)`))
-  ].join("\n"));
+  return h("a", { class: "btn", href: "cv.pdf", download: `${name}-CV.pdf` }, "Download PDF");
 }
 
 /* ---------- job-fair cards (card.html): ten business cards to an A4 page ---------- */

@@ -172,13 +172,7 @@
         experience: LIST("Experience", { title: T("Role"), org: T("Company"), location: T("Location"), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => [it.title, it.org].filter(Boolean).join(", ") || "New role" }),
         projects: LIST("Projects", { title: T("Project"), stack: T("Tech used", { help: "Shown after the project name, e.g. Python, AWS, Docker" }), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => it.title || "New project" }),
         skills: LIST("Skills lines", { label: T("Label"), text: T("Skills") }, { name: it => it.label || "New line", compact: true }),
-        languages: STR_LIST("Languages", { placeholder: "e.g. Arabic (native)" }),
-        versions: LIST("Other CV versions", {
-          name: T("Version name (e.g. SOC)"),
-          headline: T("Headline (leave empty to use the main one)"),
-          summary: A("Profile summary (leave empty to use the main one)"),
-          skills: LIST("Skills lines (leave empty to use the main ones)", { label: T("Label"), text: T("Skills") }, { name: it => it.label || "New line", compact: true })
-        }, { name: it => it.name || "New version", help: "Each version gets its own PDF on the CV page, with its own headline, summary and skills. Everything else is shared with the main CV." }) } }]
+        languages: STR_LIST("Languages", { placeholder: "e.g. Arabic (native)" }) } }]
     ] }
   ];
 
@@ -306,7 +300,7 @@
     return box;
   }
 
-  const singular = label => ({ "Chapters": "chapter", "Semesters": "semester", "Courses": "course", "Skill groups": "skill group", "Certifications": "certification", "Write-ups": "write-up", "Education": "education entry", "Experience": "role", "Projects": "project", "Skills lines": "skills line", "Other CV versions": "version", "Skills lines (leave empty to use the main ones)": "skills line" }[label] || "item");
+  const singular = label => ({ "Chapters": "chapter", "Semesters": "semester", "Courses": "course", "Skill groups": "skill group", "Certifications": "certification", "Write-ups": "write-up", "Education": "education entry", "Experience": "role", "Projects": "project", "Skills lines": "skills line" }[label] || "item");
 
   function renderTab() {
     $("tabs").replaceChildren(...TABS.map(t => el("button", { type: "button", class: "bs-tab", "aria-current": t.id === tab ? "page" : null, text: t.label,
@@ -409,25 +403,16 @@
     block: (tag, attrs, kids) => DOM.h(tag, attrs, ...kids),
     link: (href, attrs, ...kids) => href ? DOM.h("a", attrs, ...kids) : null
   };
-  async function cvFill(content = data) {
+  async function cvFill() {
     await document.fonts.ready;
     const sheet = el("article", { class: "sheet bs-measure", "aria-hidden": "true" },
-      CvLayout.header(content, DOM, location.host), ...CvLayout.body(content, DOM));
+      CvLayout.header(data, DOM, location.host), ...CvLayout.body(data, DOM));
     document.body.append(sheet);
     const fill = sheet.getBoundingClientRect().height / PRINT_HEIGHT;
     sheet.remove();
     return Math.round(fill * 100);
   }
-  const tooLong = (pct, v) => v
-    ? { path: ["cv", "versions", v.index], message: `The ${v.name} version of the CV no longer fits on one A4 page (it's ${pct}% of a page). Shorten its summary or skills, or a bullet point.` }
-    : { path: ["cv"], message: `The CV no longer fits on one A4 page (it's ${pct}% of a page). Shorten the profile summary or a bullet point.` };
-  // Every version of the CV (the main one first), measured: [{ v (null for the main CV), pct }].
-  const cvFills = async () => {
-    const out = [{ v: null, pct: await cvFill() }];
-    for (const v of CvLayout.versions(data)) out.push({ v, pct: await cvFill(v.data) });
-    return out;
-  };
-  const firstTooLong = fills => { const f = fills.find(x => x.pct > 100); return f ? tooLong(f.pct, f.v) : null; };
+  const tooLong = pct => ({ path: ["cv"], message: `The CV no longer fits on one A4 page (it's ${pct}% of a page). Shorten the profile summary or a bullet point.` });
 
   // The gauge at the top of the CV tab, updated as you type.
   let fitTimer = null;
@@ -435,14 +420,13 @@
     clearTimeout(fitTimer);
     fitTimer = setTimeout(async () => {
       if (!data || !$("cv-fit")) return;
-      const fills = await cvFills(), out = $("cv-fit");
+      const pct = await cvFill(), out = $("cv-fit");
       if (!out) return;
-      const worst = Math.max(...fills.map(f => f.pct));
-      out.textContent = fills.map(({ v, pct }) => `${v ? `${v.name} version` : "The CV"} ${pct > 100 ? `is ${pct}% of one A4 page: it no longer fits` : `fills ${pct}% of one A4 page`}`).join(" · ")
-        + (worst > 100 ? ". Shorten something before publishing." : ".");
-      out.dataset.state = worst > 100 ? "bad" : worst > 95 ? "warn" : "ok";
+      out.textContent = pct > 100 ? `The CV is ${pct}% of one A4 page: it no longer fits. Shorten something before publishing.`
+        : `The CV fills ${pct}% of one A4 page.`;
+      out.dataset.state = pct > 100 ? "bad" : pct > 95 ? "warn" : "ok";
       const was = fitProblem;
-      fitProblem = fitProblem ? firstTooLong(fills) : null;
+      fitProblem = pct > 100 && fitProblem ? tooLong(pct) : null;
       if (problems && was !== fitProblem) { problems = contentProblems(); showProblems(); }
     }, 250);
   }
@@ -653,7 +637,8 @@
     await checkLinks();
     problems = contentProblems().filter(p => p !== fitProblem);
     if (!problems.length) {
-      fitProblem = firstTooLong(await cvFills());
+      const pct = await cvFill();
+      fitProblem = pct > 100 ? tooLong(pct) : null;
       if (fitProblem) problems = [fitProblem];
     }
     showProblems();

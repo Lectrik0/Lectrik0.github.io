@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { readFileSync } from "node:fs";
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
-import { cvPdf, cvPdfs, pageCount } from "../../scripts/cv-pdf.mjs";
+import { cvPdf, pageCount } from "../../scripts/cv-pdf.mjs";
 import { siteConfig } from "../../scripts/build.mjs";
 import { cvSections } from "../../scripts/lib/views.mjs";
 import { copyOfData, data, siteFrom } from "./helpers.mjs";
@@ -83,19 +83,6 @@ test("an ATS reads the CV PDF in order, with every word whole", async () => {
   for (const heading of ["EDUCATION", "EXPERIENCE"]) expect(text.toUpperCase()).toContain(heading);
 });
 
-test("every other version of the CV is one page, reads in order, and matches its committed PDF", async () => {
-  test.setTimeout(120_000);
-  const versions = globalThis.CvLayout.versions(data);
-  expect(versions.length).toBeGreaterThan(0);
-  const pdfs = new Map(await cvPdfs());
-  for (const v of versions) {
-    const pdf = pdfs.get(`cv-${v.slug}.pdf`);
-    expect(pageCount(pdf), `${v.name} version`).toBe(1);
-    expectReadsInOrder(await pdfText(pdf), expectedOrder(v.data));
-    expect(pdf.equals(readFileSync(new URL(`../../cv-${v.slug}.pdf`, import.meta.url))), `cv-${v.slug}.pdf is out of date: npm run pdf`).toBe(true);
-  }
-});
-
 test("an ATS reads the CV in order after content edits too", async () => {
   test.setTimeout(60_000);
   const d = copyOfData();
@@ -112,15 +99,6 @@ test("an ATS reads the CV in order after content edits too", async () => {
 
 test.describe("without JavaScript", () => {
   test.use({ javaScriptEnabled: false });
-
-  test("each version's download button gets its committed PDF", async ({ page }) => {
-    await page.goto("/cv.html");
-    for (const v of globalThis.CvLayout.versions(data)) {
-      const res = await page.request.get(new URL(await page.getByRole("link", { name: `${v.name} version (PDF)` }).getAttribute("href"), page.url()).href);
-      expect(res.headers()["content-type"]).toBe("application/pdf");
-      expect((await res.body()).equals(readFileSync(new URL(`../../cv-${v.slug}.pdf`, import.meta.url)))).toBe(true);
-    }
-  });
 
   test("the Download PDF button gets the committed PDF", async ({ page }) => {
     await page.goto("/cv.html");
