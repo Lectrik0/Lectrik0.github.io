@@ -3,7 +3,12 @@
  * Every function is pure (data in, SafeHtml out) and goes through h()/link(), so nothing from the
  * data is ever written into a page unescaped. Missing or malformed fields are skipped, not fatal.
  */
-import { h, isExternal, link, raw, safeUrl } from "./html.mjs";
+import { h, link, raw, safeUrl } from "./html.mjs";
+import "../../assets/cv-layout.js";
+
+// The CV layout is shared with Backstage (assets/cv-layout.js); here it renders to escaped HTML.
+const { CvLayout } = globalThis;
+const HTML = { h, block, link };
 
 export const str = v => (typeof v === "string" || typeof v === "number") ? String(v).trim() : "";
 export const arr = v => Array.isArray(v) ? v : [];
@@ -13,10 +18,7 @@ const obj = v => (v && typeof v === "object" && !Array.isArray(v)) ? v : {};
 const named = (list, key) => arr(list).filter(x => str(obj(x)[key]));
 const texts = list => arr(list).map(str).filter(Boolean);
 // The profile email if it looks like one, else "" (which hides it everywhere).
-export const email = data => {
-  const e = str(obj(data.profile).email);
-  return /^[^\s@<>"'()\\,;:]+@[^\s@<>"'()\\,;:]+\.[^\s@<>"'()\\,;:]+$/.test(e) ? e : "";
-};
+export const email = data => CvLayout.email(data);
 
 // One element per line, children indented, so the generated source stays readable.
 export function block(tag, attrs, children) {
@@ -43,7 +45,8 @@ const ICON_PATHS = {
   li: "M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01zM6.27 13.4h2.4V9.36c0-.22.02-.43.08-.59.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.88h2.4V9.25c0-2.22-1.18-3.25-2.76-3.25-1.28 0-1.84.7-2.16 1.2v.03h-.02l.02-.03V6.17h-2.4c.03.68 0 7.23 0 7.23z",
   cv: "M3 0h7l3 3v13H3zM9 1v3h3M5 7h6v1.5H5zm0 3h6v1.5H5zm0 3h4v1.5H5z",
   mail: "M0 2h16v12H0zM1.5 3.5v.6L8 8.7l6.5-4.6v-.6zm13 2.4L8 10.5 1.5 5.9v6.6h13z",
-  moon: "M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"
+  moon: "M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z",
+  plane: "M15.5 6.6c.3 0 .5.6.5 1.4s-.2 1.4-.5 1.4H10l-3.6 6.1H4.7l1.9-6.1H3.4L2 11.6H.6L1.6 8 .6 4.4H2l1.4 2.2h3.2L4.7.5h1.7L10 6.6z"
 };
 const icon = name => h("svg", { viewBox: "0 0 16 16", "aria-hidden": "true" },
   h("path", { fill: "currentColor", "fill-rule": "evenodd", d: ICON_PATHS[name] }));
@@ -168,14 +171,10 @@ export const skills = data => raw(named(data.skills, "group").map(g => {
   ]);
 }).join("\n"));
 
-const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planned" };
+const { CERT_LABEL, certStatus } = CvLayout;
 const CERT_COLOR = { earned: "teal", progress: "blue", planned: "muted" };
-const certStatus = c => CERT_LABEL[c.status] ? c.status : "planned";
 // The proof link (e.g. Credly) of an earned certification: https only, and only once it's earned.
-const verifyLink = c => {
-  const url = certStatus(c) === "earned" ? safeUrl(c.verify) : null;
-  return url && isExternal(url) ? link(url, { class: "verify", "aria-label": `Verify ${str(c.name)}` }, "Verify", h("span", { "aria-hidden": "true" }, " ↗")) : null;
-};
+const verifyLink = c => CvLayout.verifyLink(c, HTML);
 // Badge text shrinks to stay inside the hexagon: exam codes like AZ-900 or CLF-C02 fit.
 const badgeClass = text => text.length > 5 ? "hex-t longer" : text.length > 4 ? "hex-t long" : "hex-t";
 
@@ -237,88 +236,21 @@ export function coursesSummary(data) {
 
 export const semesters = data => raw(semesterList(data).map(s => {
   const status = SEM_STATUS[s.status] ? s.status : "upcoming";
-  return block("section", { class: `sem ${status}` }, [
+  const abroad = str(s.abroad);   // a semester studied abroad gets its own look, so it stands out
+  return block("section", { class: `sem ${status}${abroad ? " abroad" : ""}` }, [
     h("div", { class: "sem-head" }, h("h3", {}, str(s.name)), h("span", { class: "sem-state" }, SEM_STATUS[status])),
+    abroad && h("p", { class: "sem-abroad" }, icon("plane"), h("span", {}, "Abroad: ", h("b", {}, abroad))),
     block("ul", { class: "sem-list" }, courseList(s).map(c =>
       h("li", {}, h("span", {}, str(c.name)), h("span", { class: "ects" }, Number(c.ects) ? `${Number(c.ects)} ECTS` : "")))),
     h("p", { class: "sem-total" }, `${ects(s)} ECTS`)
   ]);
 }).join("\n"));
 
-/* ---------- CV page ---------- */
-// One column, in the style of Jake's Resume, so it reads top to bottom for people and for ATS software
-// alike: plain-text contact line, standard section names, each entry's dates on the same line as its title.
-const plainUrl = u => { try { const x = new URL(u); return (x.host + x.pathname).replace(/^www\./, "").replace(/\/$/, ""); } catch { return u; } };
-// A phone number as shown (with non-breaking spaces, so it never wraps), and as a tel: link (digits only).
-const phone = data => str(obj(data.profile).phone);
-const telLink = p => safeUrl(`tel:${p.replace(/[^\d+]/g, "")}`);
-
-export function cvContact(data, site) {
-  const P = obj(data.profile), tel = phone(data);
-  const items = [
-    str(P.location) && h("span", {}, str(P.location)),
-    tel && (telLink(tel) ? link(telLink(tel), {}, tel.replace(/ /g, "\u00a0")) : h("span", {}, tel)),
-    email(data) && link(`mailto:${email(data)}`, {}, email(data)),
-    safeUrl(P.linkedin) && link(P.linkedin, {}, plainUrl(P.linkedin)),
-    safeUrl(P.github) && link(P.github, {}, plainUrl(P.github)),
-    h("a", { href: "/" }, new URL(site.url).host)
-  ].filter(Boolean);
-  return raw(items.join(`\n${h("span", { class: "sep", "aria-hidden": "true" }, " | ")}\n`));
-}
-
-// Personal details under the contact line (as Egyptian employers expect), only when filled in.
-export const cvPersonal = data => {
-  const military = str(obj(data.cv).military);
-  return raw(military ? h("p", { class: "sheet-personal" }, `Military status: ${military}`) : "");
-};
-
-const section = (title, ...kids) => block("section", {}, [h("h2", {}, title), ...kids]);
-// A line with text on the left and, optionally, on the right (dates, location, status).
-const row = (cls, left, right) => h("div", { class: cls }, left, right ? h("span", {}, right) : "");
-const entry = (rows, ...kids) => block("div", { class: "entry" }, [...rows.filter(Boolean), ...kids]);
-const bullets = list => texts(list).length ? block("ul", {}, texts(list).map(b => h("li", {}, b))) : null;
-
-// The CV's sections, in order, each only when it has something to show. Planned certifications stay
-// on the home page: on a CV they could read as held.
-export function cvSections(data) {
-  const CV = obj(data.cv);
-  const languages = texts(CV.languages);
-  return [
-    ["Profile", [str(CV.summary)].filter(Boolean)],
-    ["Education", named(CV.education, "title")],
-    ["Experience", named(CV.experience, "title")],
-    ["Projects", named(CV.projects, "title")],
-    ["Certifications & Training", named(data.certs, "name").filter(c => certStatus(c) !== "planned")],
-    ["Skills", [...named(CV.skills, "label"), ...(languages.length ? [{ label: "Spoken languages", text: languages.join(", ") }] : [])]]
-  ].filter(([, items]) => items.length);
-}
-
-const CV_SECTION = {
-  Profile: items => items.map(summary => h("p", {}, summary)),
-  // School | location, then degree | dates
-  Education: items => items.map(e => {
-    const [school, degree] = str(e.org) ? [str(e.org), str(e.title)] : [str(e.title), ""];
-    return entry([
-      row("row", h("b", {}, school), str(e.location)),
-      (degree || str(e.dates)) && row("row sub", h("i", {}, degree), str(e.dates))
-    ], str(e.details) ? h("p", { class: "note" }, str(e.details)) : null);
-  }),
-  // Role | dates, then company | location
-  Experience: items => items.map(e => entry([
-    row("row", h("b", {}, str(e.title)), str(e.dates)),
-    (str(e.org) || str(e.location)) && row("row sub", h("i", {}, str(e.org)), str(e.location))
-  ], bullets(e.bullets))),
-  // Project | tech used, then dates on the right
-  Projects: items => items.map(p => entry([
-    row("row", h("span", {}, h("b", {}, str(p.title)), ...(str(p.stack) ? [" | ", h("i", {}, str(p.stack))] : [])), str(p.dates))
-  ], bullets(p.bullets))),
-  "Certifications & Training": items => [block("div", { class: "entry" }, items.map(c =>
-    row("row", h("span", {}, h("b", {}, str(c.name)), ...(verifyLink(c) ? [" | ", verifyLink(c)] : [])),
-      certStatus(c) === "earned" && str(c.issued) ? str(c.issued) : CERT_LABEL[certStatus(c)])))],
-  Skills: items => [block("ul", { class: "skills" }, items.map(s => h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text))))]
-};
-
-export const cvBody = data => raw(cvSections(data).map(([title, items]) => section(title, ...CV_SECTION[title](items))).join("\n"));
+/* ---------- CV page (layout in assets/cv-layout.js) ---------- */
+export const cvContact = (data, site) => raw(CvLayout.contact(data, HTML, new URL(site.url).host).join(`\n${CvLayout.separator(HTML)}\n`));
+export const cvPersonal = data => raw(CvLayout.personal(data, HTML) || "");
+export const cvSections = data => CvLayout.sections(data);
+export const cvBody = data => raw(CvLayout.body(data, HTML).join("\n"));
 
 /* ---------- single text values, for elements marked data-bind="..." ---------- */
 export function bindings(data) {

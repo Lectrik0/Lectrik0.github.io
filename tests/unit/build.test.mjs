@@ -108,6 +108,14 @@ test("a Verify link shows only on earned certifications, and only for https link
   }
 });
 
+test("a semester studied abroad is marked in the course list", () => {
+  const data = JSON.parse(read("data/site.json"));
+  data.courses.semesters.forEach((s, i) => { s.abroad = i === 0 ? "GIU Berlin, Germany" : ""; });
+  const html = renderSite({ data }).get("index.html");
+  assert.equal([...html.matchAll(/<section class="sem [a-z]+ abroad">/g)].length, 1);
+  assert.match(html, /<p class="sem-abroad"><svg[^>]*>.*?<\/svg><span>Abroad: <b>GIU Berlin, Germany<\/b><\/span><\/p>/);
+});
+
 test("CV sections appear when they get content and disappear when emptied", () => {
   const data = JSON.parse(read("data/site.json"));
   data.cv.languages = ["Arabic (native)"];
