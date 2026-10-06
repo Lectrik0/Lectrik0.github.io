@@ -50,6 +50,7 @@ export async function siteFrom(content) {
   const server = await serve({ root: dir, port: 0 });
   return {
     origin: `http://127.0.0.1:${server.address().port}`,
+    root: dir,
     close() { server.close(); rmSync(dir, { recursive: true, force: true }); }
   };
 }

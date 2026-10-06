@@ -22,7 +22,7 @@ for (const [name, path] of Object.entries(PAGES)) {
       for (const ref of refs) {
         const url = new URL(ref.url);
         if (url.origin !== origin) {
-          expect(url.protocol, `${ref.url} should be https or mailto`).toMatch(/^(https|mailto):$/);
+          expect(url.protocol, `${ref.url} should be https, mailto or tel`).toMatch(/^(https|mailto|tel):$/);
           if (ref.tag === "a" && url.protocol === "https:") {
             expect(ref.target, `${ref.url} should open in a new tab`).toBe("_blank");
             expect(ref.rel, `${ref.url} needs noopener noreferrer`).toContain("noopener");
@@ -102,9 +102,11 @@ async function expectCompleteHome(page, d) {
 }
 
 async function expectCompleteCV(page, d) {
-  const { main, side } = cvSections(d);
-  await expect(page.locator(".cv h2")).toHaveText([...main, ...side].map(([title]) => title));
-  for (const language of side.find(([t]) => t === "Languages")?.[1] ?? []) await expect(page.locator(".cv-side li", { hasText: language })).toHaveCount(1);
+  const sections = cvSections(d);
+  await expect(page.locator(".sheet h2")).toHaveText(sections.map(([title]) => title));
+  for (const language of d.cv.languages.filter(l => l.trim())) await expect(page.locator(".sheet .skills li", { hasText: language })).toHaveCount(1);
+  // planned certifications stay off the CV
+  for (const c of d.certs.filter(c => c.status === "planned" && c.name)) await expect(page.locator(".sheet", { hasText: c.name })).toHaveCount(0);
   expect(await page.locator("h2:empty, h3:empty, li:empty, b:empty").count()).toBe(0);
 }
 
@@ -115,7 +117,8 @@ const more = () => {
   d.certs.push({ name: "Test certificate", short: "TST", status: "earned", verify: "https://www.credly.com/badges/test" }, { name: "", short: "", status: "earned" },
     { name: "Planned with a link", short: "PWL", status: "planned", verify: "https://www.credly.com/badges/later" });
   d.cv.languages.push("German (basic)", "");
-  d.cv.projects.push({ title: "Home lab", dates: "2027", bullets: ["Built a lab"] }, { title: "" });
+  d.cv.projects.push({ title: "Home lab", stack: "Proxmox, pfSense", dates: "2027", bullets: ["Built a lab"] }, { title: "" });
+  d.cv.experience.push({ title: "Volunteer", org: "Club", location: "Cairo, Egypt", dates: "2025", bullets: ["Helped"] }, { title: "" });
   d.skills.push({ group: "", note: "", color: "teal", items: [] });
   d.posts.push({ title: "An older write-up", date: "2025-01-01", tag: "Lab", summary: "Old", url: "writeups/hardening-this-site.html" });
   d.posts.reverse(); // stored oldest first: the site must still list newest first
@@ -160,7 +163,7 @@ test.describe("without JavaScript", () => {
         await expectVerifyLinks(page, d, "#certs");
         await page.goto(site.origin + "/cv.html");
         await expectCompleteCV(page, d);
-        await expectVerifyLinks(page, d, ".cv-side");
+        await expectVerifyLinks(page, d, ".sheet");
       } finally {
         site.close();
       }

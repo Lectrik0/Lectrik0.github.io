@@ -6,10 +6,11 @@
   "github": "https://github.com/Lectrik0",
   "linkedin": "https://www.linkedin.com/in/aliahmed255",
   "email": "aliahmedismail2@gmail.com",
+  "phone": "+20 101 954 3773",
   "cv": "cv.html"
  },
  "internship": {
-  "start": "2026-07-16",
+  "start": "2026-08-01",
   "end": "2027-01-16"
  },
  "story": [
@@ -335,28 +336,52 @@
  ],
  "cv": {
   "headline": "Final-year cybersecurity student focused on cloud security.",
-  "summary": "Final-year B.Sc. student at the German International University, majoring in IT Security, building toward a career in cloud security. Studying for AWS Certified Cloud Practitioner and documenting hands-on cloud and web security work publicly on my site and GitHub.",
+  "summary": "Final-year IT Security student with hands-on internship experience at a bank in vulnerability management, governance, risk and compliance (GRC), penetration testing and SOC operations. Building toward a career in cloud security and studying for AWS Certified Cloud Practitioner.",
   "education": [
    {
     "title": "B.Sc. Informatics and Computer Science, IT Security major",
     "org": "German International University (GIU)",
-    "dates": "Expected 2027",
-    "details": "Cryptography, Network Security, Ethical Hacking and Penetration Testing, Digital Forensics, Software and Mobile Devices Security, Business Continuity and Risk Management."
+    "dates": "Sep 2023 – Sep 2027",
+    "details": "Relevant coursework: Cryptography, Network Security, Ethical Hacking and Penetration Testing, Digital Forensics, Software and Mobile Devices Security, Business Continuity and Risk Management."
+   },
+   {
+    "title": "Exchange semester (5th semester), Cybersecurity",
+    "org": "German International University in Berlin (GIU Berlin)",
+    "location": "Berlin, Germany",
+    "dates": "Sep 2025 – Feb 2026"
    }
   ],
   "experience": [
    {
-    "title": "Intern",
+    "title": "Information Security Intern",
     "org": "Ebank",
-    "dates": "Jul 2026 – Jan 2027",
+    "location": "New Cairo, Egypt",
+    "dates": "Aug 2026 – Jan 2027",
     "bullets": [
-     "Six-month internship in a banking IT environment."
+     "Rotated across the bank's vulnerability management, GRC, penetration testing and SOC teams.",
+     "Ran vulnerability scans with Tenable and analyzed the findings by CVE and plugin.",
+     "Worked with the GRC team on employee risk assessments aligned with ISO/IEC 27001.",
+     "Ran phishing simulations to test employees' security awareness.",
+     "Performed internal network penetration tests across each floor of the bank's offices.",
+     "Used IBM QRadar (SIEM) with the SOC team to monitor and analyze security events."
+    ]
+   },
+   {
+    "title": "Cybersecurity Intern",
+    "org": "ICT Misr",
+    "location": "Sheikh Zayed, Giza, Egypt",
+    "dates": "Jul 2024",
+    "bullets": [
+     "Shadowed cybersecurity staff in their daily work, learning how businesses apply security in practice.",
+     "Observed how the team works with clients and handles their security needs.",
+     "Built foundational knowledge of core security concepts, common threat vectors and basic security controls."
     ]
    }
   ],
   "projects": [
    {
     "title": "Personal site: lectrik0.github.io",
+    "stack": "HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation",
     "dates": "2026",
     "bullets": [
      "Built a static portfolio with a strict Content Security Policy and Trusted Types, blocking XSS by design.",
@@ -369,23 +394,27 @@
   "skills": [
    {
     "label": "Security",
-    "text": "Web security (XSS, CSP), cryptography, network security, penetration testing basics"
+    "text": "Vulnerability scanning, network penetration testing, phishing simulation, risk assessment, web security (XSS, CSP), cryptography"
+   },
+   {
+    "label": "Tools",
+    "text": "Tenable, IBM QRadar (SIEM), Git, GitHub Actions"
    },
    {
     "label": "Cloud",
-    "text": "AWS core services, IAM, S3, CloudFront"
+    "text": "AWS core services, IAM, S3, CloudFront, CloudFormation"
    },
    {
-    "label": "Systems",
-    "text": "Networking, Linux"
+    "label": "Systems & code",
+    "text": "Networking, Linux, Python"
    },
    {
-    "label": "Code & tools",
-    "text": "Python, Git, GitHub Actions, CloudFormation"
+    "label": "Standards",
+    "text": "ISO/IEC 27001"
    }
   ],
   "languages": [
-   "English  (full professional proficiency)",
+   "English (full professional proficiency)",
    "Arabic (native)"
   ]
  }

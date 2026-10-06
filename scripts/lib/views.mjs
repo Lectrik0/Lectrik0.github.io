@@ -246,59 +246,72 @@ export const semesters = data => raw(semesterList(data).map(s => {
 }).join("\n"));
 
 /* ---------- CV page ---------- */
+// One column, in the style of Jake's Resume, so it reads top to bottom for people and for ATS software
+// alike: plain-text contact line, standard section names, each entry's dates on the same line as its title.
 const plainUrl = u => { try { const x = new URL(u); return (x.host + x.pathname).replace(/^www\./, "").replace(/\/$/, ""); } catch { return u; } };
+// A phone number as shown (with non-breaking spaces, so it never wraps), and as a tel: link (digits only).
+const phone = data => str(obj(data.profile).phone);
+const telLink = p => safeUrl(`tel:${p.replace(/[^\d+]/g, "")}`);
 
 export function cvContact(data, site) {
-  const P = obj(data.profile);
-  return raw([
-    str(P.location) && h("li", {}, str(P.location)),
-    email(data) && h("li", {}, link(`mailto:${email(data)}`, {}, email(data))),
-    safeUrl(P.linkedin) && h("li", {}, link(P.linkedin, {}, plainUrl(P.linkedin))),
-    safeUrl(P.github) && h("li", {}, link(P.github, {}, plainUrl(P.github))),
-    h("li", {}, h("a", { href: "/" }, new URL(site.url).host))
-  ].filter(Boolean).join("\n"));
+  const P = obj(data.profile), tel = phone(data);
+  const items = [
+    str(P.location) && h("span", {}, str(P.location)),
+    tel && (telLink(tel) ? link(telLink(tel), {}, tel.replace(/ /g, "\u00a0")) : h("span", {}, tel)),
+    email(data) && link(`mailto:${email(data)}`, {}, email(data)),
+    safeUrl(P.linkedin) && link(P.linkedin, {}, plainUrl(P.linkedin)),
+    safeUrl(P.github) && link(P.github, {}, plainUrl(P.github)),
+    h("a", { href: "/" }, new URL(site.url).host)
+  ].filter(Boolean);
+  return raw(items.join(`\n${h("span", { class: "sep", "aria-hidden": "true" }, " | ")}\n`));
 }
 
 const section = (title, ...kids) => block("section", {}, [h("h2", {}, title), ...kids]);
-const item = (title, dates, ...kids) => block("div", { class: "item" }, [
-  h("div", { class: "item-top" }, h("b", {}, title), h("span", {}, dates)), ...kids]);
+// A line with text on the left and, optionally, on the right (dates, location, status).
+const row = (cls, left, right) => h("div", { class: cls }, left, right ? h("span", {}, right) : "");
+const entry = (rows, ...kids) => block("div", { class: "entry" }, [...rows.filter(Boolean), ...kids]);
 const bullets = list => texts(list).length ? block("ul", {}, texts(list).map(b => h("li", {}, b))) : null;
-const titleOrg = e => [str(e.title), str(e.org)].filter(Boolean).join(", ");
 
-// The CV's sections, in order, each only when it has something to show.
+// The CV's sections, in order, each only when it has something to show. Planned certifications stay
+// on the home page: on a CV they could read as held.
 export function cvSections(data) {
   const CV = obj(data.cv);
-  return {
-    main: [
-      ["Profile", [str(CV.summary)].filter(Boolean)],
-      ["Education", named(CV.education, "title")],
-      ["Experience", named(CV.experience, "title")],
-      ["Projects", named(CV.projects, "title")]
-    ].filter(([, items]) => items.length),
-    side: [
-      ["Certifications", named(data.certs, "name")],
-      ["Skills", named(CV.skills, "label")],
-      ["Languages", texts(CV.languages)]
-    ].filter(([, items]) => items.length)
-  };
+  const languages = texts(CV.languages);
+  return [
+    ["Profile", [str(CV.summary)].filter(Boolean)],
+    ["Education", named(CV.education, "title")],
+    ["Experience", named(CV.experience, "title")],
+    ["Projects", named(CV.projects, "title")],
+    ["Certifications", named(data.certs, "name").filter(c => certStatus(c) !== "planned")],
+    ["Skills", [...named(CV.skills, "label"), ...(languages.length ? [{ label: "Spoken languages", text: languages.join(", ") }] : [])]]
+  ].filter(([, items]) => items.length);
 }
 
-const CV_MAIN = {
-  Profile: summary => h("p", {}, summary),
-  Education: e => item(titleOrg(e), str(e.dates), str(e.details) ? h("p", {}, str(e.details)) : null),
-  Experience: e => item(titleOrg(e), str(e.dates), bullets(e.bullets)),
-  Projects: p => item(str(p.title), str(p.dates), bullets(p.bullets))
-};
-const CV_SIDE = {
-  Certifications: c => h("li", {}, h("b", {}, str(c.name)), h("br"), CERT_LABEL[certStatus(c)], ...(verifyLink(c) ? [" · ", verifyLink(c)] : [])),
-  Skills: s => h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text)),
-  Languages: l => h("li", {}, l)
+const CV_SECTION = {
+  Profile: items => items.map(summary => h("p", {}, summary)),
+  // School | location, then degree | dates
+  Education: items => items.map(e => {
+    const [school, degree] = str(e.org) ? [str(e.org), str(e.title)] : [str(e.title), ""];
+    return entry([
+      row("row", h("b", {}, school), str(e.location)),
+      (degree || str(e.dates)) && row("row sub", h("i", {}, degree), str(e.dates))
+    ], str(e.details) ? h("p", { class: "note" }, str(e.details)) : null);
+  }),
+  // Role | dates, then company | location
+  Experience: items => items.map(e => entry([
+    row("row", h("b", {}, str(e.title)), str(e.dates)),
+    (str(e.org) || str(e.location)) && row("row sub", h("i", {}, str(e.org)), str(e.location))
+  ], bullets(e.bullets))),
+  // Project | tech used, then dates on the right
+  Projects: items => items.map(p => entry([
+    row("row", h("span", {}, h("b", {}, str(p.title)), ...(str(p.stack) ? [" | ", h("i", {}, str(p.stack))] : [])), str(p.dates))
+  ], bullets(p.bullets))),
+  Certifications: items => [block("div", { class: "entry" }, items.map(c =>
+    row("row", h("span", {}, h("b", {}, str(c.name)), ...(verifyLink(c) ? [" | ", verifyLink(c)] : [])), CERT_LABEL[certStatus(c)])))],
+  Skills: items => [block("ul", { class: "skills" }, items.map(s => h("li", {}, h("b", {}, `${str(s.label)}:`), " ", str(s.text))))]
 };
 
-export const cvMain = data => raw(cvSections(data).main
-  .map(([title, items]) => section(title, ...items.map(CV_MAIN[title]))).join("\n"));
-export const cvSide = data => raw(cvSections(data).side
-  .map(([title, items]) => section(title, block("ul", { class: "side-list" }, items.map(CV_SIDE[title])))).join("\n"));
+export const cvBody = data => raw(cvSections(data).map(([title, items]) => section(title, ...CV_SECTION[title](items))).join("\n"));
 
 /* ---------- single text values, for elements marked data-bind="..." ---------- */
 export function bindings(data) {

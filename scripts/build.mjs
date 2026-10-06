@@ -36,8 +36,7 @@ const REGIONS = {
   "courses-summary": data => views.coursesSummary(data),
   semesters: data => views.semesters(data),
   "cv-contact": (data, page, site) => views.cvContact(data, site),
-  "cv-main": data => views.cvMain(data),
-  "cv-side": data => views.cvSide(data)
+  "cv-body": data => views.cvBody(data)
 };
 
 export function siteConfig(root = ROOT) {

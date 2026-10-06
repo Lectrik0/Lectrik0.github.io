@@ -26,7 +26,7 @@ The site is also a security project in its own right. It was built from scratch,
 | Page | What you'll find |
 |---|---|
 | [Home](https://lectrik0.github.io) | The story so far (open Chapter 1 for every university course), skills, certifications, write-ups, hidden flags and contact links |
-| [CV](https://lectrik0.github.io/cv.html) | A one-page CV, ready to download as a PDF |
+| [CV](https://lectrik0.github.io/cv.html) | A one-page CV in a classic, ATS-friendly layout, ready to download as a PDF |
 | [Write-ups](https://lectrik0.github.io/#writeups) | Hands-on security projects, each told as a comic-book "issue" |
 
 ## ✨ What makes it different
@@ -113,7 +113,7 @@ data/site.json ──► scripts/build.mjs ──► index.html, cv.html, writeu
 | Content Security Policy | `default-src 'none'`. Scripts, styles, fonts and images load only from this site, and `connect-src 'none'`: the public pages make no requests from script at all. No inline scripts, no `eval`, no plugins, no forms, no `<base>` tag injection. |
 | Trusted Types | `require-trusted-types-for 'script'` with no policies allowed, so the browser refuses any `innerHTML`/`document.write` style HTML injection. |
 | Content is text, never markup | The build writes data into pages only through one helper, `h()` in [`scripts/lib/html.mjs`](scripts/lib/html.mjs), which escapes every value, refuses event-handler and `style` attributes, and checks every URL. `main.js` never builds HTML; it only sets text and attributes. |
-| URL allow-list | Every link from data goes through `safeUrl()`: only `https:`, `mailto:` or same-site paths. `javascript:`, `data:` and plain `http:` links are dropped. |
+| URL allow-list | Every link from data goes through `safeUrl()`: only `https:`, `mailto:`, `tel:` (digits only) or same-site paths. `javascript:`, `data:` and plain `http:` links are dropped. |
 | No third parties | Fonts are self-hosted (SIL OFL). Pages make zero requests to other domains, so there are no supply-chain scripts and visitors aren't tracked. |
 | Referrer policy | `no-referrer`. Outbound links also use `rel="noopener noreferrer"`, which blocks reverse tabnabbing. |
 | HTTPS | Served over HTTPS by GitHub Pages ("Enforce HTTPS" on); `upgrade-insecure-requests` in the CSP. |
@@ -135,7 +135,7 @@ data/site.json ──► scripts/build.mjs ──► index.html, cv.html, writeu
 2. **Build:** on a PR the pages must already be rebuilt (`npm run check`); on `main` they're rebuilt from `data/site.json`.
 3. **HTML validation** with html-validate.
 4. **Unit tests:** escaping, URL filtering, deterministic build, meta tags, sitemap, feed, security.txt, and that Backstage's content checker agrees with Ajv on over a thousand edited versions of the content.
-5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker and course list work; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated); the CV renders to a one-page PDF, identical on every run.
+5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker and course list work; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated); the CV renders to a one-page PDF, identical on every run, and an ATS-style text extraction (pdf.js) reads it in order with every word whole, also after content edits.
 6. **Publish** (`main` only, after everything passes): the CV is rendered to `cv.pdf`, and if that or the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
 
 The tests check the site *against* the content rather than freezing today's content: what each page must show is worked out from `data/site.json`, and the content checks also run on copies of the site built from edited content (more entries, fewer entries, half-filled entries, write-ups stored out of order). So editing the content can't make a test fail unless the edit itself is a problem.
@@ -152,6 +152,7 @@ Edit [`data/site.json`](data/site.json), run `npm run build`, and commit both. O
 - Unlocking decrypts the token into memory; locking, closing the tab or 30 idle minutes forgets it. Wrong attempts are slowed down.
 - Before publishing, Backstage checks the content with the same rules CI uses ([`assets/content-check.js`](assets/content-check.js) + the schema, and asks GitHub whether linked pages exist). Problems are listed by field, with a *Show* button that jumps to it, and nothing is published until they're fixed.
 - Publishing commits `data/site.json` through the GitHub API. CI then checks it again, rebuilds the pages and publishes them, usually within a few minutes; Backstage links to the run. If a check still fails there, GitHub emails the failed run and the live site doesn't change.
+- The CV is one column in the style of Jake's Resume, so applicant tracking systems read it in order: plain-text contact line (phone, email, LinkedIn, GitHub), standard section names, dates on the same line as each role. Planned certifications stay off it. No letter-spacing or small caps on it, since both split words when text is extracted from the PDF.
 - A certification can have a *Verify link* (e.g. its Credly badge). Once its status is *Earned*, the home page and the CV show a **Verify ↗** link to it.
 - Half-filled entries never break a page: the build leaves out an entry whose name or title is empty, and write-ups are always listed newest first by date.
 - The editor page has its own CSP that only allows connections to `api.github.com`, and Trusted Types like the rest of the site.

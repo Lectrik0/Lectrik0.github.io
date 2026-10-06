@@ -6,13 +6,14 @@ test("escapeHtml escapes everything that can break out of text or an attribute",
   assert.equal(escapeHtml(`<a href="x" onclick='y'>&</a>`), "&lt;a href=&quot;x&quot; onclick=&#39;y&#39;&gt;&amp;&lt;/a&gt;");
 });
 
-test("safeUrl allows https, mailto and same-site paths only", () => {
+test("safeUrl allows https, mailto, tel (digits only) and same-site paths only", () => {
   assert.equal(safeUrl("https://github.com/Lectrik0"), "https://github.com/Lectrik0");
   assert.equal(safeUrl("mailto:me@example.com"), "mailto:me@example.com");
+  assert.equal(safeUrl("tel:+201019543773"), "tel:+201019543773");
   assert.equal(safeUrl("cv.html"), "/cv.html");
   assert.equal(safeUrl("writeups/x.html#part"), "/writeups/x.html#part");
   assert.equal(safeUrl("/feed.xml"), "/feed.xml");
-  for (const bad of ["javascript:alert(1)", " JaVaScRiPt:alert(1)", "java\tscript:alert(1)", "data:text/html,<script>", "vbscript:x", "http://example.com", "file:///etc/passwd", "", "   ", null, 42, {}]) {
+  for (const bad of ["javascript:alert(1)", " JaVaScRiPt:alert(1)", "java\tscript:alert(1)", "data:text/html,<script>", "vbscript:x", "http://example.com", "file:///etc/passwd", "tel:+20 101", "tel:<script>", "tel:123", "", "   ", null, 42, {}]) {
     assert.equal(safeUrl(bad), null, `should reject ${JSON.stringify(bad)}`);
   }
 });

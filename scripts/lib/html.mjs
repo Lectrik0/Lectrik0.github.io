@@ -20,10 +20,11 @@ export const isSafeHtml = value => value instanceof SafeHtml;
 
 const SITE = "https://site.invalid";
 
-// https: links, mailto: links, or paths on this site (returned root-relative, e.g. "cv.html" -> "/cv.html").
-// Everything else (javascript:, data:, http:, garbage) returns null.
+// https: links, mailto: links, tel: links (digits only), or paths on this site (returned root-relative,
+// e.g. "cv.html" -> "/cv.html"). Everything else (javascript:, data:, http:, garbage) returns null.
 export function safeUrl(value) {
   if (typeof value !== "string" || !value.trim()) return null;
+  if (/^tel:/i.test(value.trim())) return /^tel:\+?\d{5,20}$/i.test(value.trim()) ? value.trim() : null;
   let url;
   try { url = new URL(value.trim(), SITE + "/"); } catch { return null; }
   if (url.origin === SITE) return url.pathname + url.search + url.hash;

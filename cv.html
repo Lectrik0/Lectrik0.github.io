@@ -24,7 +24,7 @@
 <!-- /build:meta -->
 <link rel="icon" href="assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
 <link rel="preload" href="assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/style.css?v=178c9723ac">
+<link rel="stylesheet" href="assets/style.css?v=0c9da60eca">
 <noscript><link rel="stylesheet" href="assets/nojs.css?v=02f3f7d7dd"></noscript>
 <script src="assets/main.js?v=2d0b68fb62" defer></script>
 </head>
@@ -46,91 +46,103 @@
   </div>
 </nav>
 <!-- /build:nav -->
-<main>
-  <header class="page-head wrap">
-    <h1 data-bind="profile.name">Ali Ahmed</h1>
-    <p class="lede" data-bind="cv.headline">Final-year cybersecurity student focused on cloud security.</p>
-    <ul class="contact-list">
-      <!-- build:cv-contact -->
-      <li>Cairo, Egypt</li>
-      <li><a href="mailto:aliahmedismail2@gmail.com">aliahmedismail2@gmail.com</a></li>
-      <li><a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer">linkedin.com/in/aliahmed255</a></li>
-      <li><a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer">github.com/Lectrik0</a></li>
-      <li><a href="/">lectrik0.github.io</a></li>
-      <!-- /build:cv-contact -->
-    </ul>
-    <div class="btns no-print">
-      <a class="btn" href="cv.pdf" download="Ali-Ahmed-CV.pdf">Download PDF</a>
-      <button class="btn ghost needs-js" id="print-cv" type="button">Print</button>
-    </div>
-  </header>
-
-  <div class="wrap cv">
-    <div class="frame cut-a cv-main"><div class="in">
-      <!-- build:cv-main -->
-      <section>
-        <h2>Profile</h2>
-        <p>Final-year B.Sc. student at the German International University, majoring in IT Security, building toward a career in cloud security. Studying for AWS Certified Cloud Practitioner and documenting hands-on cloud and web security work publicly on my site and GitHub.</p>
-      </section>
-      <section>
-        <h2>Education</h2>
-        <div class="item">
-          <div class="item-top"><b>B.Sc. Informatics and Computer Science, IT Security major, German International University (GIU)</b><span>Expected 2027</span></div>
-          <p>Cryptography, Network Security, Ethical Hacking and Penetration Testing, Digital Forensics, Software and Mobile Devices Security, Business Continuity and Risk Management.</p>
-        </div>
-      </section>
-      <section>
-        <h2>Experience</h2>
-        <div class="item">
-          <div class="item-top"><b>Intern, Ebank</b><span>Jul 2026 – Jan 2027</span></div>
-          <ul>
-            <li>Six-month internship in a banking IT environment.</li>
-          </ul>
-        </div>
-      </section>
-      <section>
-        <h2>Projects</h2>
-        <div class="item">
-          <div class="item-top"><b>Personal site: lectrik0.github.io</b><span>2026</span></div>
-          <ul>
-            <li>Built a static portfolio with a strict Content Security Policy and Trusted Types, blocking XSS by design.</li>
-            <li>Tested it against XSS payloads (event-handler, script and javascript: URL injection); none executed.</li>
-            <li>Self-hosted all assets (zero third-party requests) and published an RFC 9116 security.txt.</li>
-            <li>Wrote AWS infrastructure as code (S3, CloudFront, security headers) with keyless GitHub Actions deploys via OIDC.</li>
-          </ul>
-        </div>
-      </section>
-      <!-- /build:cv-main -->
-    </div></div>
-    <aside class="frame cut-b cv-side"><div class="in">
-      <!-- build:cv-side -->
-      <section>
-        <h2>Certifications</h2>
-        <ul class="side-list">
-          <li><b>AWS Certified Cloud Practitioner</b><br>In progress</li>
-          <li><b>AWS Solutions Architect – Associate</b><br>Planned</li>
-          <li><b>AWS Certified Security – Specialty</b><br>Planned</li>
-        </ul>
-      </section>
-      <section>
-        <h2>Skills</h2>
-        <ul class="side-list">
-          <li><b>Security:</b> Web security (XSS, CSP), cryptography, network security, penetration testing basics</li>
-          <li><b>Cloud:</b> AWS core services, IAM, S3, CloudFront</li>
-          <li><b>Systems:</b> Networking, Linux</li>
-          <li><b>Code &amp; tools:</b> Python, Git, GitHub Actions, CloudFormation</li>
-        </ul>
-      </section>
-      <section>
-        <h2>Languages</h2>
-        <ul class="side-list">
-          <li>English  (full professional proficiency)</li>
-          <li>Arabic (native)</li>
-        </ul>
-      </section>
-      <!-- /build:cv-side -->
-    </div></aside>
+<main class="wrap cv-page">
+  <div class="btns no-print">
+    <a class="btn" href="cv.pdf" download="Ali-Ahmed-CV.pdf">Download PDF</a>
+    <button class="btn ghost needs-js" id="print-cv" type="button">Print</button>
   </div>
+  <article class="sheet">
+    <header class="sheet-head">
+      <h1 data-bind="profile.name">Ali Ahmed</h1>
+      <p class="sheet-headline" data-bind="cv.headline">Final-year cybersecurity student focused on cloud security.</p>
+      <p class="sheet-contact">
+        <!-- build:cv-contact -->
+        <span>Cairo, Egypt</span>
+        <span class="sep" aria-hidden="true"> | </span>
+        <a href="tel:+201019543773">+20 101 954 3773</a>
+        <span class="sep" aria-hidden="true"> | </span>
+        <a href="mailto:aliahmedismail2@gmail.com">aliahmedismail2@gmail.com</a>
+        <span class="sep" aria-hidden="true"> | </span>
+        <a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer">linkedin.com/in/aliahmed255</a>
+        <span class="sep" aria-hidden="true"> | </span>
+        <a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer">github.com/Lectrik0</a>
+        <span class="sep" aria-hidden="true"> | </span>
+        <a href="/">lectrik0.github.io</a>
+        <!-- /build:cv-contact -->
+      </p>
+    </header>
+    <!-- build:cv-body -->
+    <section>
+      <h2>Profile</h2>
+      <p>Final-year IT Security student with hands-on internship experience at a bank in vulnerability management, governance, risk and compliance (GRC), penetration testing and SOC operations. Building toward a career in cloud security and studying for AWS Certified Cloud Practitioner.</p>
+    </section>
+    <section>
+      <h2>Education</h2>
+      <div class="entry">
+        <div class="row"><b>German International University (GIU)</b></div>
+        <div class="row sub"><i>B.Sc. Informatics and Computer Science, IT Security major</i><span>Sep 2023 – Sep 2027</span></div>
+        <p class="note">Relevant coursework: Cryptography, Network Security, Ethical Hacking and Penetration Testing, Digital Forensics, Software and Mobile Devices Security, Business Continuity and Risk Management.</p>
+      </div>
+      <div class="entry">
+        <div class="row"><b>German International University in Berlin (GIU Berlin)</b><span>Berlin, Germany</span></div>
+        <div class="row sub"><i>Exchange semester (5th semester), Cybersecurity</i><span>Sep 2025 – Feb 2026</span></div>
+      </div>
+    </section>
+    <section>
+      <h2>Experience</h2>
+      <div class="entry">
+        <div class="row"><b>Information Security Intern</b><span>Aug 2026 – Jan 2027</span></div>
+        <div class="row sub"><i>Ebank</i><span>New Cairo, Egypt</span></div>
+        <ul>
+          <li>Rotated across the bank&#39;s vulnerability management, GRC, penetration testing and SOC teams.</li>
+          <li>Ran vulnerability scans with Tenable and analyzed the findings by CVE and plugin.</li>
+          <li>Worked with the GRC team on employee risk assessments aligned with ISO/IEC 27001.</li>
+          <li>Ran phishing simulations to test employees&#39; security awareness.</li>
+          <li>Performed internal network penetration tests across each floor of the bank&#39;s offices.</li>
+          <li>Used IBM QRadar (SIEM) with the SOC team to monitor and analyze security events.</li>
+        </ul>
+      </div>
+      <div class="entry">
+        <div class="row"><b>Cybersecurity Intern</b><span>Jul 2024</span></div>
+        <div class="row sub"><i>ICT Misr</i><span>Sheikh Zayed, Giza, Egypt</span></div>
+        <ul>
+          <li>Shadowed cybersecurity staff in their daily work, learning how businesses apply security in practice.</li>
+          <li>Observed how the team works with clients and handles their security needs.</li>
+          <li>Built foundational knowledge of core security concepts, common threat vectors and basic security controls.</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h2>Projects</h2>
+      <div class="entry">
+        <div class="row"><span><b>Personal site: lectrik0.github.io</b> | <i>HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation</i></span><span>2026</span></div>
+        <ul>
+          <li>Built a static portfolio with a strict Content Security Policy and Trusted Types, blocking XSS by design.</li>
+          <li>Tested it against XSS payloads (event-handler, script and javascript: URL injection); none executed.</li>
+          <li>Self-hosted all assets (zero third-party requests) and published an RFC 9116 security.txt.</li>
+          <li>Wrote AWS infrastructure as code (S3, CloudFront, security headers) with keyless GitHub Actions deploys via OIDC.</li>
+        </ul>
+      </div>
+    </section>
+    <section>
+      <h2>Certifications</h2>
+      <div class="entry">
+        <div class="row"><span><b>AWS Certified Cloud Practitioner</b></span><span>In progress</span></div>
+      </div>
+    </section>
+    <section>
+      <h2>Skills</h2>
+      <ul class="skills">
+        <li><b>Security:</b> Vulnerability scanning, network penetration testing, phishing simulation, risk assessment, web security (XSS, CSP), cryptography</li>
+        <li><b>Tools:</b> Tenable, IBM QRadar (SIEM), Git, GitHub Actions</li>
+        <li><b>Cloud:</b> AWS core services, IAM, S3, CloudFront, CloudFormation</li>
+        <li><b>Systems &amp; code:</b> Networking, Linux, Python</li>
+        <li><b>Standards:</b> ISO/IEC 27001</li>
+        <li><b>Spoken languages:</b> English (full professional proficiency), Arabic (native)</li>
+      </ul>
+    </section>
+    <!-- /build:cv-body -->
+  </article>
 </main>
 
 <!-- build:footer -->

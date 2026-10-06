@@ -19,7 +19,7 @@ for (const [name, path] of Object.entries(PAGES)) {
     const injected = await page.evaluate(() => ({
       handlers: document.querySelectorAll("[onerror], [onload], [onclick]").length,
       inlineScripts: document.querySelectorAll('script:not([src]):not([type="application/ld+json"])').length,
-      badLinks: [...document.querySelectorAll("a[href]")].filter(a => !/^(https|mailto):$/.test(new URL(a.href).protocol) && new URL(a.href).origin !== location.origin).length
+      badLinks: [...document.querySelectorAll("a[href]")].filter(a => !/^(https|mailto|tel):$/.test(new URL(a.href).protocol) && new URL(a.href).origin !== location.origin).length
     }));
     expect(injected).toEqual({ handlers: 0, inlineScripts: 0, badLinks: 0 });
   });
