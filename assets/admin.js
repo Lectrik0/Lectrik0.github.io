@@ -451,6 +451,7 @@
       out.textContent = pct > 100 ? `The CV is ${pct}% of one A4 page: it no longer fits. Shorten something before publishing.`
         : `The CV fills ${pct}% of one A4 page.`;
       out.dataset.state = pct > 100 ? "bad" : pct > 95 ? "warn" : "ok";
+      out.style.setProperty("--fill", `${Math.min(pct, 100)}%`);   // the bar behind the text (CSSOM, so CSP allows it)
       const was = fitProblem;
       fitProblem = pct > 100 && fitProblem ? tooLong(pct) : null;
       if (problems && was !== fitProblem) { problems = contentProblems(); showProblems(); }

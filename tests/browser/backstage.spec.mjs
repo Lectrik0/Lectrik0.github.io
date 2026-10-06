@@ -185,3 +185,13 @@ test("without an expiry date, Backstage asks for one and then shows it", async (
   await expect(note).toContainText("GitHub token valid until");
   await expect(note).toHaveAttribute("data-state", "ok");
 });
+
+test("the day/night switch works in Backstage and shares the site's setting", async ({ page }) => {
+  await fakeGitHub(page);
+  await unlock(page);
+  await page.getByRole("button", { name: "Switch to night mode" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("#toggle-label")).toHaveText("Day");
+  await page.goto("/cv.html");                       // the public pages follow the same choice
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+});

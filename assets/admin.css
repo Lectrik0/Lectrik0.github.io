@@ -166,3 +166,38 @@
 .bs-history li{line-height:1.4}
 .bs-tag{font:600 .78rem/1 var(--f-display);padding:3px 6px;border:2px solid var(--green-text);color:var(--green-text)}
 #view-editor:not([hidden]){display:grid;gap:18px}
+
+/* the day/night switch in the top bar (same button and setting as the public pages) */
+.bs-bar .toggle{align-self:stretch}
+
+/* ---------- motion: small and quick, and none at all for people who ask for less ---------- */
+@keyframes bs-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes bs-fade{from{opacity:0}to{opacity:1}}
+@keyframes bs-drop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+@keyframes bs-toast{from{opacity:0;transform:translate(-50%,14px)}to{opacity:1;transform:translateX(-50%)}}
+@keyframes bs-pulse{0%,100%{box-shadow:0 0 0 0 currentColor}60%{box-shadow:0 0 0 5px transparent}}
+@property --fill{syntax:"<percentage>";inherits:false;initial-value:0%}
+
+.bs-card:not([hidden]){animation:bs-rise .4s cubic-bezier(.2,.7,.2,1) both}
+.bs-panel>*{animation:bs-rise .32s cubic-bezier(.2,.7,.2,1) both}
+.bs-panel>:nth-child(2){animation-delay:.04s}
+.bs-panel>:nth-child(3){animation-delay:.08s}
+.bs-panel>:nth-child(n+4){animation-delay:.12s}
+.bs-item[open]>.bs-grid{animation:bs-fade .22s ease both}
+.bs-problems:not([hidden]),.bs-history:not([hidden]),.bs-token:not([hidden]){animation:bs-drop .25s ease both}
+.bs-toast:not([hidden]){animation:bs-toast .28s cubic-bezier(.2,.7,.2,1) both}
+.bs-status[data-state="dirty"]::before{animation:bs-pulse 1.8s ease-out infinite}
+.bs-bar .btn:not([disabled]),.bs-icon,.bs-tab,.bs-tools a,.toggle{transition:transform .15s,background-color .15s,color .15s,border-color .15s}
+.bs-bar .btn:not([disabled]):hover{transform:translateY(-1px)}
+.bs-bar .btn:not([disabled]):active{transform:translateY(1px)}
+.bs-tab:hover svg,.bs-tools a:hover svg{transform:scale(1.12)}
+.bs-tab svg,.bs-tools svg{transition:transform .15s}
+
+/* the CV page gauge fills like a progress bar */
+.bs-fit{background:linear-gradient(to right,color-mix(in srgb,var(--green-text) 14%,var(--panel)) var(--fill),var(--panel) var(--fill));transition:--fill .5s cubic-bezier(.2,.7,.2,1)}
+.bs-fit[data-state="warn"]{background:linear-gradient(to right,color-mix(in srgb,var(--teal) 16%,var(--panel)) var(--fill),var(--panel) var(--fill))}
+.bs-fit[data-state="bad"]{background:color-mix(in srgb,var(--purple) 14%,var(--panel))}
+
+@media (prefers-reduced-motion:reduce){
+  .bs *,.bs *::before,.bs *::after{animation:none!important;transition:none!important}
+}
