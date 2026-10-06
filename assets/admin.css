@@ -54,7 +54,8 @@
 
 /* ---------- layout: sections on the left, the form on the right ---------- */
 .bs-layout{display:grid;grid-template-columns:220px minmax(0,1fr);gap:24px;align-items:start}
-.bs-tabs{display:grid;gap:4px;position:sticky;top:96px}
+.bs-side{display:grid;gap:16px;position:sticky;top:96px}
+.bs-tabs{display:grid;gap:4px}
 .bs-tab{display:flex;align-items:center;gap:10px;width:100%;text-align:left;font:600 .98rem/1 var(--f-display);padding:11px 12px;
   border:0;border-left:4px solid transparent;background:transparent;color:var(--muted);cursor:pointer;transition:background .15s,color .15s}
 .bs-tab svg{width:17px;height:17px;flex:none}
@@ -63,10 +64,21 @@
 .bs-tab:focus-visible{outline:3px solid var(--teal);outline-offset:1px}
 @media (max-width:900px){
   .bs-layout{grid-template-columns:1fr;gap:14px}
+  .bs-side{position:static;gap:10px}
+  .bs-tools{display:flex;flex-wrap:wrap;gap:4px;padding-top:0;border-top:0}
+  .bs-tools a{border-left:0;padding:6px 10px}
   .bs-tabs{position:static;display:flex;overflow-x:auto;gap:6px;padding-bottom:4px;scrollbar-width:thin}
   .bs-tab{width:auto;flex:none;border-left:0;border-bottom:3px solid transparent}
   .bs-tab[aria-current="page"]{border-bottom-color:var(--teal)}
 }
+
+/* shortcuts under the sections: the cards, the CV, the live site (open in a new tab) */
+.bs-tools{display:grid;gap:2px;padding-top:12px;border-top:2px solid var(--soft)}
+.bs-tools a{display:flex;align-items:center;gap:10px;padding:8px 12px;border-left:4px solid transparent;color:var(--muted);text-decoration:none;font:600 .92rem/1.2 var(--f-display)}
+.bs-tools a::after{content:"↗";margin-left:auto;font-size:.85em}
+.bs-tools a:hover{background:var(--softer);color:var(--text)}
+.bs-tools a:focus-visible{outline:3px solid var(--teal);outline-offset:1px}
+.bs-tools svg{width:16px;height:16px;flex:none}
 
 /* ---------- the form ---------- */
 .bs-panel{display:grid;gap:18px}

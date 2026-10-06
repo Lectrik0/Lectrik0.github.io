@@ -171,6 +171,7 @@ test("Backstage warns before the GitHub token expires", async ({ page }) => {
   await fakeGitHub(page);
   await unlock(page, { expires: inDays(5) });
   await expect(page.locator("#token-note")).toContainText("Your GitHub token expires in 5 days");
+  await expect(page.getByRole("link", { name: "Job-fair cards" })).toHaveAttribute("href", "../card.html");
   await expect(page.locator("#token-note")).toHaveAttribute("data-state", "warn");
 });
 
