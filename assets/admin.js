@@ -127,7 +127,8 @@
       ["profile", { type: "object", label: "Profile", fields: {
         name: T("Name"), tagline: A("Tagline under your name"), location: T("Location"),
         linkedin: T("LinkedIn URL", { kind: "url" }), github: T("GitHub URL", { kind: "url" }),
-        email: T("Email (shown on the home page, the CV and in security.txt; leave empty to hide)", { kind: "email" }), cv: T("CV link", { help: "cv.html, or a PDF like cv.pdf" }) } }],
+        email: T("Email (shown on the home page, the CV and in security.txt; leave empty to hide)", { kind: "email" }),
+        phone: T("Phone (shown on the CV and its PDF; leave empty to hide)", { kind: "tel" }), cv: T("CV link", { help: "cv.html, or a PDF like cv.pdf" }) } }],
       ["internship", { type: "object", label: "Internship progress bar", fields: {
         start: T("Start date", { kind: "date" }), end: T("End date", { kind: "date" }) } }]
     ] },
@@ -162,9 +163,9 @@
     { id: "cv", label: "CV", fields: [
       ["cv", { type: "object", label: "CV", fields: {
         headline: T("Headline"), summary: A("Profile summary"),
-        education: LIST("Education", { title: T("Degree"), org: T("School"), dates: T("Dates"), details: A("Details") }, { name: it => it.title || "New entry" }),
-        experience: LIST("Experience", { title: T("Role"), org: T("Company"), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => [it.title, it.org].filter(Boolean).join(", ") || "New role" }),
-        projects: LIST("Projects", { title: T("Project"), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => it.title || "New project" }),
+        education: LIST("Education", { title: T("Degree"), org: T("School"), location: T("Location"), dates: T("Dates"), details: A("Details") }, { name: it => it.title || "New entry" }),
+        experience: LIST("Experience", { title: T("Role"), org: T("Company"), location: T("Location"), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => [it.title, it.org].filter(Boolean).join(", ") || "New role" }),
+        projects: LIST("Projects", { title: T("Project"), stack: T("Tech used", { help: "Shown after the project name, e.g. Python, AWS, Docker" }), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => it.title || "New project" }),
         skills: LIST("Skills lines", { label: T("Label"), text: T("Skills") }, { name: it => it.label || "New line", compact: true }),
         languages: STR_LIST("Languages", { placeholder: "e.g. Arabic (native)" }) } }]
     ] }
@@ -189,7 +190,7 @@
       input = el("select", { id }, ...f.options.map(([v, l]) => el("option", { value: v, text: l })));
       input.value = obj[key] ?? f.options[0][0];
     } else {
-      const type = f.kind === "date" ? "date" : f.kind === "number" ? "number" : f.kind === "email" ? "email" : f.kind === "url" ? "url" : "text";
+      const type = ["date", "number", "email", "url", "tel"].includes(f.kind) ? f.kind : "text";
       input = el("input", { id, type, value: obj[key] ?? "", maxlength: f.max || null, min: f.kind === "number" ? 0 : null, inputmode: f.kind === "number" ? "numeric" : null });
     }
     input.addEventListener("input", () => {

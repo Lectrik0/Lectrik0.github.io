@@ -111,9 +111,10 @@ test("a Verify link shows only on earned certifications, and only for https link
 test("CV sections appear when they get content and disappear when emptied", () => {
   const data = JSON.parse(read("data/site.json"));
   data.cv.languages = ["Arabic (native)"];
-  assert.match(renderSite({ data }).get("cv.html"), /<h2>Languages<\/h2>\s*<ul class="side-list">\s*<li>Arabic \(native\)<\/li>/);
+  data.cv.skills = [];
+  assert.match(renderSite({ data }).get("cv.html"), /<h2>Skills<\/h2>\s*<ul class="skills">\s*<li><b>Spoken languages:<\/b> Arabic \(native\)<\/li>/);
   data.cv.languages = [];
-  assert.doesNotMatch(renderSite({ data }).get("cv.html"), /<h2>Languages<\/h2>/);
+  assert.doesNotMatch(renderSite({ data }).get("cv.html"), /<h2>Skills<\/h2>|Spoken languages/);
 });
 
 test("security.txt is valid and not about to expire", () => {

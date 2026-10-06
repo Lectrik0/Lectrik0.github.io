@@ -276,27 +276,38 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
 .next h3{margin:0;font-size:1.25rem}
 .next p{margin:0;color:var(--muted)}
 
-/* CV */
-.cv{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:20px;padding-block:0 clamp(40px,6vw,72px)}
-.cv-main .in,.cv-side .in{padding:clamp(20px,4vw,36px);display:grid;gap:26px;align-content:start}
-.cv section h2{margin:0 0 10px;font-size:1.25rem;padding-bottom:6px;border-bottom:2px solid var(--line)}
-.cv .item{display:grid;gap:3px;margin-bottom:14px}
-.cv .item:last-child{margin-bottom:0}
-.cv .item-top{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}
-.cv .item-top b{font:700 1.05rem/1.3 var(--f-display)}
-.cv .item-top span{font:600 .9rem/1.3 var(--f-display);color:var(--muted);font-variant-numeric:tabular-nums}
-.cv .item p,.cv .item li{margin:0;color:var(--muted);font-size:.97rem}
-.cv .item ul{margin:4px 0 0;padding-left:1.2em;display:grid;gap:3px}
-.cv p{margin:0}
-.contact-list{display:flex;flex-wrap:wrap;gap:8px 18px;margin:0;padding:0;list-style:none;font:600 .98rem/1.3 var(--f-display)}
-.contact-list a{text-decoration:none;border-bottom:2px solid var(--teal)}
-.side-list{margin:0;padding:0;list-style:none;display:grid;gap:6px;color:var(--muted)}
-.side-list b{color:var(--text);font-weight:600}
-@media (max-width:900px){.strip{grid-template-columns:1fr}.cv{grid-template-columns:1fr}.ctf{grid-template-columns:1fr}}
+/* CV: one printable sheet in the style of Jake's Resume. Black on white in both themes, like paper.
+   No letter-spacing or small caps anywhere on it: both come out of a PDF as split words ("git hub",
+   "E ducation"), which breaks ATS keyword matching. Headings are uppercase instead. */
+.cv-page{padding-block:clamp(24px,4vw,40px) clamp(40px,6vw,72px);display:grid;gap:18px;justify-items:center}
+.sheet{--ink:#111;--ink-2:#3a3a3a;box-sizing:border-box;width:100%;max-width:210mm;background:#fff;color:var(--ink);
+  padding:clamp(20px,5vw,14mm) clamp(16px,5vw,15mm);box-shadow:0 0 0 1px var(--line),10px 10px 0 var(--teal);
+  font:400 10.5pt/1.38 var(--f-body);letter-spacing:normal}
+.sheet *{letter-spacing:normal}
+.sheet a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px}
+.sheet a:hover{text-decoration-thickness:2px}
+.sheet-head{text-align:center;margin-bottom:6pt}
+.sheet h1{margin:0;font:700 22pt/1.1 var(--f-body);text-shadow:none}
+.sheet-headline{margin:2pt 0 0;font-style:italic;color:var(--ink-2)}
+.sheet-contact{margin:3pt 0 0;font-size:9.5pt;text-wrap:balance}
+.sheet-contact a,.sheet-contact span:not(.sep){white-space:nowrap}
+.sheet h2{margin:9pt 0 4pt;padding-bottom:1pt;border-bottom:1px solid var(--ink);font:600 11pt/1.2 var(--f-body);text-transform:uppercase;text-wrap:wrap}
+.sheet section>p{margin:0}
+.sheet .entry{margin:0 0 5pt}
+.sheet .entry:last-child{margin-bottom:0}
+.sheet .row{display:flex;flex-wrap:wrap;justify-content:space-between;gap:0 12pt}
+.sheet .row>span:last-child:not(:first-child){font-variant-numeric:tabular-nums}
+.sheet .row.sub{font-size:9.5pt;font-style:italic}
+.sheet .note{margin:1pt 0 0;font-size:9.8pt;color:var(--ink-2)}
+.sheet ul{display:block;margin:2pt 0 0;padding-left:14pt}
+.sheet li{margin:0 0 1pt;font-size:9.8pt}
+.sheet .skills{margin:0;padding:0;list-style:none}
+.sheet .skills li{margin:0}
+@media (max-width:900px){.strip{grid-template-columns:1fr}.ctf{grid-template-columns:1fr}}
 
 /* print: the CV prints as a clean one-pager */
 @media print{
-  @page{size:A4;margin:14mm}
+  @page{size:A4;margin:12mm 14mm}
   :root,:root[data-theme]{--bg:#fff;--panel:#fff;--line:#000;--text:#000;--muted:#333;--teal:#000}
   body{background:#fff;font-size:10.5pt;line-height:1.45}
   .nav,footer,.no-print,.back{display:none!important}
@@ -304,9 +315,8 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
   .frame>.in{clip-path:none;padding:0!important}
   .page-head{padding:0 0 10pt}
   .page-head h1{text-shadow:none;font-size:26pt}
-  .cv{grid-template-columns:1fr 34%;gap:14pt;padding:0}
-  .cv section h2{font-size:12pt;border-bottom-width:1px}
-  .contact-list a{border:0}
+  .cv-page{display:block;padding:0;max-width:none}
+  .sheet{max-width:none;padding:0;box-shadow:none}
   a{color:#000}
 }
 
