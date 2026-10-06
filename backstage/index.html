@@ -9,7 +9,7 @@
 <title>Backstage</title>
 <link rel="icon" href="../assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
 <link rel="stylesheet" href="../assets/style.css?v=36845fe0d1">
-<link rel="stylesheet" href="../assets/admin.css?v=31dd85848f">
+<link rel="stylesheet" href="../assets/admin.css?v=6c72938777">
 <script src="../assets/content-check.js?v=40052dcc00" defer></script>
 <script src="../assets/cv-layout.js?v=f95b130192" defer></script>
 <script src="../assets/admin.js?v=dbff1d4435" defer></script>
@@ -95,7 +95,14 @@
       <ol id="history-list"></ol>
     </div></section>
     <div class="bs-layout">
-      <nav class="bs-tabs" id="tabs" aria-label="Sections"></nav>
+      <div class="bs-side">
+        <nav class="bs-tabs" id="tabs" aria-label="Sections"></nav>
+        <nav class="bs-tools" aria-label="Shortcuts">
+          <a href="../card.html" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M1 1h6v6H1zm2 2v2h2V3zm6-2h6v6H9zm2 2v2h2V3zM1 9h6v6H1zm2 2v2h2v-2zm6-2h2v2H9zm4 0h2v2h-2zm-2 2h2v2h-2zm-2 2h2v2H9zm4 0h2v2h-2z"></path></svg>Job-fair cards</a>
+          <a href="../cv.html" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M3 0h7l3 3v13H3zM9 1v3h3M5 7h6v1.5H5zm0 3h6v1.5H5zm0 3h4v1.5H5z"></path></svg>View the CV</a>
+          <a href="../" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M8 0a8 8 0 110 16A8 8 0 018 0zM1.7 7.2h2.8c.1-1.9.5-3.6 1.2-4.9A6.4 6.4 0 001.7 7.2zm4.4 0h3.8C9.7 4.5 8.8 2.1 8 1.7c-.8.4-1.7 2.8-1.9 5.5zm5.4 0h2.8a6.4 6.4 0 00-4-4.9c.7 1.3 1.1 3 1.2 4.9zm2.8 1.6h-2.8c-.1 1.9-.5 3.6-1.2 4.9a6.4 6.4 0 004-4.9zm-4.4 0H6.1c.2 2.7 1.1 5.1 1.9 5.5.8-.4 1.7-2.8 1.9-5.5zm-5.4 0H1.7a6.4 6.4 0 004 4.9c-.7-1.3-1.1-3-1.2-4.9z"></path></svg>Open the live site</a>
+        </nav>
+      </div>
       <div class="bs-panel" id="panel"></div>
     </div>
     <p class="bs-toast" id="toast" role="status" aria-live="polite" hidden></p>
