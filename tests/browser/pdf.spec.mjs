@@ -45,7 +45,8 @@ const STATUS = { earned: "Earned", progress: "In progress" };
 // Everything the CV says, in the order a reader (or a parser) should meet it.
 function expectedOrder(d) {
   const P = d.profile;
-  const out = [P.name, P.phone, P.email, plain(P.linkedin), plain(P.github), new URL(siteConfig().url).host];
+  const out = [d.cv.fullName || P.name, P.phone, P.email, plain(P.linkedin), plain(P.github), new URL(siteConfig().url).host,
+    d.cv.military && `Military status: ${d.cv.military}`];
   for (const [title, items] of cvSections(d)) {
     out.push(title);
     for (const it of items) {
@@ -53,7 +54,7 @@ function expectedOrder(d) {
       if (title === "Education") out.push(it.org, it.location, it.title, it.dates, it.details);
       if (title === "Experience") out.push(it.title, it.dates, it.org, it.location, ...(it.bullets ?? []));
       if (title === "Projects") out.push(it.title, it.stack, it.dates, ...(it.bullets ?? []));
-      if (title === "Certifications") out.push(it.name, STATUS[it.status]);
+      if (title === "Certifications") out.push(it.name, it.status === "earned" && it.issued ? it.issued : STATUS[it.status]);
       if (title === "Skills") out.push(`${it.label}:`, it.text);
     }
   }

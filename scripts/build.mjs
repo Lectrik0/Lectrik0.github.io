@@ -36,6 +36,7 @@ const REGIONS = {
   "courses-summary": data => views.coursesSummary(data),
   semesters: data => views.semesters(data),
   "cv-contact": (data, page, site) => views.cvContact(data, site),
+  "cv-personal": data => views.cvPersonal(data),
   "cv-body": data => views.cvBody(data)
 };
 

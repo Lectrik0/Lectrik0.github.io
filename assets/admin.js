@@ -153,6 +153,7 @@
       ["certs", LIST("Certifications", {
         name: T("Name"), short: T("Badge text (max 7 characters, e.g. AZ-900)", { max: 7 }),
         status: SEL("Status", [["earned", "Earned"], ["progress", "In progress"], ["planned", "Planned"]], { default: "planned" }),
+        issued: T("Issued (optional, e.g. Sep 2026)", { help: "Shown on the CV instead of \"Earned\"." }),
         verify: T("Verify link (optional)", { help: "Your Credly badge link, like https://www.credly.com/badges/…. Shown as a Verify button once the status is Earned." }) }, { name: it => it.name || "New certification" })]
     ] },
     { id: "posts", label: "Write-ups", fields: [
@@ -162,7 +163,8 @@
     ] },
     { id: "cv", label: "CV", fields: [
       ["cv", { type: "object", label: "CV", fields: {
-        headline: T("Headline"), summary: A("Profile summary"),
+        fullName: T("Full name on the CV (leave empty to use your name)"), headline: T("Headline"),
+        military: T("Military status (e.g. Postponed, Exempted, Completed; leave empty to hide)"), summary: A("Profile summary"),
         education: LIST("Education", { title: T("Degree"), org: T("School"), location: T("Location"), dates: T("Dates"), details: A("Details") }, { name: it => it.title || "New entry" }),
         experience: LIST("Experience", { title: T("Role"), org: T("Company"), location: T("Location"), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => [it.title, it.org].filter(Boolean).join(", ") || "New role" }),
         projects: LIST("Projects", { title: T("Project"), stack: T("Tech used", { help: "Shown after the project name, e.g. Python, AWS, Docker" }), dates: T("Dates"), bullets: STR_LIST("Bullet points", { long: true, placeholder: "Add a bullet point" }) }, { name: it => it.title || "New project" }),

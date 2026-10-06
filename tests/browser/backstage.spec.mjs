@@ -73,7 +73,7 @@ test("a half-filled certification is caught before publishing, then published on
   await expect(page.locator("#toast")).toContainText("Published.");
   await expect(page.locator("#toast a")).toHaveText("Follow the checks");
   expect(published).toHaveLength(1);
-  expect(published[0].certs.at(-1)).toEqual({ name: "Test certificate", short: "TC", status: "planned", verify: "" });
+  expect(published[0].certs.at(-1)).toEqual({ name: "Test certificate", short: "TC", status: "planned", issued: "", verify: "" });
 });
 
 test("a write-up linking to a page that doesn't exist yet is caught", async ({ page }) => {

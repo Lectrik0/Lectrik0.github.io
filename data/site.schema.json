@@ -95,6 +95,7 @@
           "name": { "$ref": "#/$defs/text" },
           "short": { "type": "string", "minLength": 1, "maxLength": 7 },
           "status": { "enum": ["earned", "progress", "planned"] },
+          "issued": { "type": "string" },
           "verify": { "description": "Needs an https:// link, like your Credly badge, or leave it empty.", "anyOf": [{ "const": "" }, { "$ref": "#/$defs/httpsUrl" }] }
         }
       }
@@ -120,7 +121,9 @@
       "required": ["headline", "summary", "education", "experience", "projects", "skills", "languages"],
       "additionalProperties": false,
       "properties": {
+        "fullName": { "type": "string" },
         "headline": { "$ref": "#/$defs/text" },
+        "military": { "type": "string" },
         "summary": { "$ref": "#/$defs/text" },
         "education": { "type": "array", "items": { "$ref": "#/$defs/cvEntry" } },
         "experience": { "type": "array", "items": { "$ref": "#/$defs/cvEntry" } },
