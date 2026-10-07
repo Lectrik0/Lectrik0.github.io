@@ -4,7 +4,7 @@
  *
  * All content is already in the HTML: scripts/build.mjs renders it from data/site.json at build time.
  * This file only adds behaviour (day/night toggle, flag checker, course list, internship countdown,
- * motion), and every page works without it.
+ * terminal, motion), and every page works without it.
  *
  * Security notes
  * - The script never builds HTML: it only sets textContent, classes and attributes, and the page's
@@ -131,6 +131,98 @@
     render();
   }
 
+  /* ---------- "Ask my terminal": types a command, prints the output the build already put in the page ---------- */
+  function initTerminal() {
+    const log = $("term-log"), form = $("term-form"), input = $("term-input");
+    if (!log || !form || !input) return;
+    // Lift each command's finished output out of the page. Visitors only ever see copies of these nodes (or
+    // plain text), so nothing typed is ever parsed as HTML.
+    const outputs = new Map();
+    log.querySelectorAll(".term-block").forEach(b => outputs.set(b.dataset.cmd, b.querySelector(".term-out")));
+    log.textContent = "";
+    const ps = form.querySelector(".term-ps").textContent, user = ps.split("@")[0];
+    const element = (tag, cls, text) => {
+      const n = document.createElement(tag);
+      if (cls) n.className = cls;
+      if (text !== undefined) n.textContent = text;
+      return n;
+    };
+    const lines = (...texts) => {
+      const out = element("div", "term-out");
+      texts.forEach(t => out.append(element("p", null, t)));
+      return out;
+    };
+    const FILES = ["flag.txt", "cv.pdf"];
+    // a few extras that aren't in the help list
+    const extras = {
+      sudo: () => lines(`${user} is not in the sudoers file. This incident will be reported.`),
+      ls: () => lines(FILES.join("  ")),
+      pwd: () => lines(`/home/${user}`),
+      date: () => lines(new Date().toString()),
+      echo: args => lines(args.join(" ")),
+      rm: () => lines("rm: permission denied. Nice try."),
+      exit: () => lines("There is no escape. The Contact section is further down, though."),
+      cat: args => !args[0] ? lines("cat: missing file name")
+        : args[0] === "flag.txt" ? lines("Nice try. The real flags aren't in a file: see the hints under Hidden flags.")
+        : FILES.includes(args[0]) ? lines(`cat: ${args[0]}: binary file. Try the cv command.`)
+        : lines(`cat: ${args[0].slice(0, 30)}: No such file or directory`),
+      history: () => lines(...(past.length ? past.map((c, i) => `${String(i + 1).padStart(3)}  ${c}`) : ["Nothing yet."]))
+    };
+    const names = [...outputs.keys(), "clear"];
+    const past = [];
+    let recall = 0;   // how far back the up arrow has gone
+
+    const show = (typed, out) => {
+      const cmd = element("p", "term-cmd");
+      cmd.append(element("span", "term-ps", ps), " ", typed);   // the typed text goes in as a text node
+      log.append(cmd, out);
+      log.scrollTop = log.scrollHeight;
+    };
+    const run = raw => {
+      const line = raw.trim().replace(/\s+/g, " ").slice(0, 40);
+      if (!line) return show("", element("div", "term-out"));
+      if (past[past.length - 1] !== line) past.push(line);
+      past.splice(0, past.length - 50);
+      recall = past.length;
+      const [word, ...args] = line.split(" "), name = word.toLowerCase();
+      if (name === "clear") { log.textContent = ""; return; }
+      if (outputs.has(name)) return show(line, outputs.get(name).cloneNode(true));
+      if (Object.hasOwn(extras, name)) return show(line, extras[name](args));
+      show(line, lines(`${word.slice(0, 20)}: command not found. Type help to see what works.`));
+    };
+
+    form.addEventListener("submit", e => { e.preventDefault(); run(input.value); input.value = ""; });
+    input.addEventListener("keydown", e => {
+      if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+        if (!past.length) return;
+        e.preventDefault();
+        recall = Math.min(past.length, Math.max(0, recall + (e.key === "ArrowUp" ? -1 : 1)));
+        input.value = past[recall] || "";
+      } else if (e.key === "l" && e.ctrlKey) {
+        e.preventDefault();
+        log.textContent = "";
+      } else if (e.key === "Tab" && !e.shiftKey && input.value.trim() && !/\s/.test(input.value.trim())) {
+        const typed = input.value.trim().toLowerCase(), hits = names.filter(n => n.startsWith(typed));
+        if (!hits.length) return;   // nothing to complete: Tab moves on as usual
+        e.preventDefault();
+        let common = hits[0];
+        for (const h of hits) while (!h.startsWith(common)) common = common.slice(0, -1);
+        input.value = hits.length === 1 ? `${common} ` : common;
+      }
+    });
+    document.querySelectorAll("#term .term-chip").forEach(b => b.addEventListener("click", () => {
+      run(b.dataset.run);
+      if (matchMedia("(pointer: fine)").matches) input.focus({ preventScroll: true });   // no keyboard popping up on phones
+    }));
+    // Clicking the screen puts the cursor in the prompt, unless the visitor is selecting text or following a link.
+    log.addEventListener("click", e => { if (!e.target.closest("a") && !getSelection().toString()) input.focus({ preventScroll: true }); });
+    // Output is announced to screen readers only once the visitor starts using the terminal.
+    $("term").addEventListener("focusin", () => log.setAttribute("aria-live", "polite"), { once: true });
+
+    show("whoami", outputs.get("whoami").cloneNode(true));
+    log.scrollTop = 0;
+  }
+
   /* ---------- motion: hero parallax, panels settle in, loops pause off screen ---------- */
   function initMotion() {
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
@@ -171,6 +263,7 @@
   initInternship();
   initCourses();
   initFlags();
+  initTerminal();
   initMotion();
   document.querySelectorAll("#print-cv, [data-print]").forEach(b => b.addEventListener("click", () => window.print()));
   const year = $("year");

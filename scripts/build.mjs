@@ -33,6 +33,7 @@ const REGIONS = {
   skills: data => views.skills(data),
   certs: data => views.certs(data),
   posts: data => views.posts(data),
+  terminal: data => views.terminal(data),
   "courses-summary": data => views.coursesSummary(data),
   semesters: data => views.semesters(data),
   "cv-contact": (data, page, site) => views.cvContact(data, site),

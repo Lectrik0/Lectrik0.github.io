@@ -95,6 +95,12 @@ async function expectCompleteHome(page, d) {
   await expect(page.locator(".post h3")).toHaveText(postList(d).map(p => p.title)); // newest first
   await expect(page.locator("#writeups .empty")).toHaveCount(postList(d).length ? 0 : 1);
   await expect(page.locator(".sem h3")).toHaveText(filled(d.courses.semesters, "name").map(s => s.name));
+  // the terminal's commands follow the content too; an emptied section says so instead of printing nothing
+  await expect(page.locator('.term-block[data-cmd="skills"] dt')).toHaveText(filled(d.skills, "group").map(g => g.group));
+  await expect(page.locator('.term-block[data-cmd="projects"] .term-head b')).toHaveText(filled(d.cv.projects, "title").map(p => p.title));
+  await expect(page.locator('.term-block[data-cmd="certs"] li')).toHaveCount(filled(d.certs, "name").length);
+  await expect(page.locator('.term-block[data-cmd="writeups"] li')).toHaveCount(postList(d).length);
+  if (!filled(d.cv.projects, "title").length) await expect(page.locator('.term-block[data-cmd="projects"]')).toContainText("Nothing here yet.");
   await expect(page.locator("#intern-left")).toHaveText(`${month(d.internship.start)} – ${month(d.internship.end)}`);
   await expect(page.locator(".hero-card .btn").first()).toBeVisible();
   // nothing half-filled slips through as an empty heading or list item
@@ -141,6 +147,10 @@ test.describe("without JavaScript", () => {
     // controls that need a script are hidden, with a note where it matters
     await expect(page.locator("#toggle")).toBeHidden();
     await expect(page.locator("#flag-form")).toBeHidden();
+    // the terminal shows as a short transcript instead of a prompt
+    await expect(page.locator("#term-form")).toBeHidden();
+    for (const cmd of ["whoami", "skills", "projects", "contact"]) await expect(page.locator(`.term-block[data-cmd="${cmd}"]`)).toBeVisible();
+    await expect(page.locator('.term-block[data-cmd="help"]')).toBeHidden();
     const note = page.locator(".ctf-check noscript p"); // (Playwright's text matching skips <noscript>)
     await expect(note).toBeVisible();
     expect(await note.evaluate(n => n.textContent)).toContain("needs JavaScript");

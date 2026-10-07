@@ -37,6 +37,18 @@ for (const scheme of ["light", "dark"]) {
     }
   });
 
+  test(`terminal is accessible with output on screen (${scheme})`, async ({ page }) => {
+    await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
+    await page.goto("/");
+    for (const cmd of ["help", "skills", "projects", "certs", "education", "experience", "writeups", "contact", "cv", "flags", "nope"]) {
+      await page.locator("#term-input").fill(cmd);
+      await page.locator("#term-input").press("Enter");
+    }
+    await expect(page.locator("#term-log .term-cmd")).toHaveCount(12);
+    const problems = await seriousProblems(page, "#terminal");
+    expect(problems, problems.join("\n")).toEqual([]);
+  });
+
   test(`course list and flag messages are accessible (${scheme})`, async ({ page }) => {
     await page.emulateMedia({ colorScheme: scheme, reducedMotion: "reduce" });
     await page.goto("/");
