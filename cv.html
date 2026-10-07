@@ -121,12 +121,16 @@
     <section>
       <h2>Projects</h2>
       <div class="entry">
+        <div class="row"><span><b>Explain This CVE: explain-this-cve.vercel.app</b> | <i>JavaScript, Node.js, Vercel, NVD, CISA KEV, EPSS</i></span><span>2026</span></div>
+        <ul>
+          <li>Built a CVE checker that turns NVD, CISA KEV and EPSS data into a one-page brief for managers and analysts.</li>
+          <li>Treated all upstream data and AI output as hostile: input validation, rate limiting, CSP with Trusted Types, 140+ offline tests including an XSS drill.</li>
+        </ul>
+      </div>
+      <div class="entry">
         <div class="row"><span><b>Personal site: lectrik0.github.io</b> | <i>HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation</i></span><span>2026</span></div>
         <ul>
-          <li>Built a static portfolio that restricts XSS with a strict Content Security Policy and Trusted Types.</li>
-          <li>Tested it against XSS payloads (event-handler, script and javascript: URL injection); none executed.</li>
-          <li>Self-hosted all assets (zero third-party requests) and published an RFC 9116 security.txt.</li>
-          <li>Wrote AWS infrastructure as code (S3, CloudFront, security headers) with keyless GitHub Actions deploys via OIDC.</li>
+          <li>Built a static portfolio hardened against XSS (strict CSP and Trusted Types, tested with injection payloads) with zero third-party requests and AWS infrastructure as code deployed keylessly via OIDC.</li>
         </ul>
       </div>
     </section>
