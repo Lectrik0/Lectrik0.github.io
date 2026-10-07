@@ -3,10 +3,9 @@
  * Adding a command means adding a row to COMMANDS; terminal.mjs renders them.
  */
 import { h, link } from "../html.mjs";
-import { str, obj, named, texts, email, CvLayout, CERT_LABEL, verifyLink } from "./shared.mjs";
+import { str, obj, named, texts, email, CvLayout, CERT_LABEL, verifyLink, cvFileName } from "./shared.mjs";
 import { longDate } from "./dates.mjs";
 import { postList } from "./posts.mjs";
-import { cvFileName } from "./cv.mjs";
 
 // Every command's output is built here from the content, as plain HTML, so the section reads fine without
 // JavaScript (the first few commands show as a transcript) and follows Backstage edits. main.js lifts the
