@@ -4,7 +4,7 @@ import { readFileSync } from "node:fs";
 
 export const PAYLOAD = `"><img src=x onerror=alert(1)><script>alert(2)</script><svg onload=alert(3)>'`;
 const BAD_URLS = ["javascript:alert(4)", "data:text/html,<script>alert(5)</script>", "  JaVaScRiPt:alert(6)", "http://insecure.example", "vbscript:msgbox(7)"];
-const URL_KEYS = new Set(["github", "linkedin", "cv", "url", "verify"]);
+const URL_KEYS = new Set(["github", "linkedin", "cv", "url", "verify", "cveChecker"]);
 const KEEP = new Set(["date", "start", "end", "status", "color", "ects"]);
 
 export function hostileData() {

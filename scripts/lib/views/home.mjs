@@ -13,13 +13,14 @@ function contactLinks(data, order) {
     cv: cls => link(P.cv, { class: cls }, icon("cv"), "View CV"),
     li: cls => link(P.linkedin, { class: cls }, icon("li"), "LinkedIn"),
     gh: cls => link(P.github, { class: cls }, icon("gh"), "GitHub"),
+    cve: cls => link(P.cveChecker, { class: cls }, icon("ext"), "CVE Checker"),
     mail: cls => email(data) ? link(`mailto:${email(data)}`, { class: cls }, icon("mail"), "Email") : null
   };
   // the first link that survives is the primary button
   return order.filter(k => all[k]("btn")).map((k, i) => all[k](i === 0 ? "btn" : "btn ghost"));
 }
-// Email lives in the contact section and on the CV; a fourth hero button would wrap onto its own row.
-export const heroButtons = data => raw(contactLinks(data, ["cv", "li", "gh"]).join("\n"));
+// Email lives in the contact section and on the CV. The CVE Checker (a separate site) only shows once its link is set.
+export const heroButtons = data => raw(contactLinks(data, ["cv", "li", "gh", "cve"]).join("\n"));
 export const contactButtons = data => raw(contactLinks(data, ["li", "mail", "gh", "cv"]).join("\n"));
 
 export function internship(data) {

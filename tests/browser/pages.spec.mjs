@@ -103,6 +103,10 @@ async function expectCompleteHome(page, d) {
   if (!filled(d.cv.projects, "title").length) await expect(page.locator('.term-block[data-cmd="projects"]')).toContainText("Nothing here yet.");
   await expect(page.locator("#intern-left")).toHaveText(`${month(d.internship.start)} – ${month(d.internship.end)}`);
   await expect(page.locator(".hero-card .btn").first()).toBeVisible();
+  // the CVE Checker (a separate site) is one button, and only while its link is set
+  const checker = page.locator(".hero-card").getByRole("link", { name: "CVE Checker" });
+  await expect(checker).toHaveCount(/^https:\/\//.test(d.profile.cveChecker ?? "") ? 1 : 0);
+  if (/^https:\/\//.test(d.profile.cveChecker ?? "")) await expect(checker).toHaveAttribute("href", new URL(d.profile.cveChecker).href);
   // nothing half-filled slips through as an empty heading or list item
   expect(await page.locator("h2:empty, h3:empty, li:empty, b:empty").count()).toBe(0);
 }
@@ -135,6 +139,7 @@ const less = () => {
   Object.assign(d.cv, { languages: [], projects: [], experience: [] });
   d.posts = [];
   d.certs = [];
+  d.profile.cveChecker = "";
   return d;
 };
 

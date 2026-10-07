@@ -5,8 +5,17 @@
   <link href="https://lectrik0.github.io/feed.xml" rel="self" type="application/atom+xml"/>
   <link href="https://lectrik0.github.io/" rel="alternate" type="text/html"/>
   <id>https://lectrik0.github.io/</id>
-  <updated>2026-10-04T00:00:00Z</updated>
+  <updated>2026-10-07T00:00:00Z</updated>
   <author><name>Ali Ahmed</name><uri>https://lectrik0.github.io/</uri></author>
+  <entry>
+    <title>Issue #2: Explain This CVE</title>
+    <link href="https://lectrik0.github.io/writeups/explain-this-cve.html" rel="alternate" type="text/html"/>
+    <id>https://lectrik0.github.io/writeups/explain-this-cve.html</id>
+    <published>2026-10-07T00:00:00Z</published>
+    <updated>2026-10-07T00:00:00Z</updated>
+    <category term="Project"/>
+    <summary>A one-page CVE checker for managers and analysts: how it works, and the security choices behind it.</summary>
+  </entry>
   <entry>
     <title>Issue #1: Hardening a static site</title>
     <link href="https://lectrik0.github.io/writeups/hardening-this-site.html" rel="alternate" type="text/html"/>

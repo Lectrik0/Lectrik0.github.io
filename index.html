@@ -106,6 +106,7 @@
             <a href="/cv.html" class="btn"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M3 0h7l3 3v13H3zM9 1v3h3M5 7h6v1.5H5zm0 3h6v1.5H5zm0 3h4v1.5H5z"></path></svg>View CV</a>
             <a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer" class="btn ghost"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M0 1.15C0 .52.52 0 1.18 0h13.64C15.48 0 16 .52 16 1.15v13.7c0 .63-.52 1.15-1.18 1.15H1.18C.52 16 0 15.48 0 14.85V1.15zM4.94 13.4V6.17H2.54v7.23h2.4zM3.74 5.18c.84 0 1.36-.56 1.36-1.25-.02-.71-.52-1.25-1.34-1.25-.82 0-1.36.54-1.36 1.25 0 .69.52 1.25 1.33 1.25h.01zM6.27 13.4h2.4V9.36c0-.22.02-.43.08-.59.17-.43.57-.88 1.23-.88.87 0 1.21.66 1.21 1.63v3.88h2.4V9.25c0-2.22-1.18-3.25-2.76-3.25-1.28 0-1.84.7-2.16 1.2v.03h-.02l.02-.03V6.17h-2.4c.03.68 0 7.23 0 7.23z"></path></svg>LinkedIn</a>
             <a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer" class="btn ghost"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path></svg>GitHub</a>
+            <a href="https://explain-this-cve.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn ghost"><svg viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" fill-rule="evenodd" d="M9 1h6v6h-1.6V4.1L7.6 9.9 6.1 8.4l5.8-5.8H9zM2 3h5v1.5H3.5v8h8V9H13v5H2z"></path></svg>CVE Checker</a>
             <!-- /build:hero-buttons -->
           </div>
         </div>
@@ -337,6 +338,7 @@
     </div>
     <!-- build:posts -->
     <div class="posts">
+      <a href="/writeups/explain-this-cve.html" class="post"><time datetime="2026-10-07">7 Oct 2026</time><div><h3>Issue #2: Explain This CVE</h3><p>A one-page CVE checker for managers and analysts: how it works, and the security choices behind it.</p></div><span class="tag">Project</span></a>
       <a href="/writeups/hardening-this-site.html" class="post"><time datetime="2026-10-04">4 Oct 2026</time><div><h3>Issue #1: Hardening a static site</h3><p>A site with no backend can still be attacked. How this one blocks XSS with CSP and Trusted Types, and how I tested it.</p></div><span class="tag">Web security</span></a>
     </div>
     <!-- /build:posts -->
@@ -367,7 +369,7 @@
           </div>
           <div class="term-block" data-cmd="projects" data-static="">
             <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> projects</p>
-            <div class="term-out"><div class="term-item"><p class="term-head"><b>Personal site: lectrik0.github.io</b> <span class="term-dim">HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation</span></p><p class="term-dim">2026</p><ul class="term-bullets"><li>Built a static portfolio that restricts XSS with a strict Content Security Policy and Trusted Types.</li><li>Tested it against XSS payloads (event-handler, script and javascript: URL injection); none executed.</li><li>Self-hosted all assets (zero third-party requests) and published an RFC 9116 security.txt.</li><li>Wrote AWS infrastructure as code (S3, CloudFront, security headers) with keyless GitHub Actions deploys via OIDC.</li></ul></div></div>
+            <div class="term-out"><div class="term-item"><p class="term-head"><b>Explain This CVE: explain-this-cve.vercel.app</b> <span class="term-dim">JavaScript, Node.js, Vercel, NVD, CISA KEV, EPSS</span></p><p class="term-dim">2026</p><ul class="term-bullets"><li>Built a CVE checker that turns NVD, CISA KEV and EPSS data into a one-page brief for managers and analysts.</li><li>Treated all upstream data and AI output as hostile: input validation, rate limiting, CSP with Trusted Types, 140+ offline tests including an XSS drill.</li></ul></div><div class="term-item"><p class="term-head"><b>Personal site: lectrik0.github.io</b> <span class="term-dim">HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation</span></p><p class="term-dim">2026</p><ul class="term-bullets"><li>Built a static portfolio hardened against XSS (strict CSP and Trusted Types, tested with injection payloads) with zero third-party requests and AWS infrastructure as code deployed keylessly via OIDC.</li></ul></div></div>
           </div>
           <div class="term-block" data-cmd="certs">
             <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> certs</p>
@@ -383,7 +385,7 @@
           </div>
           <div class="term-block" data-cmd="writeups">
             <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> writeups</p>
-            <div class="term-out"><ul class="term-posts"><li><a href="/writeups/hardening-this-site.html">Issue #1: Hardening a static site</a> <span class="term-dim">4 October 2026</span></li></ul></div>
+            <div class="term-out"><ul class="term-posts"><li><a href="/writeups/explain-this-cve.html">Issue #2: Explain This CVE</a> <span class="term-dim">7 October 2026</span></li><li><a href="/writeups/hardening-this-site.html">Issue #1: Hardening a static site</a> <span class="term-dim">4 October 2026</span></li></ul></div>
           </div>
           <div class="term-block" data-cmd="contact" data-static="">
             <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> contact</p>
