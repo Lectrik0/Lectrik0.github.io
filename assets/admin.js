@@ -147,7 +147,8 @@
         name: T("Name"), tagline: A("Tagline under your name"), location: T("Location"),
         linkedin: T("LinkedIn URL", { kind: "url" }), github: T("GitHub URL", { kind: "url" }),
         email: T("Email (shown on the home page, the CV and in security.txt; leave empty to hide)", { kind: "email" }),
-        phone: T("Phone (shown on the CV and its PDF; leave empty to hide)", { kind: "tel" }), cv: T("CV link", { help: "cv.html, or a PDF like cv.pdf" }) } }],
+        phone: T("Phone (shown on the CV and its PDF; leave empty to hide)", { kind: "tel" }), cv: T("CV link", { help: "cv.html, or a PDF like cv.pdf" }),
+        cveChecker: T("CVE Checker link (optional)", { kind: "url", help: "Adds a CVE Checker button to the top of the home page. Leave empty to hide it." }) } }],
       ["internship", { type: "object", label: "Internship progress bar", fields: {
         start: T("Start date", { kind: "date" }), end: T("End date", { kind: "date" }) } }]
     ] },

@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Explain This CVE – Ali Ahmed</title>
+<meta name="description" content="Issue #2: a one-page CVE checker for managers and analysts, and the security choices behind it.">
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="Explain This CVE – Ali Ahmed">
+<meta property="og:description" content="Issue #2: a one-page CVE checker for managers and analysts, and the security choices behind it.">
+<meta property="og:url" content="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: Cybersecurity student building toward a career in cloud security.">
+<meta property="og:locale" content="en_GB">
+<meta property="article:published_time" content="2026-10-07">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<!-- /build:meta -->
+<link rel="icon" href="../assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="preload" href="../assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="../assets/style.css?v=0d82d66b7e">
+<noscript><link rel="stylesheet" href="../assets/nojs.css?v=16c2832380"></noscript>
+<script src="../assets/main.js?v=16fcafa5be" defer></script>
+</head>
+<body>
+<!-- build:nav -->
+<nav class="nav" aria-label="Main">
+  <div class="wrap">
+    <a class="brand" href="/">Ali Ahmed</a>
+    <ul>
+      <li><a href="/#story">Story</a></li>
+      <li><a href="/#skills">Skills</a></li>
+      <li><a href="/#certs">Certifications</a></li>
+      <li><a href="/#writeups">Write-ups</a></li>
+      <li><a href="/#terminal">Terminal</a></li>
+      <li><a href="/#flags">Flags</a></li>
+      <li><a href="/cv.html">CV</a></li>
+      <li><a href="/#contact">Contact</a></li>
+    </ul>
+    <button class="toggle" id="toggle" type="button" aria-label="Switch to night mode"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">Night</span></button>
+  </div>
+</nav>
+<!-- /build:nav -->
+<main>
+  <header class="page-head wrap">
+    <a class="back" href="/#writeups">Back to write-ups</a>
+    <span class="caption">Issue #2 &nbsp;/&nbsp; <time datetime="2026-10-07">7 October 2026</time></span>
+    <h1>Explain This CVE</h1>
+    <p class="lede">A CVE record is written for specialists. I built a one-page checker that explains any CVE in plain English, and I tried to make it hard to abuse.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="strip">
+      <div class="frame cut-a"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="A long wall of text on one side and a small summary card on the other">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="24" y="24" width="150" height="182" class="f-panel ink"/>
+          <path d="M38 48 h122 M38 62 h122 M38 76 h96 M38 90 h122 M38 104 h110 M38 118 h122 M38 132 h84 M38 146 h122 M38 160 h100 M38 174 h122 M38 188 h70" class="ink-thin" stroke-width="3"/>
+          <rect x="204" y="64" width="132" height="102" class="f-panel ink"/>
+          <rect x="204" y="64" width="132" height="26" class="f-purple ink"/>
+          <text x="270" y="82" class="mono-t" text-anchor="middle" fill="var(--panel)">CRITICAL</text>
+          <path d="M218 112 h104 M218 130 h80 M218 148 h92" class="ink-thin" stroke-width="4"/>
+          <text x="190" y="52" class="sfx" text-anchor="middle">vs</text>
+        </svg>
+        <figcaption class="cap"><b>The problem</b><span>A manager deciding "do we drop everything today?" gets a score, a vector string and 100 links.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-b"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Three public data sources feeding one page">
+          <rect width="360" height="230" class="sky-b"/>
+          <g class="ink">
+            <rect x="24" y="30" width="96" height="34" class="cloud"/>
+            <rect x="24" y="98" width="96" height="34" class="cloud"/>
+            <rect x="24" y="166" width="96" height="34" class="cloud"/>
+          </g>
+          <text x="72" y="52" class="mono-t" text-anchor="middle" fill="var(--purple)">NVD</text>
+          <text x="72" y="120" class="mono-t" text-anchor="middle" fill="var(--purple)">CISA KEV</text>
+          <text x="72" y="188" class="mono-t" text-anchor="middle" fill="var(--purple)">EPSS</text>
+          <path d="M122 47 L232 112 M122 115 h110 M122 183 L232 118" class="ink" stroke-width="3" stroke-dasharray="6 6" fill="none"/>
+          <rect x="232" y="70" width="104" height="90" class="f-panel ink"/>
+          <path d="M248 94 h72 M248 114 h72 M248 134 h48" class="ink-thin" stroke-width="4"/>
+        </svg>
+        <figcaption class="cap"><b>The sources</b><span>Three public databases, fetched in parallel and boiled down to one small, fixed answer.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-c"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="A shield between untrusted data and the page">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="250" y="44" width="86" height="142" class="f-panel ink"/>
+          <path d="M264 74 h58 M264 94 h58 M264 114 h40" class="ink-thin" stroke-width="4"/>
+          <path d="M150 36 l50 19 v44 c0 36 -22 58 -50 70 c-28 -12 -50 -34 -50 -70 v-44z" class="f-teal ink"/>
+          <path d="M128 106 l16 16 l30 -34" fill="none" stroke="var(--panel)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <g class="ink" stroke-width="4"><path d="M24 70 l26 26 M50 70 l-26 26"/><path d="M30 144 l26 26 M56 144 l-26 26"/></g>
+          <text x="150" y="214" class="sfx" text-anchor="middle">treated as hostile.</text>
+        </svg>
+        <figcaption class="cap"><b>The rule</b><span>Everything from the databases, and everything the AI says, is treated as hostile text.</span></figcaption>
+      </figure></div>
+    </div>
+
+    <article class="prose">
+      <h2>What it does</h2>
+      <p>You type a CVE ID, such as <code>CVE-2021-44228</code> (Log4Shell), and get one page with seven chapters, always in the same order:</p>
+      <ol>
+        <li>The CVE ID, its title and when it was published.</li>
+        <li>Severity: the CVSS score with a colour badge, and the level written as a word.</li>
+        <li>Whether it is being exploited: CISA's Known Exploited Vulnerabilities list (KEV) and the EPSS probability.</li>
+        <li>A plain-language summary.</li>
+        <li>Which products and versions are affected.</li>
+        <li>The fix and mitigation: what CISA requires, the first unaffected versions, patches and advisories.</li>
+        <li>References.</li>
+      </ol>
+      <p>There are two views of the same data. The <b>Manager</b> view answers "do we need to act today?". The <b>Analyst</b> view keeps the detail. Every brief ends with "Always verify with the official vendor advisory."</p>
+
+      <h2>How it works</h2>
+      <p>It's a static page and one serverless function, with no accounts, no database and no dependencies. For each request the function runs these steps in order:</p>
+      <ol>
+        <li>Check the method, then rate limit the client.</li>
+        <li>Validate the ID. It must match <code>^CVE-\d{4}-\d{4,10}$</code>, and it must be the only query parameter.</li>
+        <li>Look in the cache. If another request for the same ID is already running, wait for it instead of asking again.</li>
+        <li>Fetch NVD, the CISA KEV feed and EPSS in parallel, each with its own timeout.</li>
+        <li>Normalise the untrusted data into a small fixed shape.</li>
+        <li>Write the summary: an AI model when a key is set, fixed rules otherwise.</li>
+      </ol>
+      <p>NVD is required. If CISA, EPSS or the AI model fails, the page still works and says what is missing. "Could not check CISA's list" is shown as <b>unknown</b>, never as "not exploited", because a failed lookup that reads as good news is the worst thing a security tool can do. For the same reason, a KEV feed with fewer than 100 entries is treated as broken.</p>
+
+      <h2>The security choices</h2>
+      <p>The data comes from public databases, but anyone can influence some of it, and an AI model reads it. So all of it is treated as hostile.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Threat</th><th>What I did</th></tr></thead>
+        <tbody>
+          <tr><td>API keys leaking</td><td>Keys are read from environment variables in one server file. The browser code never mentions them, and a test scans every committed file for key-shaped strings.</td></tr>
+          <tr><td>Bad input and SSRF</td><td>One strict, ASCII-only ID pattern. The three API hosts are constants, the ID goes in through <code>URL.searchParams</code>, and redirects are refused.</td></tr>
+          <tr><td>XSS</td><td>The server cleans text and caps lengths. The browser writes only with <code>textContent</code>. A strict Content Security Policy with Trusted Types is the last line.</td></tr>
+          <tr><td>Prompt injection</td><td>The model gets only public facts, no tools and no secrets. Its answer must be a three-field JSON object, and it is rejected if it contains a link, a tag or a version number that isn't in the facts.</td></tr>
+          <tr><td>Abuse and quota</td><td>20 requests a minute per client, 6 uncached lookups a minute, a shared budget just under NVD's own limit, and an hour of caching.</td></tr>
+          <tr><td>Hostile upstream data</td><td>Every field is type-checked, loops and sizes are capped, and a record about a different CVE than the one asked for is refused.</td></tr>
+        </tbody>
+      </table></div>
+      <p>There are more than 140 tests on saved real API responses, so they run offline. The most useful is an XSS drill that runs the real browser code against a response full of <code>&lt;img onerror&gt;</code> and <code>&lt;script&gt;</code> payloads and fails on any unexpected element, attribute or link.</p>
+
+      <h2>What it can't do yet</h2>
+      <ul>
+        <li>The cache and the rate limiter live in the memory of one function instance, so they are best-effort. A shared store would fix that.</li>
+        <li>NVD's quota is shared by all visitors. If it runs out, the page shows a "busy" message.</li>
+        <li>A persuaded AI model can still write a misleading sentence that contains no link or version number. The checks can't catch an opinion, which is why severity, KEV and EPSS are shown separately from the summary.</li>
+        <li>KEV lists confirmed exploitation only, and EPSS is a probability, not a verdict.</li>
+        <li>I tested one Chromium browser, in both themes, at desktop and phone widths. I did not test Safari or Firefox.</li>
+      </ul>
+      <p>I built it with AI assistance. I designed the features and the security requirements, and I reviewed and tested the code.</p>
+
+      <h2>Try it</h2>
+      <p>The live checker is at <a href="https://explain-this-cve.vercel.app" target="_blank" rel="noopener noreferrer">explain-this-cve.vercel.app</a>, and the code and a study guide are on <a href="https://github.com/Lectrik0/explain-this-cve" target="_blank" rel="noopener noreferrer">GitHub</a>. Try Log4Shell first.</p>
+    </article>
+
+    <div class="frame cut-b next"><div class="in">
+      <h3>Next: Nessus plugin IDs</h3>
+      <p>Show which Tenable Nessus plugins detect a CVE, so an analyst can go from a scanner finding to this brief and back.</p>
+    </div></div>
+  </div>
+</main>
+
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, Cairo</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
+</body>
+</html>

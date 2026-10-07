@@ -7,6 +7,7 @@
   "linkedin": "https://www.linkedin.com/in/aliahmed255",
   "email": "aliahmedismail2@gmail.com",
   "phone": "+20 101 954 3773",
+  "cveChecker": "https://explain-this-cve.vercel.app",
   "cv": "cv.html"
  },
  "internship": {
@@ -334,6 +335,13 @@
   }
  ],
  "posts": [
+  {
+   "title": "Issue #2: Explain This CVE",
+   "date": "2026-10-07",
+   "tag": "Project",
+   "summary": "A one-page CVE checker for managers and analysts: how it works, and the security choices behind it.",
+   "url": "writeups/explain-this-cve.html"
+  },
   {
    "title": "Issue #1: Hardening a static site",
    "date": "2026-10-04",

@@ -19,6 +19,7 @@
         "linkedin": { "$ref": "#/$defs/httpsUrl" },
         "email": { "description": "Needs a valid email address, or leave it empty to hide it.", "anyOf": [{ "const": "" }, { "type": "string", "format": "email" }] },
         "phone": { "description": "Needs a phone number like +20 101 234 5678, or leave it empty to hide it.", "anyOf": [{ "const": "" }, { "type": "string", "pattern": "^\\+?[0-9][0-9 ()-]{5,22}[0-9]$" }] },
+        "cveChecker": { "description": "Needs an https:// link, or leave it empty to hide the button.", "anyOf": [{ "const": "" }, { "$ref": "#/$defs/httpsUrl" }] },
         "cv": { "$ref": "#/$defs/link" }
       }
     },

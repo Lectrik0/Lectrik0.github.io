@@ -12,7 +12,7 @@ const CORS = { "access-control-allow-origin": "*", "access-control-allow-headers
 
 // Answers Backstage's GitHub API calls. Pages listed in `existing` exist; anything else is a 404.
 // `content` is the live data/site.json; `history` lists earlier commits of it ({ sha, date, message, data }).
-async function fakeGitHub(page, { existing = ["cv.html", "writeups/hardening-this-site.html"], content = data, history = [] } = {}) {
+async function fakeGitHub(page, { existing = ["cv.html", "writeups/hardening-this-site.html", "writeups/explain-this-cve.html"], content = data, history = [] } = {}) {
   const published = [];
   await page.route("https://api.github.com/**", async route => {
     const req = route.request();
