@@ -1,3 +1,5 @@
 /* Loaded only when JavaScript is off (from a <noscript> in each page's head).
    All content is already in the HTML; this just hides the controls that can't work without a script. */
 .toggle,.needs-js,.meter .bar{display:none!important}
+/* The terminal on the home page: without a script it's a short transcript, not a prompt. */
+.term-block:not([data-static]){display:none!important}

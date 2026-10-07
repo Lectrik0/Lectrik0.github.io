@@ -102,10 +102,35 @@ test("a Verify link shows only on earned certifications, and only for https link
     { name: "No link", short: "L", status: "earned", verify: "" }
   ];
   const out = renderSite({ data });
-  for (const f of ["index.html", "cv.html"]) {
+  const link = '<a href="https://www.credly.com/badges/abc" target="_blank" rel="noopener noreferrer" class="verify" aria-label="Verify Earned one">';
+  // the home page shows it twice: in the certifications section and in the terminal's certs command
+  for (const [f, count] of [["index.html", 2], ["cv.html", 1]]) {
     const links = [...out.get(f).matchAll(/<a [^>]*class="verify"[^>]*>/g)].map(m => m[0]);
-    assert.deepEqual(links, ['<a href="https://www.credly.com/badges/abc" target="_blank" rel="noopener noreferrer" class="verify" aria-label="Verify Earned one">'], f);
+    assert.deepEqual(links, Array(count).fill(link), f);
   }
+});
+
+test("the terminal's commands are built from the content, and say so when a section is empty", () => {
+  const data = JSON.parse(read("data/site.json"));
+  const html = d => renderSite({ data: d }).get("index.html");
+  const block = (page, cmd) => new RegExp(`<div class="term-block" data-cmd="${cmd}"[^>]*>[^]*?\\n    </div>`).exec(page)?.[0] ?? "";
+  data.skills = [{ group: "Group A", note: "", color: "teal", items: ["Alpha", "Beta"] }];
+  data.cv.projects = [{ title: "Home lab", stack: "Proxmox", dates: "2027", bullets: ["Built a lab", ""] }];
+  let page = html(data);
+  assert.match(block(page, "skills"), /<dt>Group A<\/dt><dd>Alpha, Beta<\/dd>/);
+  assert.match(block(page, "projects"), /<b>Home lab<\/b> <span class="term-dim">Proxmox<\/span>[^]*<li>Built a lab<\/li>/);
+  assert.doesNotMatch(block(page, "projects"), /<li><\/li>/);
+  for (const cmd of ["help", "whoami", "skills", "projects", "certs", "education", "experience", "writeups", "contact", "cv", "flags"]) {
+    assert.ok(block(page, cmd), `no output block for ${cmd}`);
+    assert.ok(page.includes(`data-run="${cmd}"`), `no button for ${cmd}`);
+  }
+  // emptied out: the commands still answer
+  Object.assign(data.cv, { projects: [], experience: [], education: [] });
+  Object.assign(data, { skills: [], certs: [], posts: [] });
+  page = html(data);
+  for (const cmd of ["skills", "projects", "certs", "education", "experience", "writeups"]) assert.match(block(page, cmd), /Nothing here yet\./, cmd);
+  // only a few commands show without JavaScript
+  assert.deepEqual([...page.matchAll(/data-cmd="(\w+)" data-static/g)].map(m => m[1]), ["whoami", "skills", "projects", "contact"]);
 });
 
 test("a semester studied abroad is marked in the course list", () => {
