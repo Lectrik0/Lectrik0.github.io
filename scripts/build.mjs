@@ -7,7 +7,7 @@
  *
  * The HTML files stay hand-written. The build only rewrites
  * - regions between <!-- build:name --> and <!-- /build:name --> (see REGIONS below),
- * - the text of elements marked data-bind="key" (see bindings() in lib/views.mjs),
+ * - the text of elements marked data-bind="key" (see bindings() in lib/views/bindings.mjs),
  * - ?v= version stamps on links to files in assets/, so browsers never mix old CSS/JS with new HTML,
  * and it writes sitemap.xml, feed.xml, robots.txt and the Contact lines of .well-known/security.txt.
  * Output depends only on the repo's files (no dates, no randomness), so a second run changes nothing.
