@@ -57,6 +57,19 @@ test.describe("terminal", () => {
     await expect(log.getByRole("link", { name: "Download the PDF" })).toHaveAttribute("download", /-CV\.pdf$/);
   });
 
+  test("a tapped command types itself out first, or runs at once with reduced motion", async ({ page }) => {
+    await page.goto("/#terminal");
+    const input = page.locator("#term-input"), log = page.locator("#term-log");
+    await page.getByRole("button", { name: "certs", exact: true }).click();
+    await expect(input).toHaveValue(/^c/);                       // being typed
+    await expect(log).toContainText(data.certs[0].name);         // then run
+    await expect(input).toHaveValue("");
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.getByRole("button", { name: "experience", exact: true }).click();
+    await expect(log).toContainText(data.cv.experience[0].title, { timeout: 100 });
+    await expect(input).toHaveValue("");
+  });
+
   test("handles unknown commands, extras, history, completion and clear", async ({ page }) => {
     await page.goto("/#terminal");
     const input = page.locator("#term-input"), log = page.locator("#term-log");

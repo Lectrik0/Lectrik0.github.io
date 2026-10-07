@@ -191,7 +191,7 @@
       show(line, lines(`${word.slice(0, 20)}: command not found. Type help to see what works.`));
     };
 
-    form.addEventListener("submit", e => { e.preventDefault(); run(input.value); input.value = ""; });
+    form.addEventListener("submit", e => { e.preventDefault(); if (typing) return; run(input.value); input.value = ""; });
     input.addEventListener("keydown", e => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         if (!past.length) return;
@@ -210,8 +210,24 @@
         input.value = hits.length === 1 ? `${common} ` : common;
       }
     });
+    // A tapped command types itself into the prompt first, unless the visitor prefers reduced motion.
+    let typing = null;
+    const stopTyping = () => { if (typing) { clearInterval(typing); typing = null; input.readOnly = false; } };
+    const typeAndRun = name => {
+      stopTyping();
+      input.value = "";
+      if (matchMedia("(prefers-reduced-motion: reduce)").matches) return run(name);
+      let n = 0;
+      input.readOnly = true;
+      typing = setInterval(() => {
+        input.value = name.slice(0, ++n);
+        if (n < name.length) return;
+        stopTyping();
+        setTimeout(() => { if (input.value === name) { input.value = ""; run(name); } }, 200);   // a beat before "Enter"
+      }, 45);
+    };
     document.querySelectorAll("#term .term-chip").forEach(b => b.addEventListener("click", () => {
-      run(b.dataset.run);
+      typeAndRun(b.dataset.run);
       if (matchMedia("(pointer: fine)").matches) input.focus({ preventScroll: true });   // no keyboard popping up on phones
     }));
     // Clicking the screen puts the cursor in the prompt, unless the visitor is selecting text or following a link.
