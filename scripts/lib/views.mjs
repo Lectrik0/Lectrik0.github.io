@@ -8,7 +8,7 @@
  */
 export { str, arr, email, block } from "./views/shared.mjs";
 export { isoDate, longDate } from "./views/dates.mjs";
-export { nav, footer, meta } from "./views/chrome.mjs";
+export { nav, footer, meta, uiStrings } from "./views/chrome.mjs";
 export { heroButtons, contactButtons, internship, skills, certs, posts } from "./views/home.mjs";
 export { postList } from "./views/posts.mjs";
 export { coursesSummary, semesters } from "./views/courses.mjs";

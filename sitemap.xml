@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://lectrik0.github.io/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url><loc>https://lectrik0.github.io/</loc><xhtml:link rel="alternate" hreflang="en" href="https://lectrik0.github.io/"/><xhtml:link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/"/><xhtml:link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/"/></url>
+  <url><loc>https://lectrik0.github.io/ar/</loc><xhtml:link rel="alternate" hreflang="en" href="https://lectrik0.github.io/"/><xhtml:link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/"/><xhtml:link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/"/></url>
   <url><loc>https://lectrik0.github.io/cv.html</loc></url>
+  <url><loc>https://lectrik0.github.io/es/</loc><xhtml:link rel="alternate" hreflang="en" href="https://lectrik0.github.io/"/><xhtml:link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/"/><xhtml:link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/"/></url>
   <url><loc>https://lectrik0.github.io/writeups/explain-this-cve.html</loc><lastmod>2026-10-07</lastmod></url>
   <url><loc>https://lectrik0.github.io/writeups/hardening-this-site.html</loc><lastmod>2026-10-04</lastmod></url>
 </urlset>

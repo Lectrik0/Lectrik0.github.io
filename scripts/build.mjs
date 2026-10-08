@@ -14,19 +14,24 @@
  * No dependencies: it runs on a plain Node.js 20+.
  */
 import { createHash } from "node:crypto";
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { escapeHtml, safeUrl } from "./lib/html.mjs";
 import * as views from "./lib/views.mjs";
+import { LANGS } from "./lib/langs.mjs";
+import { loadTranslation, localizedData, localizeTemplate } from "./lib/i18n.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
-const SKIP_DIRS = new Set([".git", ".github", "node_modules", "scripts", "tests", "infra", "test-results", "playwright-report", "_site"]);
+// <code>/index.html for each translation is generated from index.html, so it isn't a template of its own
+const GENERATED_DIRS = LANGS.filter(l => l.code !== "en").map(l => l.code);
+const SKIP_DIRS = new Set([...GENERATED_DIRS, ".git", ".github", "node_modules", "scripts", "tests", "infra", "test-results", "playwright-report", "_site"]);
 
 const REGIONS = {
   nav: (data, page) => views.nav(data, page),
   footer: data => views.footer(data),
   meta: (data, page, site) => views.meta(data, page, site),
+  "ui-strings": data => views.uiStrings(data),
   "hero-buttons": data => views.heroButtons(data),
   "contact-buttons": data => views.contactButtons(data),
   internship: data => views.internship(data),
@@ -106,9 +111,12 @@ const xml = s => escapeHtml(s);
 function sitemap(pages, data, site) {
   const urls = pages.filter(p => !p.noindex).sort((a, b) => a.path.localeCompare(b.path)).map(p => {
     const lastmod = p.article && views.isoDate(p.article.date);
-    return `  <url><loc>${xml(new URL(p.path, site.url).href)}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}</url>`;
+    // the home page lists itself in every language
+    const alternates = LANGS.some(l => l.path === p.path)
+      ? LANGS.map(l => `<xhtml:link rel="alternate" hreflang="${l.code}" href="${xml(new URL(l.path, site.url).href)}"/>`).join("") : "";
+    return `  <url><loc>${xml(new URL(p.path, site.url).href)}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}${alternates}</url>`;
   });
-  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join("\n")}\n</urlset>\n`;
 }
 
 function feed(data, site) {
@@ -178,6 +186,15 @@ export function renderSite({ root = ROOT, data } = {}) {
     out.set(file, html);
     pages.push(page);
   }
+  // the translated home pages, made from index.html and the translation files
+  const template = readFileSync(join(root, "index.html"), "utf8");
+  for (const lang of LANGS.filter(l => l.code !== "en")) {
+    const tr = loadTranslation(root, lang.code);
+    const file = `${lang.code}/index.html`;
+    const { html, page } = renderPage(root, file, localizeTemplate(template, tr, lang.code), localizedData(data, tr), site);
+    out.set(file, html);
+    pages.push(page);
+  }
   out.set("sitemap.xml", sitemap(pages, data, site));
   out.set("feed.xml", feed(data, site));
   out.set("robots.txt", robots(site));
@@ -193,7 +210,7 @@ export function build({ root = ROOT, data, check = false } = {}) {
     const path = join(root, file);
     if (existsSync(path) && readFileSync(path, "utf8") === contents) continue;
     changed.push(file);
-    if (!check) writeFileSync(path, contents);
+    if (!check) { mkdirSync(dirname(path), { recursive: true }); writeFileSync(path, contents); }
   }
   return changed;
 }

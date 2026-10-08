@@ -10,7 +10,7 @@ const parseDate = v => {
   return d.getUTCMonth() === +m[2] - 1 ? d : null;
 };
 export const isoDate = v => { const d = parseDate(v); return d ? d.toISOString().slice(0, 10) : null; };
-const fmt = (d, opts) => d.toLocaleDateString("en-GB", { timeZone: "UTC", ...opts });
-export const longDate = v => { const d = parseDate(v); return d ? fmt(d, { day: "numeric", month: "long", year: "numeric" }) : ""; };
-export const shortDate = v => { const d = parseDate(v); return d ? fmt(d, { day: "numeric", month: "short", year: "numeric" }) : ""; };
-export const monthYear = v => { const d = parseDate(v); return d ? fmt(d, { month: "short", year: "numeric" }) : ""; };
+const fmt = (d, opts, locale = "en-GB") => d.toLocaleDateString(locale, { timeZone: "UTC", ...opts });
+export const longDate = (v, locale) => { const d = parseDate(v); return d ? fmt(d, { day: "numeric", month: "long", year: "numeric" }, locale) : ""; };
+export const shortDate = (v, locale) => { const d = parseDate(v); return d ? fmt(d, { day: "numeric", month: "short", year: "numeric" }, locale) : ""; };
+export const monthYear = (v, locale) => { const d = parseDate(v); return d ? fmt(d, { month: "short", year: "numeric" }, locale) : ""; };

@@ -10,6 +10,8 @@ export const SITE = JSON.parse(readFileSync(new URL("../../package.json", import
 
 export const PAGES = {
   home: "/",
+  homeEs: "/es/",
+  homeAr: "/ar/",
   cv: "/cv.html",
   cards: "/card.html",
   writeup: "/writeups/hardening-this-site.html",

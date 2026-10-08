@@ -60,7 +60,7 @@ test("every page gets a canonical URL and social preview tags, except the 404 pa
 test("sitemap lists the indexable pages and nothing else", () => {
   const locs = [...read("sitemap.xml").matchAll(/<loc>([^<]+)<\/loc>/g)].map(m => m[1].replace(SITE, "/"));
   const writeups = readdirSync(new URL("../../writeups/", import.meta.url)).filter(f => f.endsWith(".html")).map(f => `/writeups/${f}`);
-  assert.deepEqual([...locs].sort(), ["/", "/cv.html", ...writeups].sort());
+  assert.deepEqual([...locs].sort(), ["/", "/es/", "/ar/", "/cv.html", ...writeups].sort());
   assert.match(read("robots.txt"), new RegExp(`^Sitemap: ${SITE}sitemap\\.xml$`, "m"));
 });
 
