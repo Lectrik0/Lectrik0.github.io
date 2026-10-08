@@ -26,7 +26,7 @@ export function block(tag, attrs, children) {
 
 export const { CERT_LABEL, certStatus } = CvLayout;
 // The proof link (e.g. Credly) of an earned certification: https only, and only once it's earned.
-export const verifyLink = c => CvLayout.verifyLink(c, HTML);
+export const verifyLink = (c, data) => CvLayout.verifyLink(c, HTML, data);
 
 // The name the CV's PDF is saved under (before "-CV.pdf"): the full name, as letters and digits joined by dashes.
 export const cvFileName = data => (str(obj(data.cv).fullName) || str(obj(data.profile).name) || "CV").replace(/[^A-Za-z0-9]+/g, "-").replace(/^-|-$/g, "");

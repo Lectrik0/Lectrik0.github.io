@@ -19,13 +19,13 @@ import { dirname, join, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { escapeHtml, safeUrl } from "./lib/html.mjs";
 import * as views from "./lib/views.mjs";
-import { LANGS } from "./lib/langs.mjs";
+import { LANGS, alternatesOf, pageLang } from "./lib/langs.mjs";
 import { loadTranslation, localizedData, localizeTemplate } from "./lib/i18n.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // <code>/index.html for each translation is generated from index.html, so it isn't a template of its own
-const GENERATED_DIRS = LANGS.filter(l => l.code !== "en").map(l => l.code);
-const SKIP_DIRS = new Set([...GENERATED_DIRS, ".git", ".github", "node_modules", "scripts", "tests", "infra", "test-results", "playwright-report", "_site"]);
+const GENERATED = LANGS.filter(l => l.code !== "en").map(l => `${l.code}/index.html`);
+const SKIP_DIRS = new Set([".git", ".github", "node_modules", "scripts", "tests", "infra", "test-results", "playwright-report", "_site"]);
 
 const REGIONS = {
   nav: (data, page) => views.nav(data, page),
@@ -62,11 +62,11 @@ function htmlFiles(root) {
   return readdirSync(root, { recursive: true, withFileTypes: true })
     .filter(e => e.isFile() && e.name.endsWith(".html"))
     .map(e => toPosix(relative(root, join(e.parentPath ?? e.path, e.name))))
-    .filter(f => !f.split("/").some(part => SKIP_DIRS.has(part)))
+    .filter(f => !GENERATED.includes(f) && !f.split("/").some(part => SKIP_DIRS.has(part)))
     .sort();
 }
 
-function pageInfo(file, html, data) {
+function pageInfo(file, html, data, known) {
   const path = "/" + file.replace(/(^|\/)index\.html$/, "$1");
   const title = (/<title>([^<]*)<\/title>/.exec(html) || [])[1] || "";
   const description = (/<meta name="description" content="([^"]*)"/.exec(html) || [])[1] || "";
@@ -74,11 +74,11 @@ function pageInfo(file, html, data) {
   const article = views.postList(data).find(p => safeUrl(p.url) === path) || null;
   // title and description are read straight from the HTML, where they're already escaped
   const unescape = s => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&amp;/g, "&");
-  return { file, path, title: unescape(title), description: unescape(description), noindex, article };
+  return { file, path, title: unescape(title), description: unescape(description), noindex, article, lang: pageLang(path), alternates: alternatesOf(path, known), known };
 }
 
-function renderPage(root, file, html, data, site) {
-  const page = pageInfo(file, html, data);
+function renderPage(root, file, html, data, site, known) {
+  const page = pageInfo(file, html, data, known);
 
   // 1. regions
   html = html.replace(/^([ \t]*)<!-- build:([a-z-]+) -->\n[\s\S]*?^[ \t]*<!-- \/build:\2 -->$/gm, (_, indent, name) => {
@@ -112,8 +112,8 @@ function sitemap(pages, data, site) {
   const urls = pages.filter(p => !p.noindex).sort((a, b) => a.path.localeCompare(b.path)).map(p => {
     const lastmod = p.article && views.isoDate(p.article.date);
     // the home page lists itself in every language
-    const alternates = LANGS.some(l => l.path === p.path)
-      ? LANGS.map(l => `<xhtml:link rel="alternate" hreflang="${l.code}" href="${xml(new URL(l.path, site.url).href)}"/>`).join("") : "";
+    const alternates = Object.keys(p.alternates).length > 1
+      ? Object.entries(p.alternates).map(([code, path]) => `<xhtml:link rel="alternate" hreflang="${code}" href="${xml(new URL(path, site.url).href)}"/>`).join("") : "";
     return `  <url><loc>${xml(new URL(p.path, site.url).href)}</loc>${lastmod ? `<lastmod>${lastmod}</lastmod>` : ""}${alternates}</url>`;
   });
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n${urls.join("\n")}\n</urlset>\n`;
@@ -181,17 +181,22 @@ export function renderSite({ root = ROOT, data } = {}) {
   const site = siteConfig(root);
   const out = new Map();
   const pages = [];
-  for (const file of htmlFiles(root)) {
-    const { html, page } = renderPage(root, file, readFileSync(join(root, file), "utf8"), data, site);
+  const translations = new Map(LANGS.filter(l => l.code !== "en").map(l => [l.code, loadTranslation(root, l.code)]));
+  const dataFor = code => (translations.has(code) ? localizedData(data, translations.get(code)) : data);
+  const files = htmlFiles(root);
+  const template = readFileSync(join(root, "index.html"), "utf8");
+  // every page path, so each page can link to its translations (home pages are generated, the rest are files)
+  const known = new Set([...files, ...GENERATED].map(f => "/" + f.replace(/(^|\/)index\.html$/, "$1")));
+  for (const file of files) {
+    const lang = pageLang("/" + file).code;
+    const { html, page } = renderPage(root, file, readFileSync(join(root, file), "utf8"), dataFor(lang), site, known);
     out.set(file, html);
     pages.push(page);
   }
   // the translated home pages, made from index.html and the translation files
-  const template = readFileSync(join(root, "index.html"), "utf8");
   for (const lang of LANGS.filter(l => l.code !== "en")) {
-    const tr = loadTranslation(root, lang.code);
     const file = `${lang.code}/index.html`;
-    const { html, page } = renderPage(root, file, localizeTemplate(template, tr, lang.code), localizedData(data, tr), site);
+    const { html, page } = renderPage(root, file, localizeTemplate(template, translations.get(lang.code), lang.code), dataFor(lang.code), site, known);
     out.set(file, html);
     pages.push(page);
   }

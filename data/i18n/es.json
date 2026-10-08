@@ -1,25 +1,72 @@
 {
  "ui": {
   "locale": "es-ES",
-  "navLabel": "Principal", "story": "Historia", "skills": "Habilidades", "certs": "Certificaciones", "writeups": "Artículos", "terminal": "Terminal",
-  "flags": "Banderas", "cv": "CV", "contact": "Contacto", "language": "Idioma",
-  "night": "Noche", "day": "Día", "toNight": "Cambiar al modo noche", "toDay": "Cambiar al modo día",
-  "viewCv": "Ver CV", "email": "Correo", "cveChecker": "Verificador de CVE", "downloadPdf": "Descargar PDF",
-  "internship": "Prácticas", "internshipProgress": "Progreso de las prácticas",
-  "earned": "Obtenida", "progress": "En curso", "planned": "Planificada",
+  "navLabel": "Principal",
+  "story": "Historia",
+  "skills": "Habilidades",
+  "certs": "Certificaciones",
+  "writeups": "Artículos",
+  "terminal": "Terminal",
+  "flags": "Banderas",
+  "cv": "CV",
+  "contact": "Contacto",
+  "language": "Idioma",
+  "night": "Noche",
+  "day": "Día",
+  "toNight": "Cambiar al modo noche",
+  "toDay": "Cambiar al modo día",
+  "viewCv": "Ver CV",
+  "email": "Correo",
+  "cveChecker": "Verificador de CVE",
+  "downloadPdf": "Descargar PDF",
+  "internship": "Prácticas",
+  "internshipProgress": "Progreso de las prácticas",
+  "earned": "Obtenida",
+  "progress": "En curso",
+  "planned": "Planificada",
   "noPosts": "Pronto, el primer artículo",
-  "courses": "asignaturas", "ectsDone": "de {total} ECTS completados", "semesters": "semestres",
-  "completed": "Completado", "current": "En curso", "upcoming": "Próximo", "abroad": "En el extranjero: ", "ects": "ECTS", "major": "especialidad en {major}", "semester": "Semestre",
-  "termHelp": "Comandos (Tab completa, la flecha arriba recupera el anterior):", "termHint": "Escribe un comando y pulsa Enter, o toca uno de abajo.",
-  "termLog": "Salida de la terminal", "termCommand": "Comando", "termPlaceholder": "escribe un comando", "termRun": "Ejecutar", "termEmpty": "Aquí aún no hay nada.",
-  "sumHelp": "esta lista", "sumClear": "vaciar la pantalla",
-  "sumWhoami": "quién soy", "sumSkills": "lo que sé y lo que estoy aprendiendo", "sumProjects": "cosas que he construido", "sumCerts": "certificaciones",
-  "sumEducation": "dónde estudio", "sumExperience": "dónde he trabajado", "sumWriteups": "cosas que he escrito", "sumContact": "cómo contactarme",
-  "sumCv": "mi CV de una página", "sumFlags": "una pista sobre las banderas ocultas",
-  "kName": "nombre", "kAbout": "sobre mí", "kBasedIn": "vive en", "kLatest": "último", "kStudying": "estudia", "studyingAt": " en ",
-  "cvLine": "Una página, texto plano, pensado para personas y para software ATS.", "cvOnline": "Leerlo en línea", "cvPdf": "Descargar el PDF",
-  "flagsBefore": "Hay banderas ocultas en este sitio. Sin spoilers: las pistas y el verificador están en ", "flagsLink": "Banderas ocultas",
-  "jsComplete": "Completadas", "jsDaysLeft": "Quedan {n} días",
+  "courses": "asignaturas",
+  "ectsDone": "de {total} ECTS completados",
+  "semesters": "semestres",
+  "completed": "Completado",
+  "current": "En curso",
+  "upcoming": "Próximo",
+  "abroad": "En el extranjero: ",
+  "ects": "ECTS",
+  "major": "especialidad en {major}",
+  "semester": "Semestre",
+  "termHelp": "Comandos (Tab completa, la flecha arriba recupera el anterior):",
+  "termHint": "Escribe un comando y pulsa Enter, o toca uno de abajo.",
+  "termLog": "Salida de la terminal",
+  "termCommand": "Comando",
+  "termPlaceholder": "escribe un comando",
+  "termRun": "Ejecutar",
+  "termEmpty": "Aquí aún no hay nada.",
+  "sumHelp": "esta lista",
+  "sumClear": "vaciar la pantalla",
+  "sumWhoami": "quién soy",
+  "sumSkills": "lo que sé y lo que estoy aprendiendo",
+  "sumProjects": "cosas que he construido",
+  "sumCerts": "certificaciones",
+  "sumEducation": "dónde estudio",
+  "sumExperience": "dónde he trabajado",
+  "sumWriteups": "cosas que he escrito",
+  "sumContact": "cómo contactarme",
+  "sumCv": "mi CV de una página",
+  "sumFlags": "una pista sobre las banderas ocultas",
+  "kName": "nombre",
+  "kAbout": "sobre mí",
+  "kBasedIn": "vive en",
+  "kLatest": "último",
+  "kStudying": "estudia",
+  "studyingAt": " en ",
+  "cvLine": "Una página, texto plano, pensado para personas y para software ATS.",
+  "cvOnline": "Leerlo en línea",
+  "cvPdf": "Descargar el PDF",
+  "flagsBefore": "Hay banderas ocultas en este sitio. Sin spoilers: las pistas y el verificador están en ",
+  "flagsLink": "Banderas ocultas",
+  "jsComplete": "Completadas",
+  "jsDaysLeft": "Quedan {n} días",
   "jsFlagFormat": "Las banderas tienen el formato AA{...}, con letras, números y guiones bajos dentro.",
   "jsFlagNoCrypto": "Tu navegador no puede comprobar banderas aquí. Prueba con una versión reciente de Chrome, Firefox o Safari.",
   "jsFlagWrong": "Esa no es una de las banderas. Revisa si hay erratas e inténtalo de nuevo.",
@@ -35,60 +82,245 @@
   "jsCatBinary": "cat: {file}: archivo binario. Prueba con el comando cv.",
   "jsCatNone": "cat: {file}: No existe el archivo o el directorio",
   "jsNothingYet": "Todavía nada.",
-  "jsNotFound": "{word}: comando no encontrado. Escribe help para ver los que funcionan."
+  "jsNotFound": "{word}: comando no encontrado. Escribe help para ver los que funcionan.",
+  "cvPdfPath": "/cv-es.pdf",
+  "cvPdfSuffix": "-CV-ES",
+  "cvWords": {
+   "Profile": "Perfil",
+   "Education": "Formación",
+   "Experience": "Experiencia",
+   "Projects": "Proyectos",
+   "Certifications & Training": "Certificaciones y formación",
+   "Skills": "Habilidades",
+   "Spoken languages": "Idiomas",
+   "Military status": "Situación militar",
+   "Verify": "Verificar",
+   "Earned": "Obtenida",
+   "In progress": "En curso",
+   "Planned": "Planificada"
+  },
+  "courseNames": {
+   "Mathematics I": "Matemáticas I",
+   "Mathematics II": "Matemáticas II",
+   "Mathematics III": "Matemáticas III",
+   "Mathematics IV": "Matemáticas IV",
+   "Programming I": "Programación I",
+   "Programming II": "Programación II",
+   "Programming III": "Programación III",
+   "Physics": "Física",
+   "Digital Logic Design": "Diseño de lógica digital",
+   "English for Academic Purposes and Study Skills": "Inglés con fines académicos y técnicas de estudio",
+   "German 1": "Alemán 1",
+   "German 2": "Alemán 2",
+   "German 3": "Alemán 3",
+   "German 4": "Alemán 4",
+   "Computer Networks": "Redes de computadores",
+   "Theoretical Computer Science": "Informática teórica",
+   "Computer Organization": "Organización de computadores",
+   "Scientific Methods": "Métodos científicos",
+   "Operating Systems": "Sistemas operativos",
+   "Databases": "Bases de datos",
+   "Data Structures & Algorithms": "Estructuras de datos y algoritmos",
+   "Communication and Presentation Skills": "Habilidades de comunicación y presentación",
+   "Software Engineering": "Ingeniería de software",
+   "Analysis and Design of Algorithms": "Análisis y diseño de algoritmos",
+   "Information Security": "Seguridad de la información",
+   "Introduction to Data Science": "Introducción a la ciencia de datos",
+   "Introduction to Media Informatics": "Introducción a la informática de medios",
+   "Research Paper Writing": "Redacción de artículos de investigación",
+   "Cryptography": "Criptografía",
+   "Software and Mobile Devices Security": "Seguridad de software y dispositivos móviles",
+   "Digital Forensics": "Informática forense",
+   "Software Project I": "Proyecto de software I",
+   "Machine Learning": "Aprendizaje automático",
+   "Database Programming": "Programación de bases de datos",
+   "Network Security": "Seguridad de redes",
+   "Ethical Hacking and Penetration Testing": "Hacking ético y pruebas de penetración",
+   "Business Continuity and Risk Management": "Continuidad del negocio y gestión de riesgos",
+   "Project Management": "Gestión de proyectos",
+   "Big Data and NoSQL": "Big Data y NoSQL",
+   "Mobile Software Development": "Desarrollo de software móvil",
+   "Bachelor Thesis and Colloquium": "Trabajo de fin de grado y coloquio",
+   "Research Methodology": "Metodología de la investigación",
+   "Workplace & Internship Readiness": "Preparación para el entorno laboral y las prácticas",
+   "Internship": "Prácticas",
+   "Internship-accompanying Seminar": "Seminario de acompañamiento de las prácticas",
+   "Business Ethics": "Ética empresarial",
+   "GIU Berlin, Germany": "GIU Berlín, Alemania"
+  }
  },
  "data": {
-  "profile": { "location": "El Cairo, Egipto", "tagline": "Estudiante de ciberseguridad en camino hacia una carrera en seguridad en la nube." },
+  "profile": {
+   "location": "El Cairo, Egipto",
+   "tagline": "Estudiante de ciberseguridad en camino hacia una carrera en seguridad en la nube.",
+   "cv": "es/cv.html"
+  },
   "story": [
-   { "title": "Estudio ciberseguridad en la GIU", "text": "Último año de una licenciatura en la Universidad Internacional Alemana, con especialidad en Seguridad Informática. Redes, sistemas operativos, criptografía y cómo se rompe todo eso." },
-   { "title": "Seis meses dentro de un banco", "text": "Prácticas en Ebank, viendo cómo una entidad financiera gestiona su TI y su seguridad." },
-   { "title": "Hacia la nube", "text": "Me preparo para AWS Certified Cloud Practitioner. La nube es donde quiero especializarme: identidad, datos e infraestructura que se defienden solas." },
-   { "title": "Próximos pasos", "text": "AWS Solutions Architect – Associate para aprender cómo se diseñan los sistemas seguros, y después AWS Certified Security – Specialty." },
-   { "title": "Arquitecto de seguridad en la nube", "text": "Adonde lleva este camino." }
+   {
+    "title": "Estudio ciberseguridad en la GIU",
+    "text": "Último año de una licenciatura en la Universidad Internacional Alemana, con especialidad en Seguridad Informática. Redes, sistemas operativos, criptografía y cómo se rompe todo eso."
+   },
+   {
+    "title": "Seis meses dentro de un banco",
+    "text": "Prácticas en Ebank, viendo cómo una entidad financiera gestiona su TI y su seguridad."
+   },
+   {
+    "title": "Hacia la nube",
+    "text": "Me preparo para AWS Certified Cloud Practitioner. La nube es donde quiero especializarme: identidad, datos e infraestructura que se defienden solas."
+   },
+   {
+    "title": "Próximos pasos",
+    "text": "AWS Solutions Architect – Associate para aprender cómo se diseñan los sistemas seguros, y después AWS Certified Security – Specialty."
+   },
+   {
+    "title": "Arquitecto de seguridad en la nube",
+    "text": "Adonde lleva este camino."
+   }
   ],
-  "courses": { "university": "Universidad Internacional Alemana (GIU)", "degree": "Licenciatura en Informática y Ciencias de la Computación", "major": "Seguridad Informática" },
+  "courses": {
+   "university": "Universidad Internacional Alemana (GIU)",
+   "degree": "Licenciatura en Informática y Ciencias de la Computación",
+   "major": "Seguridad Informática"
+  },
   "skills": [
-   { "group": "Con soltura", "note": "Usadas en clase y en proyectos.", "color": "teal", "items": ["Redes", "Linux", "Fundamentos de seguridad", "Nociones de criptografía"] },
-   { "group": "En uso ahora", "note": "Conocimiento práctico que mejora cada semana.", "color": "blue", "items": ["Python", "Servicios básicos de AWS", "Git y GitHub"] },
-   { "group": "A aprender", "note": "En la hoja de ruta de los próximos meses.", "color": "purple", "items": ["IAM en la nube", "Terraform", "CloudFormation", "Registros y detección en la nube"] }
+   {
+    "group": "Con soltura",
+    "note": "Usadas en clase y en proyectos.",
+    "color": "teal",
+    "items": [
+     "Redes",
+     "Linux",
+     "Fundamentos de seguridad",
+     "Nociones de criptografía"
+    ]
+   },
+   {
+    "group": "En uso ahora",
+    "note": "Conocimiento práctico que mejora cada semana.",
+    "color": "blue",
+    "items": [
+     "Python",
+     "Servicios básicos de AWS",
+     "Git y GitHub"
+    ]
+   },
+   {
+    "group": "A aprender",
+    "note": "En la hoja de ruta de los próximos meses.",
+    "color": "purple",
+    "items": [
+     "IAM en la nube",
+     "Terraform",
+     "CloudFormation",
+     "Registros y detección en la nube"
+    ]
+   }
   ],
   "posts": [
-   { "title": "Issue #2: Explain This CVE", "date": "2026-10-07", "tag": "Proyecto", "summary": "Un verificador de CVE de una página para directivos y analistas: cómo funciona y las decisiones de seguridad detrás.", "url": "writeups/explain-this-cve.html" },
-   { "title": "Issue #1: Hardening a static site", "date": "2026-10-04", "tag": "Seguridad web", "summary": "Un sitio sin backend también puede ser atacado. Cómo este bloquea el XSS con CSP y Trusted Types, y cómo lo probé.", "url": "writeups/hardening-this-site.html" }
+   {
+    "title": "Número #2: Explain This CVE",
+    "date": "2026-10-07",
+    "tag": "Proyecto",
+    "summary": "Un verificador de CVE de una página para directivos y analistas: cómo funciona y las decisiones de seguridad detrás.",
+    "url": "es/writeups/explain-this-cve.html"
+   },
+   {
+    "title": "Número #1: Blindar un sitio estático",
+    "date": "2026-10-04",
+    "tag": "Seguridad web",
+    "summary": "Un sitio sin backend también puede ser atacado. Cómo este bloquea el XSS con CSP y Trusted Types, y cómo lo probé.",
+    "url": "es/writeups/hardening-this-site.html"
+   }
   ],
   "cv": {
    "education": [
-    { "title": "Licenciatura en Informática y Ciencias de la Computación, especialidad en Seguridad Informática", "org": "Universidad Internacional Alemana (GIU)", "dates": "sep 2023 – sep 2027",
-      "details": "Asignaturas relevantes: Criptografía, Seguridad de Redes, Hacking Ético y Pruebas de Penetración, Informática Forense, Seguridad de Software y Dispositivos Móviles, Continuidad del Negocio y Gestión de Riesgos." },
-    { "title": "Semestre de intercambio (5.º semestre), Ciberseguridad", "org": "Universidad Internacional Alemana en Berlín (GIU Berlin)", "location": "Berlín, Alemania", "dates": "sep 2025 – feb 2026" }
+    {
+     "title": "Licenciatura en Informática y Ciencias de la Computación, especialidad en Seguridad Informática",
+     "org": "Universidad Internacional Alemana (GIU)",
+     "dates": "sep 2023 – sep 2027",
+     "details": "Clave: Criptografía, Seguridad de Redes, Hacking Ético, Informática Forense, Seguridad de Software y Móviles, Gestión de Riesgos."
+    },
+    {
+     "title": "Semestre de intercambio (5.º semestre), Ciberseguridad",
+     "org": "Universidad Internacional Alemana en Berlín (GIU Berlin)",
+     "location": "Berlín, Alemania",
+     "dates": "sep 2025 – feb 2026"
+    }
    ],
    "experience": [
-    { "title": "Becario de Seguridad de la Información", "org": "Ebank", "location": "Nuevo Cairo, Egipto", "dates": "ago 2026 – ene 2027",
-      "bullets": [
-       "Roté por los equipos de gestión de vulnerabilidades, GRC, pruebas de penetración y SOC del banco.",
-       "Ejecuté análisis de vulnerabilidades con Tenable y analicé los resultados por CVE y plugin.",
-       "Trabajé con el equipo de GRC en evaluaciones de riesgo de empleados alineadas con ISO/IEC 27001.",
-       "Realicé simulaciones de phishing para medir la concienciación en seguridad de los empleados.",
-       "Hice pruebas de penetración de red interna en cada planta de las oficinas del banco, supervisado por el equipo de pentesting.",
-       "Usé IBM QRadar (SIEM) con el equipo del SOC para monitorizar y analizar eventos de seguridad."
-      ] },
-    { "title": "Becario de Ciberseguridad", "org": "ICT Misr", "location": "Sheikh Zayed, Guiza, Egipto", "dates": "jul 2024 (1 mes)",
-      "bullets": [
-       "Acompañé al personal de ciberseguridad en su día a día y aprendí cómo las empresas aplican la seguridad en la práctica.",
-       "Observé cómo el equipo trabaja con los clientes y atiende sus necesidades de seguridad.",
-       "Adquirí conocimientos básicos de conceptos de seguridad, vectores de amenaza comunes y controles de seguridad elementales."
-      ] }
+    {
+     "title": "Becario de Seguridad de la Información",
+     "org": "Ebank",
+     "location": "Nuevo Cairo, Egipto",
+     "dates": "ago 2026 – ene 2027",
+     "bullets": [
+      "Roté por los equipos de vulnerabilidades, GRC, pruebas de penetración y SOC del banco.",
+      "Ejecuté análisis de vulnerabilidades con Tenable y analicé los resultados por CVE y plugin.",
+      "Colaboré con GRC en evaluaciones de riesgo de empleados alineadas con ISO/IEC 27001.",
+      "Realicé simulaciones de phishing para medir la concienciación de los empleados.",
+      "Hice pruebas de penetración de red interna en cada planta del banco, supervisadas por el equipo de pentesting.",
+      "Usé IBM QRadar (SIEM) con el SOC para monitorizar y analizar eventos de seguridad."
+     ]
+    },
+    {
+     "title": "Becario de Ciberseguridad",
+     "org": "ICT Misr",
+     "location": "Sheikh Zayed, Guiza, Egipto",
+     "dates": "jul 2024 (1 mes)",
+     "bullets": [
+      "Acompañé al personal de ciberseguridad en su día a día y aprendí cómo se aplica la seguridad en las empresas.",
+      "Observé cómo el equipo trabaja con los clientes y atiende sus necesidades de seguridad.",
+      "Adquirí bases sobre conceptos de seguridad, vectores de amenaza comunes y controles básicos."
+     ]
+    }
    ],
    "projects": [
-    { "title": "Explain This CVE: explain-this-cve.vercel.app", "stack": "JavaScript, Node.js, Vercel, NVD, CISA KEV, EPSS", "dates": "2026",
-      "bullets": [
-       "Creé un verificador de CVE que convierte datos de NVD, CISA KEV y EPSS en un resumen de una página para directivos y analistas.",
-       "Traté todos los datos externos y la salida de IA como hostiles: validación de entradas, límite de peticiones, CSP con Trusted Types y más de 140 pruebas sin conexión, incluido un simulacro de XSS."
-      ] },
-    { "title": "Sitio personal: lectrik0.github.io", "stack": "HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation", "dates": "2026",
-      "bullets": [
-       "Creé un portafolio estático protegido contra XSS (CSP estricta y Trusted Types, probado con cargas de inyección), sin peticiones a terceros y con infraestructura como código en AWS desplegada sin claves mediante OIDC."
-      ] }
+    {
+     "title": "Explain This CVE: explain-this-cve.vercel.app",
+     "stack": "JavaScript, Node.js, Vercel, NVD, CISA KEV, EPSS",
+     "dates": "2026",
+     "bullets": [
+      "Creé un verificador de CVE que resume datos de NVD, CISA KEV y EPSS en una página para directivos y analistas.",
+      "Traté todos los datos externos y la salida de IA como hostiles: validación de entradas, límite de peticiones, CSP con Trusted Types y más de 140 pruebas sin conexión, con un simulacro de XSS."
+     ]
+    },
+    {
+     "title": "Sitio personal: lectrik0.github.io",
+     "stack": "HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation",
+     "dates": "2026",
+     "bullets": [
+      "Portafolio estático protegido contra XSS (CSP estricta y Trusted Types, probado con cargas de inyección), sin peticiones a terceros y con infraestructura AWS como código desplegada sin claves mediante OIDC."
+     ]
+    }
+   ],
+   "headline": "Estudiante de último año de Seguridad Informática, centrado en la seguridad en la nube.",
+   "military": "Aplazado (estudiante)",
+   "summary": "Estudiante de último año de Seguridad Informática con experiencia práctica en un banco en gestión de vulnerabilidades, gobernanza, riesgo y cumplimiento (GRC), pruebas de penetración y operaciones de SOC. Me encamino hacia la seguridad en la nube y preparo AWS Certified Cloud Practitioner.",
+   "skills": [
+    {
+     "label": "Seguridad",
+     "text": "Análisis de vulnerabilidades, pentesting de red, phishing simulado, evaluación de riesgos, seguridad web, criptografía"
+    },
+    {
+     "label": "Herramientas",
+     "text": "Tenable, IBM QRadar (SIEM), Git, GitHub Actions"
+    },
+    {
+     "label": "Nube",
+     "text": "Servicios básicos de AWS, IAM, S3, CloudFront, CloudFormation"
+    },
+    {
+     "label": "Sistemas",
+     "text": "Redes, Linux"
+    },
+    {
+     "label": "Estándares",
+     "text": "ISO/IEC 27001"
+    }
+   ],
+   "languages": [
+    "Inglés (dominio profesional completo)",
+    "Árabe (nativo)"
    ]
   }
  },
@@ -96,7 +328,11 @@
   "Ali Ahmed, cybersecurity student in Cairo building toward a career in cloud security.": "Ali Ahmed, estudiante de ciberseguridad en El Cairo, en camino hacia una carrera en seguridad en la nube.",
   "The story so far": "La historia hasta ahora",
   "Where I've been, where I am, and where I'm heading.": "De dónde vengo, dónde estoy y hacia dónde voy.",
-  "Chapter 1": "Capítulo 1", "Chapter 2": "Capítulo 2", "Chapter 3": "Capítulo 3", "Chapter 4": "Capítulo 4", "Chapter 5": "Capítulo 5",
+  "Chapter 1": "Capítulo 1",
+  "Chapter 2": "Capítulo 2",
+  "Chapter 3": "Capítulo 3",
+  "Chapter 4": "Capítulo 4",
+  "Chapter 5": "Capítulo 5",
   "See all my courses": "Ver todas mis asignaturas",
   "A student looking at the Cairo skyline": "Un estudiante mirando el horizonte de El Cairo",
   "A bank building with a shield on its front": "Un edificio de banco con un escudo en la fachada",
@@ -108,7 +344,7 @@
   "Certifications": "Certificaciones",
   "Earned badges fill in. Dashed ones are in progress or planned.": "Las insignias obtenidas aparecen rellenas. Las discontinuas están en curso o planificadas.",
   "Write-ups": "Artículos",
-  "Notes from labs, CTFs and cloud security topics I'm learning.": "Notas de laboratorios, CTF y temas de seguridad en la nube que estoy aprendiendo. Los artículos están en inglés.",
+  "Notes from labs, CTFs and cloud security topics I'm learning.": "Notas de laboratorios, CTF y temas de seguridad en la nube que estoy aprendiendo.",
   "Ask my terminal": "Pregunta a mi terminal",
   "The quick way to get to know me. Type <code>whoami</code>, <code>skills</code> or <code>projects</code>, or tap a command.": "La forma rápida de conocerme. Escribe <code>whoami</code>, <code>skills</code> o <code>projects</code>, o toca un comando.",
   "Hidden flags": "Banderas ocultas",

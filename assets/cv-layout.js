@@ -29,11 +29,14 @@
   };
   const plainUrl = u => { try { const x = new URL(u); return (x.host + x.pathname).replace(/^www\./, "").replace(/\/$/, ""); } catch { return u; } };
 
+  // The CV's fixed words ("Profile", "Verify", ...). A translation supplies data.ui.cvWords, mapping each English word to its own.
+  const label = (data, word) => str(obj(obj(obj(data).ui).cvWords)[word]) || word;
+
   const CERT_LABEL = { earned: "Earned", progress: "In progress", planned: "Planned" };
   const certStatus = c => CERT_LABEL[obj(c).status] ? c.status : "planned";
   // The proof link (e.g. Credly) of an earned certification: https only, and only once it's earned.
-  const verifyLink = (c, f) => certStatus(c) === "earned" && /^https:\/\//i.test(str(c.verify))
-    ? f.link(str(c.verify), { class: "verify", "aria-label": `Verify ${str(c.name)}` }, "Verify", f.h("span", { "aria-hidden": "true" }, " ↗"))
+  const verifyLink = (c, f, data) => certStatus(c) === "earned" && /^https:\/\//i.test(str(c.verify))
+    ? f.link(str(c.verify), { class: "verify", "aria-label": `${label(data, "Verify")} ${str(c.name)}` }, label(data, "Verify"), f.h("span", { "aria-hidden": "true" }, " ↗"))
     : null;
 
   // The contact line's items, in order (location, phone, email, LinkedIn, GitHub, this site).
@@ -54,7 +57,7 @@
   // Personal details under the contact line (as Egyptian employers expect), only when filled in.
   const personal = (data, f) => {
     const military = str(obj(data.cv).military);
-    return military ? f.h("p", { class: "sheet-personal" }, `Military status: ${military}`) : null;
+    return military ? f.h("p", { class: "sheet-personal" }, `${label(data, "Military status")}: ${military}`) : null;
   };
 
   // The whole header, as cv.html has it (name and headline come from its data-bind fields there).
@@ -80,7 +83,7 @@
       ["Experience", named(CV.experience, "title")],
       ["Projects", named(CV.projects, "title")],
       ["Certifications & Training", named(data.certs, "name").filter(c => certStatus(c) !== "planned")],
-      ["Skills", [...named(CV.skills, "label"), ...(languages.length ? [{ label: "Spoken languages", text: languages.join(", ") }] : [])]]
+      ["Skills", [...named(CV.skills, "label"), ...(languages.length ? [{ label: label(data, "Spoken languages"), text: languages.join(", ") }] : [])]]
     ].filter(([, items]) => items.length);
   }
 
@@ -110,14 +113,14 @@
       ], bullets(p.bullets))),
       // Name (| Verify), then the issue date of an earned one, else its status
       "Certifications & Training": items => [f.block("div", { class: "entry" }, items.map(c => {
-        const verify = verifyLink(c, f);
+        const verify = verifyLink(c, f, data);
         return row("row", f.h("span", {}, f.h("b", {}, str(c.name)), ...(verify ? [" | ", verify] : [])),
-          certStatus(c) === "earned" && str(c.issued) ? str(c.issued) : CERT_LABEL[certStatus(c)]);
+          certStatus(c) === "earned" && str(c.issued) ? str(c.issued) : label(data, CERT_LABEL[certStatus(c)]));
       }))],
       Skills: items => [f.block("ul", { class: "skills" }, items.map(s => f.h("li", {}, f.h("b", {}, `${str(s.label)}:`), " ", str(s.text))))]
     };
-    return sections(data).map(([title, items]) => f.block("section", {}, [f.h("h2", {}, title), ...SECTION[title](items)]));
+    return sections(data).map(([title, items]) => f.block("section", {}, [f.h("h2", {}, label(data, title)), ...SECTION[title](items)]));
   }
 
-  root.CvLayout = { email, plainUrl, contact, separator, personal, header, sections, body, certStatus, verifyLink, CERT_LABEL };
+  root.CvLayout = { email, plainUrl, contact, separator, personal, header, sections, body, certStatus, verifyLink, CERT_LABEL, label };
 })(globalThis);

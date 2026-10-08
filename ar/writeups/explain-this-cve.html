@@ -1,0 +1,187 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Explain This CVE – Ali Ahmed</title>
+<meta name="description" content="العدد #2: فاحص CVE في صفحة واحدة للمديرين والمحللين، وقرارات الأمان وراءه.">
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/ar/writeups/explain-this-cve.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="Explain This CVE – Ali Ahmed">
+<meta property="og:description" content="العدد #2: فاحص CVE في صفحة واحدة للمديرين والمحللين، وقرارات الأمان وراءه.">
+<meta property="og:url" content="https://lectrik0.github.io/ar/writeups/explain-this-cve.html">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: طالب أمن سيبراني يبني طريقه نحو مسار مهني في أمن السحابة.">
+<meta property="og:locale" content="ar_EG">
+<meta property="article:published_time" content="2026-10-07">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<link rel="alternate" hreflang="en" href="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="x-default" href="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<!-- /build:meta -->
+<link rel="icon" href="/assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=84bc9e3736">
+<noscript><link rel="stylesheet" href="/assets/nojs.css?v=16c2832380"></noscript>
+<script src="/assets/main.js?v=c7a3f52e6d" defer></script>
+</head>
+<body>
+<!-- build:nav -->
+<nav class="nav" aria-label="التنقل الرئيسي">
+  <div class="wrap">
+    <a class="brand" href="/ar/">Ali Ahmed</a>
+    <ul>
+      <li><a href="/ar/#story">القصة</a></li>
+      <li><a href="/ar/#skills">المهارات</a></li>
+      <li><a href="/ar/#certs">الشهادات</a></li>
+      <li><a href="/ar/#writeups">المقالات</a></li>
+      <li><a href="/ar/#terminal">الطرفية</a></li>
+      <li><a href="/ar/#flags">الرايات</a></li>
+      <li><a href="/cv.html">السيرة الذاتية</a></li>
+      <li><a href="/ar/#contact">تواصل</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="اللغة">
+      <a href="/writeups/explain-this-cve.html" hreflang="en" title="English" data-lang="en">EN</a>
+      <a href="/es/writeups/explain-this-cve.html" hreflang="es" title="Español" data-lang="es">ES</a>
+      <a href="/ar/writeups/explain-this-cve.html" hreflang="ar" title="العربية" aria-current="true" data-lang="ar">AR</a>
+    </div>
+    <button class="toggle" id="toggle" type="button" aria-label="التبديل إلى الوضع الليلي" data-day="نهاري" data-night="ليلي" data-to-day="التبديل إلى الوضع النهاري" data-to-night="التبديل إلى الوضع الليلي"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">ليلي</span></button>
+  </div>
+</nav>
+<!-- /build:nav -->
+<main>
+  <header class="page-head wrap">
+    <a class="back" href="/ar/#writeups">العودة إلى المقالات</a>
+    <span class="caption">العدد #2 &nbsp;/&nbsp; <time datetime="2026-10-07">7 أكتوبر 2026</time></span>
+    <h1>Explain This CVE</h1>
+    <p class="lede">سجل CVE مكتوب للمتخصصين. بنيت فاحصًا في صفحة واحدة يشرح أي CVE بلغة واضحة، وحاولت أن أجعله صعب الإساءة.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="strip">
+      <div class="frame cut-a"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="جدار طويل من النص في جانب وبطاقة ملخص صغيرة في الجانب الآخر">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="24" y="24" width="150" height="182" class="f-panel ink"/>
+          <path d="M38 48 h122 M38 62 h122 M38 76 h96 M38 90 h122 M38 104 h110 M38 118 h122 M38 132 h84 M38 146 h122 M38 160 h100 M38 174 h122 M38 188 h70" class="ink-thin" stroke-width="3"/>
+          <rect x="204" y="64" width="132" height="102" class="f-panel ink"/>
+          <rect x="204" y="64" width="132" height="26" class="f-purple ink"/>
+          <text x="270" y="82" class="mono-t" text-anchor="middle" fill="var(--panel)">CRITICAL</text>
+          <path d="M218 112 h104 M218 130 h80 M218 148 h92" class="ink-thin" stroke-width="4"/>
+          <text x="190" y="52" class="sfx" text-anchor="middle">vs</text>
+        </svg>
+        <figcaption class="cap"><b>المشكلة</b><span>مدير يقرر «هل نترك كل شيء اليوم؟» يحصل على درجة وسلسلة متجه و100 رابط.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-b"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="ثلاثة مصادر بيانات عامة تغذي صفحة واحدة">
+          <rect width="360" height="230" class="sky-b"/>
+          <g class="ink">
+            <rect x="24" y="30" width="96" height="34" class="cloud"/>
+            <rect x="24" y="98" width="96" height="34" class="cloud"/>
+            <rect x="24" y="166" width="96" height="34" class="cloud"/>
+          </g>
+          <text x="72" y="52" class="mono-t" text-anchor="middle" fill="var(--purple)">NVD</text>
+          <text x="72" y="120" class="mono-t" text-anchor="middle" fill="var(--purple)">CISA KEV</text>
+          <text x="72" y="188" class="mono-t" text-anchor="middle" fill="var(--purple)">EPSS</text>
+          <path d="M122 47 L232 112 M122 115 h110 M122 183 L232 118" class="ink" stroke-width="3" stroke-dasharray="6 6" fill="none"/>
+          <rect x="232" y="70" width="104" height="90" class="f-panel ink"/>
+          <path d="M248 94 h72 M248 114 h72 M248 134 h48" class="ink-thin" stroke-width="4"/>
+        </svg>
+        <figcaption class="cap"><b>المصادر</b><span>ثلاث قواعد بيانات عامة، تُجلب بالتوازي وتُختصر في إجابة صغيرة ثابتة.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-c"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="درع بين البيانات غير الموثوقة والصفحة">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="250" y="44" width="86" height="142" class="f-panel ink"/>
+          <path d="M264 74 h58 M264 94 h58 M264 114 h40" class="ink-thin" stroke-width="4"/>
+          <path d="M150 36 l50 19 v44 c0 36 -22 58 -50 70 c-28 -12 -50 -34 -50 -70 v-44z" class="f-teal ink"/>
+          <path d="M128 106 l16 16 l30 -34" fill="none" stroke="var(--panel)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <g class="ink" stroke-width="4"><path d="M24 70 l26 26 M50 70 l-26 26"/><path d="M30 144 l26 26 M56 144 l-26 26"/></g>
+          <text x="150" y="214" class="sfx" text-anchor="middle">تُعامل كعدائية.</text>
+        </svg>
+        <figcaption class="cap"><b>القاعدة</b><span>كل ما يأتي من قواعد البيانات، وكل ما يقوله الذكاء الاصطناعي، يُعامل كنص عدائي.</span></figcaption>
+      </figure></div>
+    </div>
+
+    <article class="prose">
+      <h2>ماذا يفعل</h2>
+      <p>تكتب معرّف CVE، مثل <code>CVE-2021-44228</code> (Log4Shell)، فتحصل على صفحة واحدة بسبعة فصول، بالترتيب نفسه دائمًا:</p>
+      <ol>
+        <li>معرّف CVE وعنوانه وتاريخ نشره.</li>
+        <li>الخطورة: درجة CVSS مع شارة ملونة، والمستوى مكتوبًا بكلمة.</li>
+        <li>هل يُستغل فعلًا: قائمة الثغرات المستغلة المعروفة لدى CISA (KEV) واحتمال EPSS.</li>
+        <li>ملخص بلغة واضحة.</li>
+        <li>المنتجات والإصدارات المتأثرة.</li>
+        <li>الإصلاح والتخفيف: ما تشترطه CISA وأول الإصدارات غير المتأثرة والتحديثات والنشرات.</li>
+        <li>المراجع.</li>
+      </ol>
+      <p>هناك عرضان للبيانات نفسها. عرض <b>Manager</b> يجيب عن «هل نحتاج إلى التصرف اليوم؟». وعرض <b>Analyst</b> يحتفظ بالتفاصيل. وينتهي كل ملخص بعبارة «Always verify with the official vendor advisory» (تحقق دائمًا من نشرة الشركة المصنّعة الرسمية).</p>
+
+      <h2>كيف يعمل</h2>
+      <p>هو صفحة ثابتة ودالة واحدة بلا خادم، بلا حسابات ولا قاعدة بيانات ولا اعتماديات. مع كل طلب تنفّذ الدالة هذه الخطوات بالترتيب:</p>
+      <ol>
+        <li>فحص طريقة الطلب، ثم تحديد معدل طلبات العميل.</li>
+        <li>التحقق من المعرّف. يجب أن يطابق <code>^CVE-\d{4}-\d{4,10}$</code> وأن يكون معامل الاستعلام الوحيد.</li>
+        <li>البحث في الذاكرة المؤقتة. إذا كان هناك طلب آخر للمعرّف نفسه قيد التنفيذ، ننتظره بدل السؤال من جديد.</li>
+        <li>جلب NVD وقائمة CISA KEV وEPSS بالتوازي، لكل منها مهلته الخاصة.</li>
+        <li>تسوية البيانات غير الموثوقة إلى شكل صغير ثابت.</li>
+        <li>كتابة الملخص: بنموذج ذكاء اصطناعي إذا ضُبط مفتاح، وبقواعد ثابتة في غير ذلك.</li>
+      </ol>
+      <p>NVD إلزامي. إذا فشل CISA أو EPSS أو نموذج الذكاء الاصطناعي، تظل الصفحة تعمل وتذكر ما هو ناقص. عبارة «تعذّر فحص قائمة CISA» تظهر على أنها <b>غير معروف</b>، وليس «غير مستغل» أبدًا، لأن فشل الاستعلام الذي يبدو خبرًا سارًا هو أسوأ ما تفعله أداة أمنية. ولهذا السبب نفسه تُعد قائمة KEV التي تحوي أقل من 100 إدخال معطوبة.</p>
+
+      <h2>قرارات الأمان</h2>
+      <p>البيانات تأتي من قواعد بيانات عامة، لكن يمكن لأي أحد التأثير في بعضها، ويقرؤها نموذج ذكاء اصطناعي. لذلك تُعامل كلها على أنها عدائية.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>التهديد</th><th>ما فعلته</th></tr></thead>
+        <tbody>
+          <tr><td>تسرّب مفاتيح API</td><td>تُقرأ المفاتيح من متغيرات البيئة في ملف خادم واحد. شيفرة المتصفح لا تذكرها أبدًا، واختبار يفحص كل ملف في المستودع بحثًا عن سلاسل تشبه المفاتيح.</td></tr>
+          <tr><td>مدخلات سيئة وSSRF</td><td>نمط معرّف واحد صارم وبأحرف ASCII فقط. مضيفو واجهات API الثلاثة ثوابت، والمعرّف يدخل عبر <code>URL.searchParams</code>، وتُرفض إعادة التوجيه.</td></tr>
+          <tr><td>XSS</td><td>ينظّف الخادم النص ويحدد الأطوال. ولا يكتب المتصفح إلا عبر <code>textContent</code>. وسياسة Content Security Policy صارمة مع Trusted Types هي خط الدفاع الأخير.</td></tr>
+          <tr><td>حقن التعليمات (prompt injection)</td><td>لا يحصل النموذج إلا على حقائق عامة، بلا أدوات ولا أسرار. ويجب أن تكون إجابته كائن JSON من ثلاثة حقول، وتُرفض إن احتوت على رابط أو وسم أو رقم إصدار غير موجود في الحقائق.</td></tr>
+          <tr><td>الإساءة والحصص</td><td>20 طلبًا في الدقيقة لكل عميل، و6 استعلامات بلا تخزين مؤقت في الدقيقة، وميزانية مشتركة أقل قليلًا من حد NVD نفسه، وساعة من التخزين المؤقت.</td></tr>
+          <tr><td>بيانات المصدر العدائية</td><td>يُتحقق من نوع كل حقل، وتُحدد الحلقات والأحجام، ويُرفض أي سجل عن CVE مختلف عن المطلوب.</td></tr>
+        </tbody>
+      </table></div>
+      <p>هناك أكثر من 140 اختبارًا على استجابات API حقيقية محفوظة، فتعمل دون اتصال. وأنفعها تمرين XSS يشغّل شيفرة المتصفح الحقيقية على استجابة مليئة بحمولات <code>&lt;img onerror&gt;</code> و<code>&lt;script&gt;</code> ويفشل عند أي عنصر أو سمة أو رابط غير متوقع.</p>
+
+      <h2>ما لا يستطيع فعله بعد</h2>
+      <ul>
+        <li>الذاكرة المؤقتة ومحدد المعدل يعيشان في ذاكرة نسخة واحدة من الدالة، فهما بأفضل جهد. مخزن مشترك سيحل ذلك.</li>
+        <li>حصة NVD يتشاركها كل الزوار. وإذا نفدت تعرض الصفحة رسالة «مشغول».</li>
+        <li>نموذج ذكاء اصطناعي مُقنَع قد يكتب جملة مضللة لا تحتوي رابطًا ولا رقم إصدار. الفحوصات لا تكشف الرأي، ولذلك تُعرض الخطورة وKEV وEPSS منفصلة عن الملخص.</li>
+        <li>KEV يسجل الاستغلال المؤكد فقط، وEPSS احتمال وليس حكمًا.</li>
+        <li>اختبرت متصفح Chromium واحدًا، بالسمتين، وبعرضي سطح المكتب والهاتف. ولم أختبر Safari أو Firefox.</li>
+      </ul>
+      <p>بنيته بمساعدة الذكاء الاصطناعي. صممت الميزات ومتطلبات الأمان، وراجعت الشيفرة واختبرتها.</p>
+
+      <h2>جرّبه</h2>
+      <p>الفاحص متاح على <a href="https://explain-this-cve.vercel.app" target="_blank" rel="noopener noreferrer">explain-this-cve.vercel.app</a>، والشيفرة ودليل دراسة على <a href="https://github.com/Lectrik0/explain-this-cve" target="_blank" rel="noopener noreferrer">GitHub</a>. جرّب Log4Shell أولًا.</p>
+    </article>
+
+    <div class="frame cut-b next"><div class="in">
+      <h3>التالي: معرّفات إضافات Nessus</h3>
+      <p>عرض إضافات Tenable Nessus التي تكشف CVE معيّنًا، ليتمكن المحلل من الانتقال من نتيجة الماسح إلى هذا الملخص والعودة.</p>
+    </div></div>
+  </div>
+</main>
+
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, القاهرة، مصر</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
+</body>
+</html>

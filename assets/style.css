@@ -535,3 +535,6 @@ html[dir="rtl"] .hero-copy{margin-left:0;margin-right:auto}
 /* the terminal is code: prompt, commands and buttons read left to right; only the answers follow the page */
 html[dir="rtl"] .term-bar,html[dir="rtl"] .term-cmd,html[dir="rtl"] .term-chips,html[dir="rtl"] .term-form{direction:ltr}
 html[dir="rtl"] .term-hint{text-align:end}
+svg .mono-t{direction:ltr}
+/* code and tables of code stay left to right inside a right-to-left page */
+html[dir="rtl"] pre,html[dir="rtl"] pre code{direction:ltr;text-align:left}

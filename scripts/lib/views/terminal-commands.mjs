@@ -49,7 +49,7 @@ const whoami = data => {
 const skills = data => [dl(named(data.skills, "group").map(g => [str(g.group), texts(g.items).join(", ")]))];
 
 const certs = data => [termList(named(data.certs, "name").map(c => {
-  const status = CvLayout.certStatus(c), proof = verifyLink(c);
+  const status = CvLayout.certStatus(c), proof = verifyLink(c, data);
   return [h("span", { class: `term-mark ${status}`, "aria-hidden": "true" }, CERT_MARK[status]), " ", str(c.name), " ",
     h("span", { class: "term-dim" }, t(data, status)), ...(proof ? [" · ", proof] : [])];
 }), "term-certs")];
@@ -70,7 +70,7 @@ const contact = data => {
 
 const cv = data => [
   h("p", {}, t(data, "cvLine")),
-  termList([link(obj(data.profile).cv, {}, t(data, "cvOnline")), h("a", { href: "/cv.pdf", download: `${cvFileName(data)}-CV.pdf` }, t(data, "cvPdf"))], "term-links")
+  termList([link(obj(data.profile).cv, {}, t(data, "cvOnline")), h("a", { href: t(data, "cvPdfPath"), download: `${cvFileName(data)}${t(data, "cvPdfSuffix")}.pdf` }, t(data, "cvPdf"))], "term-links")
 ];
 
 const flags = data => [h("p", {}, t(data, "flagsBefore"), h("a", { href: "#flags" }, t(data, "flagsLink")), ".")];
