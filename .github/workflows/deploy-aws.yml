@@ -48,7 +48,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir _site
-          cp -r index.html cv.html cv.pdf card.html 404.html robots.txt sitemap.xml feed.xml assets writeups backstage es ar .well-known _site/
+          cp -r index.html cv.html cv.pdf cv-es.pdf card.html 404.html robots.txt sitemap.xml feed.xml assets writeups backstage es ar .well-known _site/
 
       - name: Get short-lived AWS credentials
         uses: aws-actions/configure-aws-credentials@e1253824e5c10ff9df46874f81ed3ec929e19cfd # v6.3.0

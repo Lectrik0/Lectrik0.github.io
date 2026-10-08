@@ -84,7 +84,7 @@ npm run lint           # validate the HTML
 npm test               # unit tests: content schema, escaping, build output
 npm run test:browser   # Playwright: errors, CSP, links, no-JS, accessibility, XSS
 npm run og             # re-render assets/og.png, the link preview image
-npm run pdf            # render cv.html into cv.pdf, the CV's Download PDF file
+npm run pdf            # render cv.html and es/cv.html into cv.pdf and cv-es.pdf, the CVs' Download PDF files
 npm run qr             # re-make assets/qr-cv.svg, the job-fair cards' QR code (only if the site's address changes)
 ```
 
@@ -163,7 +163,7 @@ Edit [`data/site.json`](data/site.json), run `npm run build`, and commit both. O
 
 Anyone can load the editor page, but without the encrypted token on their own device and the password, it can't do anything.
 
-**Languages.** `es/index.html` and `ar/index.html` are generated from `index.html` and `data/site.json` plus a translation file each, [`data/i18n/es.json`](data/i18n/es.json) and [`ar.json`](data/i18n/ar.json): `ui` (the words the views write), `data` (the parts of the content that differ, such as the story, skills and the terminal's CV entries) and `text` (each hand-written English string in `index.html` and its translation). The build fails if a `text` key no longer matches the page, and a unit test fails if a UI string is untranslated. Backstage edits the English content only; the translations are edited in these files. [`assets/lang.js`](assets/lang.js) does the first-visit redirect, using no network and nothing but the browser's language and a remembered choice.
+**Languages.** `es/index.html` and `ar/index.html` are generated from `index.html` and `data/site.json` plus a translation file each, [`data/i18n/es.json`](data/i18n/es.json) and [`ar.json`](data/i18n/ar.json): `ui` (the words the views write), `data` (the parts of the content that differ, such as the story, skills and the terminal's CV entries) and `text` (each hand-written English string in `index.html` and its translation). The build fails if a `text` key no longer matches the page, and a unit test fails if a UI string is untranslated. Backstage edits the English content only; the translations are edited in these files. The Spanish CV is built from the same layout with the Spanish content (`ui.cvWords` translates its headings), and `es/writeups/*.html` are hand-written translations of the write-ups: when an English write-up changes, its Spanish page has to be updated by hand. [`assets/lang.js`](assets/lang.js) does the first-visit redirect, using no network and nothing but the browser's language and a remembered choice.
 
 A new write-up is a new HTML page in `writeups/` (copy the existing one, keeping its `build:` markers) plus an entry in the Write-ups list. The build adds it to the home page, the feed and the sitemap, and gives it link-preview tags.
 
@@ -192,7 +192,8 @@ The editor page gets its own header policy (CSP that also allows `api.github.com
 | Path | What |
 |---|---|
 | `/` | The story (Chapter 1 opens the full GIU course list), skills, certifications, write-ups, flags |
-| `/es/`, `/ar/` | The home page in Spanish and Arabic (right to left). Visitors whose browser is set to one of them are sent there on their first visit; the EN / ES / AR switch in the nav overrides that. The CV and write-ups are English only |
+| `/es/`, `/ar/` | The home page in Spanish and Arabic (right to left). Visitors whose browser is set to one of them are sent there on their first visit; the EN / ES / AR switch in the nav overrides that |
+| `/es/cv.html`, `/cv-es.pdf`, `/es/writeups/*.html` | The CV (one page, with its own PDF) and the write-ups in Spanish. Arabic has none of these, so its pages link to the English ones |
 | `/cv.html` | CV, prints cleanly to one A4 page |
 | `/cv.pdf` | The same CV as a PDF (made by CI with `npm run pdf`) |
 | `/card.html` | Job-fair business cards, ten to an A4 page, with a QR code that opens the CV (not indexed) |

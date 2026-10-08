@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { LANGS } from "../../scripts/lib/langs.mjs";
 import { UI } from "../../scripts/lib/views/ui.mjs";
 import { loadTranslation, merge } from "../../scripts/lib/i18n.mjs";
@@ -12,7 +12,7 @@ const others = LANGS.filter(l => l.code !== "en");
 for (const { code } of others) {
   test(`${code}: every UI string is translated, and nothing extra`, () => {
     const { ui } = loadTranslation(ROOT, code);
-    const { locale, ...words } = ui;
+    const { locale, cvWords, ...words } = ui;
     assert.ok(locale, "ui.locale is missing");
     assert.deepEqual(Object.keys(words).sort(), Object.keys(UI).sort());
   });
@@ -39,7 +39,8 @@ for (const { code } of others) {
     assert.equal(over.story.length, data.story.length);
     assert.equal(over.skills.length, data.skills.length);
     assert.deepEqual(over.skills.map(s => s.items.length), data.skills.map(s => s.items.length));
-    assert.deepEqual(over.posts.map(p => p.url), data.posts.map(p => p.url));
+    // each write-up links to its translation in <code>/writeups/ if the language has one, else to the English page
+    over.posts.forEach((p, i) => assert.ok([data.posts[i].url, `${code}/${data.posts[i].url}`].includes(p.url) && existsSync(new URL(`../../${p.url}`, import.meta.url)), p.url));
     for (const k of ["education", "experience", "projects"]) assert.equal(over.cv[k].length, data.cv[k].length, k);
   });
 }

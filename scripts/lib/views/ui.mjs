@@ -12,7 +12,7 @@ export const UI = {
   flags: "Flags", cv: "CV", contact: "Contact", language: "Language",
   night: "Night", day: "Day", toNight: "Switch to night mode", toDay: "Switch to day mode",
   // buttons
-  viewCv: "View CV", email: "Email", cveChecker: "CVE Checker", downloadPdf: "Download PDF",
+  viewCv: "View CV", email: "Email", cveChecker: "CVE Checker", downloadPdf: "Download PDF", cvPdfPath: "/cv.pdf", cvPdfSuffix: "-CV",
   // home
   internship: "Internship", internshipProgress: "Internship progress",
   earned: "Earned", progress: "In progress", planned: "Planned",

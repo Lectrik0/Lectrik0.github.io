@@ -10,23 +10,25 @@ import { LANGS, langOfPath } from "../langs.mjs";
 
 const NAV = ["story", "skills", "certs", "writeups", "terminal", "flags", "cv", "contact"];
 
-// EN / ES / AR links, on the home pages only (the other pages exist in English only).
+// EN / ES / AR links: each goes to the same page in that language, and only languages that have it are listed.
 function languageSwitch(data, page) {
-  const current = langOfPath(page.path);
-  if (!current) return null;
-  return block("div", { class: "lang", role: "group", "aria-label": t(data, "language") }, LANGS.map(l =>
-    h("a", { href: l.path, hreflang: l.code, title: l.name, "aria-current": l === current ? "true" : null, "data-lang": l.code }, l.short)));
+  const links = LANGS.filter(l => page.alternates[l.code]);
+  if (links.length < 2) return null;
+  return block("div", { class: "lang", role: "group", "aria-label": t(data, "language") }, links.map(l =>
+    h("a", { href: page.alternates[l.code], hreflang: l.code, title: l.name, "aria-current": l === page.lang ? "true" : null, "data-lang": l.code }, l.short)));
 }
 
 export function nav(data, page) {
-  const home = !!langOfPath(page.path);
+  const lang = page.lang, home = page.path === lang.path;
+  // the CV is only linked in a language that has one; otherwise the English CV
+  const cvPath = page.known?.has(`${lang.path}cv.html`) ? `${lang.path}cv.html` : "/cv.html";
   const items = NAV.map(id => {
-    const href = id === "cv" ? "/cv.html" : `${home ? "" : "/"}#${id}`;
-    return h("li", {}, h("a", { href, "aria-current": page.path === "/cv.html" && id === "cv" ? "page" : null }, t(data, id)));
+    const href = id === "cv" ? cvPath : `${home ? "" : lang.path}#${id}`;
+    return h("li", {}, h("a", { href, "aria-current": page.path === cvPath && id === "cv" ? "page" : null }, t(data, id)));
   });
   return block("nav", { class: "nav", "aria-label": t(data, "navLabel") }, [
     block("div", { class: "wrap" }, [
-      h("a", { class: "brand", href: home ? "#top" : "/" }, str(obj(data.profile).name)),
+      h("a", { class: "brand", href: home ? "#top" : lang.path }, str(obj(data.profile).name)),
       block("ul", {}, items),
       languageSwitch(data, page),
       h("button", { class: "toggle", id: "toggle", type: "button", "aria-label": t(data, "toNight"),
@@ -68,16 +70,17 @@ export function meta(data, page, site) {
       h("meta", { property: "og:image:width", content: "1200" }),
       h("meta", { property: "og:image:height", content: "630" }),
       h("meta", { property: "og:image:alt", content: `${str(P.name)}: ${str(P.tagline)}` }),
-      h("meta", { property: "og:locale", content: (langOfPath(page.path) || LANGS[0]).ogLocale }),
+      h("meta", { property: "og:locale", content: page.lang.ogLocale }),
       page.article && isoDate(page.article.date) ? h("meta", { property: "article:published_time", content: isoDate(page.article.date) }) : null,
       h("meta", { name: "twitter:card", content: "summary_large_image" })
     );
   }
   tags.push(h("link", { rel: "alternate", type: "application/atom+xml", title: `${str(P.name)}: write-ups`, href: "/feed.xml" }));
   // the same page in the other languages (each one lists all of them, itself included)
-  if (langOfPath(page.path)) {
-    tags.push(...LANGS.map(l => h("link", { rel: "alternate", hreflang: l.code, href: new URL(l.path, site.url).href })),
-      h("link", { rel: "alternate", hreflang: "x-default", href: new URL("/", site.url).href }));
+  const versions = Object.entries(page.alternates);
+  if (versions.length > 1) {
+    tags.push(...versions.map(([code, path]) => h("link", { rel: "alternate", hreflang: code, href: new URL(path, site.url).href })),
+      h("link", { rel: "alternate", hreflang: "x-default", href: new URL(page.alternates.en, site.url).href }));
   }
   if (langOfPath(page.path)) tags.push(personJsonLd(data, site, page));
   return raw(tags.filter(Boolean).join("\n"));

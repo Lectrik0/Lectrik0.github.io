@@ -3,6 +3,7 @@
  */
 import { h, raw } from "../html.mjs";
 import { str, obj, block, HTML, CvLayout, cvFileName } from "./shared.mjs";
+import { t } from "./ui.mjs";
 
 export const cvContact = (data, site) => raw(CvLayout.contact(data, HTML, new URL(site.url).host).join(`\n${CvLayout.separator(HTML)}\n`));
 export const cvPersonal = data => raw(CvLayout.personal(data, HTML) || "");
@@ -10,7 +11,7 @@ export const cvSections = data => CvLayout.sections(data);
 export const cvBody = data => raw(CvLayout.body(data, HTML).join("\n"));
 // The CV's PDF, saved under the person's name.
 export function cvDownloads(data) {
-  return h("a", { class: "btn", href: "cv.pdf", download: `${cvFileName(data)}-CV.pdf` }, "Download PDF");
+  return h("a", { class: "btn", href: t(data, "cvPdfPath"), download: `${cvFileName(data)}${t(data, "cvPdfSuffix")}.pdf` }, t(data, "downloadPdf"));
 }
 
 /* ---------- job-fair cards (card.html): ten business cards to an A4 page ---------- */

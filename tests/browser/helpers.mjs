@@ -13,6 +13,8 @@ export const PAGES = {
   homeEs: "/es/",
   homeAr: "/ar/",
   cv: "/cv.html",
+  cvEs: "/es/cv.html",
+  writeupEs: "/es/writeups/hardening-this-site.html",
   cards: "/card.html",
   writeup: "/writeups/hardening-this-site.html",
   notFound: "/no-such-page",

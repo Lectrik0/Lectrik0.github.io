@@ -59,7 +59,7 @@ export const certs = data => raw(named(data.certs, "name").map(c => {
       h("svg", { viewBox: "0 0 72 80", "aria-hidden": "true" },
         h("path", { class: "hex", d: "M36 4 L66 21 V59 L36 76 L6 59 V21z" }),
         h("text", { class: badgeClass(badge), x: "36", y: "45" }, badge)),
-      h("div", {}, h("h3", {}, str(c.name)), h("p", {}, t(data, status), ...(verifyLink(c) ? [" · ", verifyLink(c)] : [])))
+      h("div", {}, h("h3", {}, str(c.name)), h("p", {}, t(data, status), ...(verifyLink(c, data) ? [" · ", verifyLink(c, data)] : [])))
     ])
   ]);
 }).join("\n"));

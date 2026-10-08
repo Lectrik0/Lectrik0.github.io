@@ -17,6 +17,13 @@ test("the CV renders to a one-page PDF that links to the live site, the same eve
   expect(uris.filter(u => /127\.0\.0\.1|localhost/.test(u))).toEqual([]);
 });
 
+test("the Spanish CV renders to one page too, and links to the live site", async () => {
+  test.setTimeout(60_000);
+  const pdf = await cvPdf({ page: "es/cv.html" });
+  expect(pageCount(pdf)).toBe(1);
+  expect(pdf.toString("latin1")).toContain(siteConfig().url);
+});
+
 /* ---------- ATS: what an applicant tracking system reads out of the PDF ---------- */
 
 // The PDF's text in content order, with a new line wherever the baseline moves: roughly what ATS
@@ -110,5 +117,16 @@ test.describe("without JavaScript", () => {
     const body = await res.body();
     expect(pageCount(body)).toBe(1);
     expect(body.equals(readFileSync(new URL("../../cv.pdf", import.meta.url)))).toBe(true);
+  });
+
+  test("the Spanish CV's Descargar PDF button gets its own committed PDF", async ({ page }) => {
+    await page.goto("/es/cv.html");
+    const button = page.getByRole("link", { name: "Descargar PDF" });
+    await expect(button).toHaveAttribute("download", /-CV-ES\.pdf$/);
+    const res = await page.request.get(new URL(await button.getAttribute("href"), page.url()).href);
+    expect(res.headers()["content-type"]).toBe("application/pdf");
+    const body = await res.body();
+    expect(pageCount(body)).toBe(1);
+    expect(body.equals(readFileSync(new URL("../../cv-es.pdf", import.meta.url)))).toBe(true);
   });
 });

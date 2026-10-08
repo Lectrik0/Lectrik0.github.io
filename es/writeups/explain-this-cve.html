@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Explain This CVE – Ali Ahmed</title>
+<meta name="description" content="Número #2: un verificador de CVE de una página para directivos y analistas, y las decisiones de seguridad detrás.">
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/es/writeups/explain-this-cve.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="Explain This CVE – Ali Ahmed">
+<meta property="og:description" content="Número #2: un verificador de CVE de una página para directivos y analistas, y las decisiones de seguridad detrás.">
+<meta property="og:url" content="https://lectrik0.github.io/es/writeups/explain-this-cve.html">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: Estudiante de ciberseguridad en camino hacia una carrera en seguridad en la nube.">
+<meta property="og:locale" content="es_ES">
+<meta property="article:published_time" content="2026-10-07">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<link rel="alternate" hreflang="en" href="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="x-default" href="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<!-- /build:meta -->
+<link rel="icon" href="/assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=2deca3d460">
+<noscript><link rel="stylesheet" href="/assets/nojs.css?v=16c2832380"></noscript>
+<script src="/assets/main.js?v=c7a3f52e6d" defer></script>
+</head>
+<body>
+<!-- build:nav -->
+<nav class="nav" aria-label="Principal">
+  <div class="wrap">
+    <a class="brand" href="/es/">Ali Ahmed</a>
+    <ul>
+      <li><a href="/es/#story">Historia</a></li>
+      <li><a href="/es/#skills">Habilidades</a></li>
+      <li><a href="/es/#certs">Certificaciones</a></li>
+      <li><a href="/es/#writeups">Artículos</a></li>
+      <li><a href="/es/#terminal">Terminal</a></li>
+      <li><a href="/es/#flags">Banderas</a></li>
+      <li><a href="/es/cv.html">CV</a></li>
+      <li><a href="/es/#contact">Contacto</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Idioma">
+      <a href="/writeups/explain-this-cve.html" hreflang="en" title="English" data-lang="en">EN</a>
+      <a href="/es/writeups/explain-this-cve.html" hreflang="es" title="Español" aria-current="true" data-lang="es">ES</a>
+    </div>
+    <button class="toggle" id="toggle" type="button" aria-label="Cambiar al modo noche" data-day="Día" data-night="Noche" data-to-day="Cambiar al modo día" data-to-night="Cambiar al modo noche"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">Noche</span></button>
+  </div>
+</nav>
+<!-- /build:nav -->
+<main>
+  <header class="page-head wrap">
+    <a class="back" href="/es/#writeups">Volver a los artículos</a>
+    <span class="caption">Número #2 &nbsp;/&nbsp; <time datetime="2026-10-07">7 de octubre de 2026</time></span>
+    <h1>Explain This CVE</h1>
+    <p class="lede">Un registro CVE está escrito para especialistas. Construí un verificador de una página que explica cualquier CVE en lenguaje claro, y traté de que fuera difícil de abusar.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="strip">
+      <div class="frame cut-a"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Un largo muro de texto a un lado y una pequeña tarjeta de resumen al otro">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="24" y="24" width="150" height="182" class="f-panel ink"/>
+          <path d="M38 48 h122 M38 62 h122 M38 76 h96 M38 90 h122 M38 104 h110 M38 118 h122 M38 132 h84 M38 146 h122 M38 160 h100 M38 174 h122 M38 188 h70" class="ink-thin" stroke-width="3"/>
+          <rect x="204" y="64" width="132" height="102" class="f-panel ink"/>
+          <rect x="204" y="64" width="132" height="26" class="f-purple ink"/>
+          <text x="270" y="82" class="mono-t" text-anchor="middle" fill="var(--panel)">CRITICAL</text>
+          <path d="M218 112 h104 M218 130 h80 M218 148 h92" class="ink-thin" stroke-width="4"/>
+          <text x="190" y="52" class="sfx" text-anchor="middle">vs</text>
+        </svg>
+        <figcaption class="cap"><b>El problema</b><span>Un directivo que decide «¿lo dejamos todo hoy?» recibe una puntuación, una cadena de vector y 100 enlaces.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-b"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Tres fuentes de datos públicas alimentando una página">
+          <rect width="360" height="230" class="sky-b"/>
+          <g class="ink">
+            <rect x="24" y="30" width="96" height="34" class="cloud"/>
+            <rect x="24" y="98" width="96" height="34" class="cloud"/>
+            <rect x="24" y="166" width="96" height="34" class="cloud"/>
+          </g>
+          <text x="72" y="52" class="mono-t" text-anchor="middle" fill="var(--purple)">NVD</text>
+          <text x="72" y="120" class="mono-t" text-anchor="middle" fill="var(--purple)">CISA KEV</text>
+          <text x="72" y="188" class="mono-t" text-anchor="middle" fill="var(--purple)">EPSS</text>
+          <path d="M122 47 L232 112 M122 115 h110 M122 183 L232 118" class="ink" stroke-width="3" stroke-dasharray="6 6" fill="none"/>
+          <rect x="232" y="70" width="104" height="90" class="f-panel ink"/>
+          <path d="M248 94 h72 M248 114 h72 M248 134 h48" class="ink-thin" stroke-width="4"/>
+        </svg>
+        <figcaption class="cap"><b>Las fuentes</b><span>Tres bases de datos públicas, consultadas en paralelo y reducidas a una respuesta pequeña y fija.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-c"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Un escudo entre los datos no confiables y la página">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="250" y="44" width="86" height="142" class="f-panel ink"/>
+          <path d="M264 74 h58 M264 94 h58 M264 114 h40" class="ink-thin" stroke-width="4"/>
+          <path d="M150 36 l50 19 v44 c0 36 -22 58 -50 70 c-28 -12 -50 -34 -50 -70 v-44z" class="f-teal ink"/>
+          <path d="M128 106 l16 16 l30 -34" fill="none" stroke="var(--panel)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <g class="ink" stroke-width="4"><path d="M24 70 l26 26 M50 70 l-26 26"/><path d="M30 144 l26 26 M56 144 l-26 26"/></g>
+          <text x="150" y="214" class="sfx" text-anchor="middle">tratado como hostil.</text>
+        </svg>
+        <figcaption class="cap"><b>La regla</b><span>Todo lo que viene de las bases de datos, y todo lo que dice la IA, se trata como texto hostil.</span></figcaption>
+      </figure></div>
+    </div>
+
+    <article class="prose">
+      <h2>Qué hace</h2>
+      <p>Escribes un ID de CVE, como <code>CVE-2021-44228</code> (Log4Shell), y obtienes una página con siete capítulos, siempre en el mismo orden:</p>
+      <ol>
+        <li>El ID del CVE, su título y cuándo se publicó.</li>
+        <li>Gravedad: la puntuación CVSS con una insignia de color y el nivel escrito con una palabra.</li>
+        <li>Si se está explotando: la lista de vulnerabilidades explotadas conocidas de CISA (KEV) y la probabilidad EPSS.</li>
+        <li>Un resumen en lenguaje claro.</li>
+        <li>Qué productos y versiones están afectados.</li>
+        <li>La corrección y la mitigación: lo que exige CISA, las primeras versiones no afectadas, parches y avisos.</li>
+        <li>Referencias.</li>
+      </ol>
+      <p>Hay dos vistas de los mismos datos. La vista <b>Manager</b> responde a «¿tenemos que actuar hoy?». La vista <b>Analyst</b> conserva el detalle. Cada resumen termina con «Always verify with the official vendor advisory» (verifica siempre con el aviso oficial del fabricante).</p>
+
+      <h2>Cómo funciona</h2>
+      <p>Es una página estática y una función sin servidor, sin cuentas, sin base de datos y sin dependencias. Con cada petición, la función ejecuta estos pasos en orden:</p>
+      <ol>
+        <li>Comprobar el método y limitar la tasa de peticiones del cliente.</li>
+        <li>Validar el ID. Debe cumplir <code>^CVE-\d{4}-\d{4,10}$</code> y ser el único parámetro de la consulta.</li>
+        <li>Mirar la caché. Si ya hay otra petición en curso para el mismo ID, esperar a esa en lugar de volver a preguntar.</li>
+        <li>Consultar NVD, el feed KEV de CISA y EPSS en paralelo, cada uno con su propio tiempo límite.</li>
+        <li>Normalizar los datos no confiables en una forma pequeña y fija.</li>
+        <li>Escribir el resumen: con un modelo de IA si hay una clave configurada, y con reglas fijas si no.</li>
+      </ol>
+      <p>NVD es obligatorio. Si CISA, EPSS o el modelo de IA fallan, la página sigue funcionando e indica qué falta. «No se pudo comprobar la lista de CISA» se muestra como <b>desconocido</b>, nunca como «no explotado», porque una consulta fallida que parece una buena noticia es lo peor que puede hacer una herramienta de seguridad. Por la misma razón, un feed KEV con menos de 100 entradas se considera roto.</p>
+
+      <h2>Las decisiones de seguridad</h2>
+      <p>Los datos vienen de bases de datos públicas, pero cualquiera puede influir en parte de ellos, y un modelo de IA los lee. Por eso todo se trata como hostil.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Amenaza</th><th>Qué hice</th></tr></thead>
+        <tbody>
+          <tr><td>Filtración de claves de API</td><td>Las claves se leen de variables de entorno en un solo archivo del servidor. El código del navegador nunca las menciona, y una prueba revisa todos los archivos del repositorio en busca de cadenas con forma de clave.</td></tr>
+          <tr><td>Entradas malas y SSRF</td><td>Un patrón de ID estricto y solo ASCII. Los tres hosts de las API son constantes, el ID entra mediante <code>URL.searchParams</code> y se rechazan las redirecciones.</td></tr>
+          <tr><td>XSS</td><td>El servidor limpia el texto y limita las longitudes. El navegador escribe solo con <code>textContent</code>. Una Content Security Policy estricta con Trusted Types es la última barrera.</td></tr>
+          <tr><td>Inyección de prompts</td><td>El modelo recibe solo hechos públicos, sin herramientas ni secretos. Su respuesta debe ser un objeto JSON de tres campos, y se rechaza si contiene un enlace, una etiqueta o un número de versión que no esté en los hechos.</td></tr>
+          <tr><td>Abuso y cuota</td><td>20 peticiones por minuto por cliente, 6 consultas sin caché por minuto, un presupuesto compartido justo por debajo del límite de NVD y una hora de caché.</td></tr>
+          <tr><td>Datos hostiles de origen</td><td>Se comprueba el tipo de cada campo, se limitan los bucles y los tamaños, y se rechaza un registro sobre un CVE distinto del solicitado.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Hay más de 140 pruebas sobre respuestas reales de las API guardadas, así que se ejecutan sin conexión. La más útil es un simulacro de XSS que ejecuta el código real del navegador contra una respuesta llena de cargas <code>&lt;img onerror&gt;</code> y <code>&lt;script&gt;</code>, y falla ante cualquier elemento, atributo o enlace inesperado.</p>
+
+      <h2>Lo que todavía no puede hacer</h2>
+      <ul>
+        <li>La caché y el limitador de tasa viven en la memoria de una instancia de la función, así que funcionan «en la medida de lo posible». Un almacén compartido lo arreglaría.</li>
+        <li>La cuota de NVD la comparten todos los visitantes. Si se agota, la página muestra un mensaje de «ocupado».</li>
+        <li>Un modelo de IA persuadido aún puede escribir una frase engañosa que no contenga ningún enlace ni número de versión. Las comprobaciones no pueden detectar una opinión, y por eso la gravedad, KEV y EPSS se muestran aparte del resumen.</li>
+        <li>KEV solo recoge explotación confirmada, y EPSS es una probabilidad, no un veredicto.</li>
+        <li>Probé un navegador Chromium, en ambos temas, en anchos de escritorio y de móvil. No probé Safari ni Firefox.</li>
+      </ul>
+      <p>Lo construí con ayuda de IA. Diseñé las funciones y los requisitos de seguridad, y revisé y probé el código.</p>
+
+      <h2>Pruébalo</h2>
+      <p>El verificador está en <a href="https://explain-this-cve.vercel.app" target="_blank" rel="noopener noreferrer">explain-this-cve.vercel.app</a>, y el código y una guía de estudio están en <a href="https://github.com/Lectrik0/explain-this-cve" target="_blank" rel="noopener noreferrer">GitHub</a>. Prueba primero con Log4Shell.</p>
+    </article>
+
+    <div class="frame cut-b next"><div class="in">
+      <h3>Siguiente: IDs de plugins de Nessus</h3>
+      <p>Mostrar qué plugins de Tenable Nessus detectan un CVE, para que un analista pueda ir de un hallazgo del escáner a este resumen y volver.</p>
+    </div></div>
+  </div>
+</main>
+
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, El Cairo</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
+</body>
+</html>
