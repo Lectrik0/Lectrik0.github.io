@@ -158,14 +158,14 @@
     "date": "2026-10-07",
     "tag": "مشروع",
     "summary": "فاحص ثغرات CVE في صفحة واحدة للمديرين والمحللين: كيف يعمل، وقرارات الأمان وراءه.",
-    "url": "writeups/explain-this-cve.html"
+    "url": "ar/writeups/explain-this-cve.html"
    },
    {
     "title": "Issue #1: Hardening a static site",
     "date": "2026-10-04",
     "tag": "أمن الويب",
     "summary": "موقع بلا خادم خلفي يمكن مهاجمته أيضًا. كيف يمنع هذا الموقع هجمات XSS عبر CSP وTrusted Types، وكيف اختبرته.",
-    "url": "writeups/hardening-this-site.html"
+    "url": "ar/writeups/hardening-this-site.html"
    }
   ],
   "cv": {

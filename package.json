@@ -13,7 +13,7 @@
     "check": "node scripts/build.mjs --check",
     "check:content": "node scripts/check-content.mjs",
     "start": "node scripts/serve.mjs",
-    "lint": "html-validate \"*.html\" \"es/*.html\" \"es/writeups/*.html\" \"ar/*.html\" \"writeups/*.html\" \"backstage/*.html\"",
+    "lint": "html-validate \"*.html\" \"es/*.html\" \"es/writeups/*.html\" \"ar/*.html\" \"ar/writeups/*.html\" \"writeups/*.html\" \"backstage/*.html\"",
     "test": "node --test tests/unit/*.test.mjs",
     "test:browser": "playwright test",
     "og": "node scripts/og.mjs",

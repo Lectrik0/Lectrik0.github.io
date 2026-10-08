@@ -90,7 +90,7 @@ test.describe("translated pages", () => {
     await page.goto("/cv.html");
     await expect(page.locator(".lang a")).toHaveText(["EN", "ES"]);   // there's no Arabic CV
     await page.goto("/writeups/hardening-this-site.html");
-    await expect(page.locator(".lang a")).toHaveText(["EN", "ES"]);
+    await expect(page.locator(".lang a")).toHaveText(["EN", "ES", "AR"]);
     await page.goto("/404.html");
     await expect(page.locator(".lang")).toHaveCount(0);
   });
@@ -106,7 +106,7 @@ test.describe("translated pages", () => {
     await expect(page.locator("h2").first()).toHaveText("Qué hace");
     await expect(page.locator(".back")).toHaveAttribute("href", "/es/#writeups");
     await expect(page.locator('.lang a[data-lang="en"]')).toHaveAttribute("href", "/writeups/explain-this-cve.html");
-    await expect(page.locator('.lang a[data-lang="ar"]')).toHaveCount(0);
+    await expect(page.locator('.lang a[data-lang="ar"]')).toHaveAttribute("href", "/ar/writeups/explain-this-cve.html");
   });
 
   test("the Spanish home page links to the Spanish CV and write-ups", async ({ page }) => {
@@ -121,5 +121,22 @@ test.describe("translated pages", () => {
   test("the English CV and write-ups offer the Spanish version", async ({ page }) => {
     await page.goto("/cv.html");
     await expect(page.locator('.lang a[data-lang="es"]')).toHaveAttribute("href", "/es/cv.html");
+  });
+
+  test("the Arabic write-ups are right to left, with code kept left to right, and link back to the Arabic home page", async ({ page }) => {
+    await page.goto("/ar/writeups/hardening-this-site.html");
+    await expect(page.locator("html")).toHaveAttribute("dir", "rtl");
+    await expect(page.locator("h1")).toHaveText("تحصين موقع ثابت");
+    await expect(page.locator(".back")).toHaveAttribute("href", "/ar/#writeups");
+    expect(await page.locator("pre").first().evaluate(e => getComputedStyle(e).direction)).toBe("ltr");
+    await expect(page.locator(".lang a")).toHaveText(["EN", "ES", "AR"]);
+    await page.goto("/ar/");
+    await expect(page.locator(".post").first()).toHaveAttribute("href", /^\/ar\/writeups\//);
+  });
+
+  test("Spanish course names are translated, and a course with no translation keeps its English name", async ({ page }) => {
+    await page.goto("/es/");
+    await expect(page.locator(".sem-list li span:first-child", { hasText: "Matemáticas I" })).not.toHaveCount(0);
+    await expect(page.locator(".sem-state").first()).toHaveText("Completado");
   });
 });

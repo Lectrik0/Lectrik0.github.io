@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>تحصين موقع ثابت – Ali Ahmed</title>
+<meta name="description" content="العدد #1: كيف يمنع هذا الموقع الثابت هجمات XSS عبر CSP وTrusted Types، وكيف جرى اختباره.">
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/ar/writeups/hardening-this-site.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="تحصين موقع ثابت – Ali Ahmed">
+<meta property="og:description" content="العدد #1: كيف يمنع هذا الموقع الثابت هجمات XSS عبر CSP وTrusted Types، وكيف جرى اختباره.">
+<meta property="og:url" content="https://lectrik0.github.io/ar/writeups/hardening-this-site.html">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: طالب أمن سيبراني يبني طريقه نحو مسار مهني في أمن السحابة.">
+<meta property="og:locale" content="ar_EG">
+<meta property="article:published_time" content="2026-10-04">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<link rel="alternate" hreflang="en" href="https://lectrik0.github.io/writeups/hardening-this-site.html">
+<link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/writeups/hardening-this-site.html">
+<link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/writeups/hardening-this-site.html">
+<link rel="alternate" hreflang="x-default" href="https://lectrik0.github.io/writeups/hardening-this-site.html">
+<!-- /build:meta -->
+<link rel="icon" href="/assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=84bc9e3736">
+<noscript><link rel="stylesheet" href="/assets/nojs.css?v=16c2832380"></noscript>
+<script src="/assets/main.js?v=c7a3f52e6d" defer></script>
+</head>
+<body>
+<!-- build:nav -->
+<nav class="nav" aria-label="التنقل الرئيسي">
+  <div class="wrap">
+    <a class="brand" href="/ar/">Ali Ahmed</a>
+    <ul>
+      <li><a href="/ar/#story">القصة</a></li>
+      <li><a href="/ar/#skills">المهارات</a></li>
+      <li><a href="/ar/#certs">الشهادات</a></li>
+      <li><a href="/ar/#writeups">المقالات</a></li>
+      <li><a href="/ar/#terminal">الطرفية</a></li>
+      <li><a href="/ar/#flags">الرايات</a></li>
+      <li><a href="/cv.html">السيرة الذاتية</a></li>
+      <li><a href="/ar/#contact">تواصل</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="اللغة">
+      <a href="/writeups/hardening-this-site.html" hreflang="en" title="English" data-lang="en">EN</a>
+      <a href="/es/writeups/hardening-this-site.html" hreflang="es" title="Español" data-lang="es">ES</a>
+      <a href="/ar/writeups/hardening-this-site.html" hreflang="ar" title="العربية" aria-current="true" data-lang="ar">AR</a>
+    </div>
+    <button class="toggle" id="toggle" type="button" aria-label="التبديل إلى الوضع الليلي" data-day="نهاري" data-night="ليلي" data-to-day="التبديل إلى الوضع النهاري" data-to-night="التبديل إلى الوضع الليلي"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">ليلي</span></button>
+  </div>
+</nav>
+<!-- /build:nav -->
+<main>
+  <header class="page-head wrap">
+    <a class="back" href="/ar/#writeups">العودة إلى المقالات</a>
+    <span class="caption">العدد #1 &nbsp;/&nbsp; <time datetime="2026-10-04">4 أكتوبر 2026</time></span>
+    <h1>تحصين موقع ثابت</h1>
+    <p class="lede">هذا الموقع بلا خادم خلفي ولا تسجيل دخول ولا قاعدة بيانات، ومع ذلك يمكن مهاجمته. إليك ما كان يمكن أن يسوء، وما غيّرته، وكيف اختبرته.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="strip">
+      <div class="frame cut-a"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="صفحة ويب تتسلل إليها وسم script">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="40" y="30" width="200" height="170" class="f-panel ink"/>
+          <rect x="40" y="30" width="200" height="24" class="mid ink"/>
+          <g class="win"><circle cx="56" cy="42" r="4"/><circle cx="70" cy="42" r="4"/><circle cx="84" cy="42" r="4"/></g>
+          <path d="M60 80 h150 M60 100 h150 M60 120 h110 M60 140 h140" class="ink-thin" stroke-width="4"/>
+          <g transform="rotate(-8 270 150)">
+            <rect x="196" y="132" width="132" height="40" class="f-purple ink"/>
+            <text x="262" y="158" class="mono-t" text-anchor="middle" fill="var(--panel)">&lt;script&gt;</text>
+          </g>
+          <path d="M330 120 l-22 8 l6 -20" fill="none" class="ink" stroke-width="3"/>
+          <text x="300" y="104" class="sfx" text-anchor="middle">تسلل</text>
+        </svg>
+        <figcaption class="cap"><b>المشكلة</b><span>أي نص يدخل الصفحة على أنه HTML يمكن أن ينفّذ شيفرة في متصفح الزائر.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-b"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="حمولات هجومية تتجه نحو الصفحة">
+          <rect width="360" height="230" class="sky-b"/>
+          <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
+          <path d="M246 70 h68 M246 90 h68 M246 110 h48" class="ink-thin" stroke-width="4"/>
+          <g class="ink">
+            <rect x="20" y="40" width="150" height="34" class="cloud"/>
+            <rect x="40" y="100" width="150" height="34" class="cloud"/>
+            <rect x="16" y="160" width="150" height="34" class="cloud"/>
+          </g>
+          <text x="95" y="63" class="mono-t" text-anchor="middle" fill="var(--purple)">&lt;img onerror&gt;</text>
+          <text x="115" y="123" class="mono-t" text-anchor="middle" fill="var(--purple)">javascript:</text>
+          <text x="91" y="183" class="mono-t" text-anchor="middle" fill="var(--purple)">&lt;svg onload&gt;</text>
+          <path d="M176 57 h40 M196 117 h28 M172 177 h44" class="ink" stroke-width="3" stroke-dasharray="6 6"/>
+        </svg>
+        <figcaption class="cap"><b>الهجوم</b><span>أدخلت حمولات XSS كلاسيكية في محتوى الموقع نفسه لأرى ما الذي سيُنفَّذ.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-c"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="درع مكتوب عليه CSP يصد الحمولات">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
+          <path d="M246 70 h68 M246 90 h68 M246 110 h48" class="ink-thin" stroke-width="4"/>
+          <path d="M150 40 l52 20 v46 c0 38 -24 60 -52 72 c-28 -12 -52 -34 -52 -72 v-46z" class="f-teal ink"/>
+          <text x="150" y="122" text-anchor="middle" font-family="var(--f-display)" font-weight="700" font-size="26" fill="var(--panel)">CSP</text>
+          <g class="ink" stroke-width="4"><path d="M30 60 l30 30 M60 60 l-30 30"/><path d="M40 150 l30 30 M70 150 l-30 30"/></g>
+          <text x="150" y="214" class="sfx" text-anchor="middle">محظور.</text>
+        </svg>
+        <figcaption class="cap"><b>الحل</b><span>اعرض كل شيء كنص، واترك المتصفح يفرض ذلك عبر CSP وTrusted Types.</span></figcaption>
+      </figure></div>
+    </div>
+
+    <article class="prose">
+      <h2>لماذا يحتاج الموقع الثابت إلى الأمان أيضًا</h2>
+      <p>من السهل أن نظن أن الموقع الثابت لا يملك ما يُهاجَم. لا توجد شيفرة خادم للاستغلال ولا قاعدة بيانات للتسريب. لكن الصفحة تشغّل JavaScript في متصفح كل زائر، وهنا يحدث هجوم cross-site scripting (XSS).</p>
+      <p>يبني موقعي أجزاء من الصفحة من بيانات: المهارات والشهادات وقائمة المقالات. النسخة الأولى كانت تدرج هذه البيانات عبر <code>innerHTML</code>. لا مشكلة في ذلك ما دمت أكتب البيانات بنفسي، لكن عنوانًا أو رابطًا واحدًا سيئًا منسوخًا من مكان آخر سيُنفَّذ كشيفرة عند كل من يفتح الصفحة.</p>
+
+      <h2>ما الذي كان يمكن أن يسوء</h2>
+      <ul>
+        <li><b>XSS عبر المحتوى:</b> عنوان مقال مثل <code>&lt;img src=x onerror=...&gt;</code> يُنفَّذ بمجرد أن تعرضه الصفحة.</li>
+        <li><b>روابط خبيثة:</b> رابط من نوع <code>javascript:</code> أو <code>data:</code> ينفّذ شيفرة عند النقر عليه.</li>
+        <li><b>شيفرة الأطراف الخارجية:</b> الخطوط أو السكربتات المحمّلة من نطاقات أخرى قد تتغير أو تتتبع الزوار أو تُخترق.</li>
+        <li><b>Reverse tabnabbing:</b> موقع يُفتح في تبويب جديد يمكنه إعادة توجيه تبويبي الأصلي.</li>
+      </ul>
+
+      <h2>ما الذي غيّرته</h2>
+      <p><b>1. المحتوى نص دائمًا، وليس HTML.</b> كل عنصر يُبنى بـ <code>createElement</code> ويُملأ بـ <code>textContent</code>. يعامل المتصفح البيانات كنص، فيُعرض ما بداخلها من وسوم ولا يُنفَّذ.</p>
+      <p><b>2. سياسة Content Security Policy صارمة.</b> لا يحمّل المتصفح السكربتات والأنماط والخطوط والصور إلا من موقعي. السكربتات المضمّنة و<code>eval</code> والإضافات والنماذج كلها محظورة.</p>
+<pre><code>default-src 'none'; script-src 'self'; style-src 'self';
+font-src 'self'; img-src 'self'; connect-src 'self';
+object-src 'none'; base-uri 'none'; form-action 'none';
+require-trusted-types-for 'script'; trusted-types 'none'</code></pre>
+      <p><b>3. Trusted Types.</b> السطران الأخيران من السياسة يجعلان المتصفح يرفض أي إسناد HTML خام، مثل <code>innerHTML</code>. حتى لو أعادت تعديلات مستقبلية مني النمط القديم، فسيظهر خطأ بدل أن تنشأ ثغرة.</p>
+      <p><b>4. قائمة سماح للروابط.</b> يمر كل رابط عبر دالة واحدة قبل أن يصل إلى الصفحة. لا يمر إلا روابط <code>https:</code> ومسارات موقعي نفسه.</p>
+<pre><code>function safeUrl(value) {
+  const u = new URL(value, location.href);
+  if (u.protocol === "https:") return u.href;
+  if (u.origin === location.origin) return u.href;
+  return null; // javascript:, data:, anything else is dropped
+}</code></pre>
+      <p><b>5. بلا أطراف خارجية.</b> الخطوط مستضافة على الموقع نفسه، ولا يرسل الموقع طلبات إلى أي نطاق آخر. لا شيفرة خارجية للوثوق بها ولا تتبع للزوار.</p>
+      <p><b>6. التفاصيل الصغيرة.</b> الروابط الخارجية تستخدم <code>rel="noopener noreferrer"</code>، وسياسة المُحيل هي <code>no-referrer</code>، وملف <code>/.well-known/security.txt</code> يبيّن للناس كيف يبلّغون عن مشكلة.</p>
+
+      <h2>كيف اختبرته</h2>
+      <p>وضعت حمولات حقيقية في بيانات الموقع، وشغّلته محليًا، وحمّلته في Chromium والسياسة مفعّلة.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>الحمولة</th><th>الموضع</th><th>النتيجة</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;img src=x onerror=...&gt;</code></td><td>عنوان المقال</td><td class="ok">عُرضت كنص</td></tr>
+          <tr><td><code>&lt;script&gt;...&lt;/script&gt;</code></td><td>وسم المقال</td><td class="ok">عُرضت كنص</td></tr>
+          <tr><td><code>"&gt;&lt;svg onload=...&gt;</code></td><td>ملخص المقال</td><td class="ok">عُرضت كنص</td></tr>
+          <tr><td><code>javascript:...</code></td><td>رابط المقال ورابط السيرة الذاتية</td><td class="ok">أُزيل الرابط</td></tr>
+          <tr><td><code>data:text/html,...</code></td><td>رابط المقال</td><td class="ok">أُزيل الرابط</td></tr>
+          <tr><td><code>&lt;script&gt;</code> مضمّن في HTML</td><td>شيفرة الصفحة</td><td class="ok">حظرته CSP</td></tr>
+          <tr><td><code>eval()</code></td><td>سكربت الموقع</td><td class="ok">حظرته CSP</td></tr>
+          <tr><td>إسناد إلى <code>innerHTML</code></td><td>الصفحة الحية</td><td class="ok">حظرته Trusted Types</td></tr>
+        </tbody>
+      </table></div>
+      <p>لم تُنفَّذ أي حمولة. وكررت الفحص الأخير على الموقع الحي بعد نشره.</p>
+
+      <h2>ما الذي ما زال ناقصًا</h2>
+      <p>لا تتيح GitHub Pages ضبط ترويسات استجابة HTTP. بعض الحمايات تعمل كترويسات فقط وليس كوسم <code>&lt;meta&gt;</code>: <code>frame-ancestors</code> ضد clickjacking، و<code>Strict-Transport-Security</code> و<code>Permissions-Policy</code>. الخطر منخفض لأن الموقع لا يحتوي ما يمكن خداع أحد للنقر عليه، لكنها تبقى ثغرة.</p>
+      <p>الحل أن أقدّم الموقع من مكان أتحكم فيه بالترويسات. وهذا موضوع العدد القادم.</p>
+    </article>
+
+    <div class="frame cut-b next"><div class="in">
+      <h3>التالي: العدد #2، Explain This CVE</h3>
+      <p>فاحص CVE في صفحة واحدة للمديرين والمحللين. أما نقل هذا الموقع إلى S3 وCloudFront للحصول على ترويسات أمان سليمة فما زال في القائمة.</p>
+    </div></div>
+  </div>
+</main>
+
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, القاهرة، مصر</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
+</body>
+</html>

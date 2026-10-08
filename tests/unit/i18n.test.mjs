@@ -12,7 +12,7 @@ const others = LANGS.filter(l => l.code !== "en");
 for (const { code } of others) {
   test(`${code}: every UI string is translated, and nothing extra`, () => {
     const { ui } = loadTranslation(ROOT, code);
-    const { locale, cvWords, ...words } = ui;
+    const { locale, cvWords, courseNames, ...words } = ui;
     assert.ok(locale, "ui.locale is missing");
     assert.deepEqual(Object.keys(words).sort(), Object.keys(UI).sort());
   });

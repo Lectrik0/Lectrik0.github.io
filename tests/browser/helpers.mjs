@@ -14,6 +14,7 @@ export const PAGES = {
   homeAr: "/ar/",
   cv: "/cv.html",
   cvEs: "/es/cv.html",
+  writeupAr: "/ar/writeups/hardening-this-site.html",
   writeupEs: "/es/writeups/hardening-this-site.html",
   cards: "/card.html",
   writeup: "/writeups/hardening-this-site.html",
