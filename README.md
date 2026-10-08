@@ -17,7 +17,7 @@
 
 ## 👋 In plain words
 
-This is the personal website of **Ali Ahmed**, a final-year cybersecurity student in Cairo. It tells the story so far: university, an internship at a bank, and the road to cloud security, with skills, certifications, write-ups and a printable CV.
+This is the personal website of **Ali Ahmed**, a final-year cybersecurity student in Cairo. It tells the story so far: university, an internship at a bank, and the road to cloud security, with skills, certifications, write-ups and a printable CV. The home page comes in English, [Spanish](https://lectrik0.github.io/es/) and [Arabic](https://lectrik0.github.io/ar/), and the CV and write-ups also in Spanish (the write-ups in Arabic too).
 
 The site is also a security project in its own right. It was built from scratch, locked down the way a real company would protect its website, and every change is tested automatically before it goes live.
 
@@ -28,6 +28,7 @@ The site is also a security project in its own right. It was built from scratch,
 | [Home](https://lectrik0.github.io) | The story so far (open Chapter 1 for every university course), skills, certifications, write-ups, an interactive "Ask my terminal" (type `whoami`, `skills` or `projects`), hidden flags and contact links |
 | [CV](https://lectrik0.github.io/cv.html) | A one-page CV in a classic, ATS-friendly layout, ready to download as a PDF |
 | [Write-ups](https://lectrik0.github.io/#writeups) | Hands-on security projects, each told as a comic-book "issue" |
+| [Español](https://lectrik0.github.io/es/) · [العربية](https://lectrik0.github.io/ar/) | The same story in Spanish and Arabic (right to left). A first-time visitor whose browser is set to one of them is taken there automatically |
 
 ## ✨ What makes it different
 
@@ -93,7 +94,8 @@ npm run qr             # re-make assets/qr-cv.svg, the job-fair cards' QR code (
 
 ```
 data/site.json ──► scripts/build.mjs ──► index.html, cv.html, writeups/*.html, 404.html   (content filled in)
-   (Backstage                         ├► sitemap.xml, feed.xml, robots.txt
+data/i18n/*.json                      ├► es/ and ar/ home pages, es/cv.html, */writeups/*.html   (translated)
+   (Backstage                         ├► sitemap.xml (with language alternates), feed.xml (English only), robots.txt
     or by hand)                       └► .well-known/security.txt                          (Contact lines)
 ```
 
@@ -136,8 +138,8 @@ data/site.json ──► scripts/build.mjs ──► index.html, cv.html, writeu
 2. **Build:** on a PR the pages must already be rebuilt (`npm run check`); on `main` they're rebuilt from `data/site.json`.
 3. **HTML validation** with html-validate.
 4. **Unit tests:** escaping, URL filtering, deterministic build, meta tags, sitemap, feed, security.txt, and that Backstage's content checker agrees with Ajv on over a thousand edited versions of the content.
-5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker, terminal and course list work; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated); the CV renders to a one-page PDF, identical on every run, and an ATS-style text extraction (pdf.js) reads it in order with every word whole, also after content edits.
-6. **Publish** (`main` only, after everything passes): the CV is rendered to `cv.pdf`, and if that or the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
+5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker, terminal and course list work; the Spanish and Arabic pages follow the browser's language, remember a chosen language, lay out right to left in Arabic and read in their own language; the Spanish CV is one page too; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated); the CV renders to a one-page PDF, identical on every run, and an ATS-style text extraction (pdf.js) reads it in order with every word whole, also after content edits.
+6. **Publish** (`main` only, after everything passes): the CVs are rendered to `cv.pdf` and `cv-es.pdf`, and if that or the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
 
 The tests check the site *against* the content rather than freezing today's content: what each page must show is worked out from `data/site.json`, and the content checks also run on copies of the site built from edited content (more entries, fewer entries, half-filled entries, write-ups stored out of order). So editing the content can't make a test fail unless the edit itself is a problem.
 
