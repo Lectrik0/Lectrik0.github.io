@@ -516,3 +516,22 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
   .js .term-out{animation:term-in .28s ease-out both}
   @keyframes term-in{from{opacity:0;transform:translateY(5px)}}
 }
+
+/* Languages: the language switch, the Arabic fonts and right-to-left layout. The home page also exists in
+   Spanish (/es/) and Arabic (/ar/); Spanish needs nothing beyond the Latin fonts above. */
+@font-face{font-family:"Noto Kufi Arabic";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/noto-kufi-arabic-arabic-600-normal.woff2") format("woff2")}
+@font-face{font-family:"Noto Kufi Arabic";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/noto-kufi-arabic-arabic-700-normal.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans Arabic";font-style:normal;font-weight:400;font-display:swap;src:url("fonts/noto-sans-arabic-arabic-400-normal.woff2") format("woff2")}
+@font-face{font-family:"Noto Sans Arabic";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/noto-sans-arabic-arabic-600-normal.woff2") format("woff2")}
+.lang{display:flex;gap:2px;margin-inline-start:-6px}
+.lang a{font:600 .85rem/1 var(--f-display);color:var(--muted);text-decoration:none;padding:7px 6px 5px;border-bottom:3px solid transparent}
+.lang a:hover{color:var(--text)}
+.lang a[aria-current="true"]{color:var(--text);border-bottom-color:var(--teal)}
+html[lang="ar"]{--f-display:"Noto Kufi Arabic","Chakra Petch","Segoe UI",system-ui,sans-serif;--f-body:"Noto Sans Arabic","Instrument Sans","Segoe UI",system-ui,sans-serif}
+html[lang="ar"] body{line-height:1.8}
+html[lang="ar"] *{letter-spacing:0!important;font-style:normal!important}
+/* the hero's skyline isn't mirrored, so its text stays on the left side */
+html[dir="rtl"] .hero-copy{margin-left:0;margin-right:auto}
+/* the terminal is code: prompt, commands and buttons read left to right; only the answers follow the page */
+html[dir="rtl"] .term-bar,html[dir="rtl"] .term-cmd,html[dir="rtl"] .term-chips,html[dir="rtl"] .term-form{direction:ltr}
+html[dir="rtl"] .term-hint{text-align:end}

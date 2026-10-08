@@ -126,6 +126,22 @@ Resources:
         SigningBehavior: always
         SigningProtocol: sigv4
 
+  # CloudFront only serves index.html for the site root, so /es/ and /ar/ (and /backstage/) need this.
+  FolderIndex:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub "${AWS::StackName}-folder-index"
+      AutoPublish: true
+      FunctionConfig:
+        Comment: Serve index.html for URLs that end in a slash
+        Runtime: cloudfront-js-2.0
+      FunctionCode: |
+        function handler(event) {
+          var request = event.request;
+          if (request.uri.charAt(request.uri.length - 1) === "/") request.uri += "index.html";
+          return request;
+        }
+
   SecurityHeaders:
     Type: AWS::CloudFront::ResponseHeadersPolicy
     Properties:
@@ -250,6 +266,9 @@ Resources:
           # AWS managed "CachingOptimized" cache policy
           CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6
           ResponseHeadersPolicyId: !Ref SecurityHeaders
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt FolderIndex.FunctionARN
         CacheBehaviors:
           - PathPattern: backstage/*
             TargetOriginId: site-bucket
@@ -260,6 +279,9 @@ Resources:
             # AWS managed "CachingDisabled" cache policy
             CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad
             ResponseHeadersPolicyId: !Ref BackstageSecurityHeaders
+            FunctionAssociations:
+              - EventType: viewer-request
+                FunctionARN: !GetAtt FolderIndex.FunctionARN
         CustomErrorResponses:
           # A private bucket answers 403 for missing files, so both map to the 404 page.
           - ErrorCode: 403

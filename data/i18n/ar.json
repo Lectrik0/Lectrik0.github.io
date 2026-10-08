@@ -1,0 +1,132 @@
+{
+ "ui": {
+  "locale": "ar-EG",
+  "navLabel": "التنقل الرئيسي", "story": "القصة", "skills": "المهارات", "certs": "الشهادات", "writeups": "المقالات", "terminal": "الطرفية",
+  "flags": "الرايات", "cv": "السيرة الذاتية", "contact": "تواصل", "language": "اللغة",
+  "night": "ليلي", "day": "نهاري", "toNight": "التبديل إلى الوضع الليلي", "toDay": "التبديل إلى الوضع النهاري",
+  "viewCv": "عرض السيرة الذاتية", "email": "البريد", "cveChecker": "فاحص CVE", "downloadPdf": "تحميل PDF",
+  "internship": "التدريب", "internshipProgress": "تقدّم التدريب",
+  "earned": "مكتسبة", "progress": "قيد التحضير", "planned": "مخطط لها",
+  "noPosts": "أول مقال قريبًا",
+  "courses": "مقررًا", "ectsDone": "من {total} ساعة ECTS مكتملة", "semesters": "فصول دراسية",
+  "completed": "مكتمل", "current": "جارٍ", "upcoming": "قادم", "abroad": "في الخارج: ", "ects": "ECTS", "major": "تخصص {major}", "semester": "الفصل",
+  "termHelp": "الأوامر (Tab لإكمال الأمر، وسهم الأعلى لاسترجاع الأمر السابق):", "termHint": "اكتب أمرًا واضغط Enter، أو اضغط على أحد الأوامر أدناه.",
+  "termLog": "مخرجات الطرفية", "termCommand": "الأمر", "termPlaceholder": "اكتب أمرًا", "termRun": "تنفيذ", "termEmpty": "لا يوجد شيء هنا بعد.",
+  "sumHelp": "هذه القائمة", "sumClear": "مسح الشاشة",
+  "sumWhoami": "من أنا", "sumSkills": "ما أعرفه وما أتعلمه", "sumProjects": "ما بنيته", "sumCerts": "الشهادات",
+  "sumEducation": "أين أدرس", "sumExperience": "أين عملت", "sumWriteups": "ما كتبته", "sumContact": "كيف تتواصل معي",
+  "sumCv": "سيرتي الذاتية في صفحة واحدة", "sumFlags": "تلميح عن الرايات المخفية",
+  "kName": "الاسم", "kAbout": "نبذة", "kBasedIn": "المقر", "kLatest": "الأحدث", "kStudying": "الدراسة", "studyingAt": " في ",
+  "cvLine": "صفحة واحدة بنص عادي، مصممة للبشر ولبرامج ATS.", "cvOnline": "اقرأها على الموقع", "cvPdf": "تحميل ملف PDF",
+  "flagsBefore": "هناك رايات مخفية في هذا الموقع. بلا حرق للأحداث: التلميحات والفاحص في قسم ", "flagsLink": "الرايات المخفية",
+  "jsComplete": "اكتمل", "jsDaysLeft": "متبقٍ {n} يومًا",
+  "jsFlagFormat": "شكل الراية AA{...} وبداخلها حروف وأرقام وشرطات سفلية.",
+  "jsFlagNoCrypto": "متصفحك لا يستطيع فحص الرايات هنا. جرّب نسخة حديثة من Chrome أو Firefox أو Safari.",
+  "jsFlagWrong": "هذه ليست إحدى الرايات. راجع الكتابة وحاول مرة أخرى.",
+  "jsFlagAgain": "لقد وجدت الراية {n} من قبل.",
+  "jsFlagAll": "وجدت الرايات الأربع. راسلني على LinkedIn وأخبرني أيها استغرقت وقتًا أطول.",
+  "jsFlagOne": "تم العثور على الراية {n}. تبقّى {left}.",
+  "jsFlagCount": "تم العثور على {n} من {total}",
+  "jsSudo": "{user} غير موجود في ملف sudoers. سيتم الإبلاغ عن هذه الحادثة.",
+  "jsRm": "rm: تم رفض الإذن. محاولة جيدة.",
+  "jsExit": "لا مهرب من هنا. لكن قسم التواصل في الأسفل.",
+  "jsCatMissing": "cat: اسم الملف مفقود",
+  "jsCatFlag": "محاولة جيدة. الرايات الحقيقية ليست في ملف: انظر التلميحات في قسم الرايات المخفية.",
+  "jsCatBinary": "cat: {file}: ملف ثنائي. جرّب الأمر cv.",
+  "jsCatNone": "cat: {file}: لا يوجد ملف أو مجلد بهذا الاسم",
+  "jsNothingYet": "لا شيء بعد.",
+  "jsNotFound": "{word}: الأمر غير موجود. اكتب help لعرض الأوامر المتاحة."
+ },
+ "data": {
+  "profile": { "location": "القاهرة، مصر", "tagline": "طالب أمن سيبراني يبني طريقه نحو مسار مهني في أمن السحابة." },
+  "story": [
+   { "title": "أدرس الأمن السيبراني في الجامعة الألمانية", "text": "السنة الأخيرة من البكالوريوس في الجامعة الألمانية الدولية، بتخصص أمن المعلومات. الشبكات وأنظمة التشغيل والتشفير، وكيف ينهار كل ذلك." },
+   { "title": "ستة أشهر داخل بنك", "text": "أتدرب في Ebank وأرى كيف تدير مؤسسة مالية تقنية المعلومات والأمن لديها." },
+   { "title": "نحو السحابة", "text": "أستعد لشهادة AWS Certified Cloud Practitioner. السحابة هي المجال الذي أريد التخصص فيه: هويات وبيانات وبنية تحتية تدافع عن نفسها." },
+   { "title": "الخطوات القادمة", "text": "شهادة AWS Solutions Architect – Associate لأتعلم كيف تُصمَّم الأنظمة الآمنة، ثم AWS Certified Security – Specialty." },
+   { "title": "مهندس أمن سحابي", "text": "إلى هناك يقود هذا الطريق." }
+  ],
+  "courses": { "university": "الجامعة الألمانية الدولية (GIU)", "degree": "بكالوريوس المعلوماتية وعلوم الحاسب", "major": "أمن المعلومات" },
+  "skills": [
+   { "group": "أتقنها", "note": "استخدمتها في المقررات والمشاريع.", "color": "teal", "items": ["الشبكات", "Linux", "أساسيات الأمن", "أساسيات التشفير"] },
+   { "group": "أستخدمها الآن", "note": "معرفة عملية تتحسن كل أسبوع.", "color": "blue", "items": ["Python", "خدمات AWS الأساسية", "Git وGitHub"] },
+   { "group": "أتعلمها لاحقًا", "note": "ضمن الخطة للأشهر القادمة.", "color": "purple", "items": ["إدارة الهويات والوصول في السحابة (IAM)", "Terraform", "CloudFormation", "سجلات السحابة والكشف"] }
+  ],
+  "posts": [
+   { "title": "Issue #2: Explain This CVE", "date": "2026-10-07", "tag": "مشروع", "summary": "فاحص ثغرات CVE في صفحة واحدة للمديرين والمحللين: كيف يعمل، وقرارات الأمان وراءه.", "url": "writeups/explain-this-cve.html" },
+   { "title": "Issue #1: Hardening a static site", "date": "2026-10-04", "tag": "أمن الويب", "summary": "موقع بلا خادم خلفي يمكن مهاجمته أيضًا. كيف يمنع هذا الموقع هجمات XSS عبر CSP وTrusted Types، وكيف اختبرته.", "url": "writeups/hardening-this-site.html" }
+  ],
+  "cv": {
+   "education": [
+    { "title": "بكالوريوس المعلوماتية وعلوم الحاسب، تخصص أمن المعلومات", "org": "الجامعة الألمانية الدولية (GIU)", "dates": "سبتمبر 2023 – سبتمبر 2027",
+      "details": "مقررات ذات صلة: التشفير، أمن الشبكات، القرصنة الأخلاقية واختبار الاختراق، التحقيق الجنائي الرقمي، أمن البرمجيات والأجهزة المحمولة، استمرارية الأعمال وإدارة المخاطر." },
+    { "title": "فصل دراسي تبادلي (الفصل الخامس)، الأمن السيبراني", "org": "الجامعة الألمانية الدولية في برلين (GIU Berlin)", "location": "برلين، ألمانيا", "dates": "سبتمبر 2025 – فبراير 2026" }
+   ],
+   "experience": [
+    { "title": "متدرب أمن المعلومات", "org": "Ebank", "location": "القاهرة الجديدة، مصر", "dates": "أغسطس 2026 – يناير 2027",
+      "bullets": [
+       "تنقلت بين فرق إدارة الثغرات والحوكمة والمخاطر والامتثال (GRC) واختبار الاختراق ومركز العمليات الأمنية (SOC) في البنك.",
+       "أجريت فحوصات للثغرات باستخدام Tenable وحللت النتائج حسب CVE والإضافة.",
+       "عملت مع فريق GRC على تقييمات مخاطر الموظفين وفق معيار ISO/IEC 27001.",
+       "نفذت محاكاة للتصيد الاحتيالي لاختبار وعي الموظفين بالأمن.",
+       "أجريت اختبارات اختراق للشبكة الداخلية في كل طابق من مكاتب البنك، بإشراف فريق اختبار الاختراق.",
+       "استخدمت IBM QRadar (SIEM) مع فريق SOC لمراقبة الأحداث الأمنية وتحليلها."
+      ] },
+    { "title": "متدرب أمن سيبراني", "org": "ICT Misr", "location": "الشيخ زايد، الجيزة، مصر", "dates": "يوليو 2024 (شهر واحد)",
+      "bullets": [
+       "رافقت العاملين في الأمن السيبراني في عملهم اليومي وتعلمت كيف تطبق الشركات الأمن عمليًا.",
+       "لاحظت كيف يتعامل الفريق مع العملاء ويلبي احتياجاتهم الأمنية.",
+       "كوّنت معرفة أساسية بمفاهيم الأمن وسبل التهديد الشائعة وضوابط الأمن الأولية."
+      ] }
+   ],
+   "projects": [
+    { "title": "Explain This CVE: explain-this-cve.vercel.app", "stack": "JavaScript, Node.js, Vercel, NVD, CISA KEV, EPSS", "dates": "2026",
+      "bullets": [
+       "بنيت فاحص CVE يحول بيانات NVD وCISA KEV وEPSS إلى ملخص من صفحة واحدة للمديرين والمحللين.",
+       "تعاملت مع كل البيانات الخارجية ومخرجات الذكاء الاصطناعي على أنها غير موثوقة: التحقق من المدخلات، وتحديد معدل الطلبات، وCSP مع Trusted Types، وأكثر من 140 اختبارًا دون اتصال تشمل تمرين XSS."
+      ] },
+    { "title": "موقع شخصي: lectrik0.github.io", "stack": "HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation", "dates": "2026",
+      "bullets": [
+       "بنيت موقعًا ثابتًا محصّنًا ضد XSS (سياسة CSP صارمة وTrusted Types، واختبرته بحمولات حقن) بلا طلبات لأطراف خارجية، وبنية AWS كشيفرة تُنشر دون مفاتيح عبر OIDC."
+      ] }
+   ]
+  }
+ },
+ "text": {
+  "Ali Ahmed, cybersecurity student in Cairo building toward a career in cloud security.": "علي أحمد، طالب أمن سيبراني في القاهرة يبني طريقه نحو مسار مهني في أمن السحابة.",
+  "The story so far": "القصة حتى الآن",
+  "Where I've been, where I am, and where I'm heading.": "من أين جئت، وأين أقف، وإلى أين أتجه.",
+  "Chapter 1": "الفصل 1", "Chapter 2": "الفصل 2", "Chapter 3": "الفصل 3", "Chapter 4": "الفصل 4", "Chapter 5": "الفصل 5",
+  "See all my courses": "عرض كل مقرراتي",
+  "A student looking at the Cairo skyline": "طالب ينظر إلى أفق القاهرة",
+  "A bank building with a shield on its front": "مبنى بنك عليه درع في واجهته",
+  "A padlock inside a cloud, connected by lines to the ground": "قفل داخل سحابة، موصول بالأرض بخطوط",
+  "Three rising blocks like stairs, with a flag on the top one": "ثلاث كتل صاعدة كالدرج، وعلى أعلاها علم",
+  "A road leading toward a distant city on the horizon": "طريق يمتد نحو مدينة بعيدة على الأفق",
+  "Skills": "المهارات",
+  "Grouped by where I am with each one.": "مجمّعة بحسب مستواي في كل منها.",
+  "Certifications": "الشهادات",
+  "Earned badges fill in. Dashed ones are in progress or planned.": "الشارات المكتسبة ممتلئة. أما المنقطة فهي قيد التحضير أو مخطط لها.",
+  "Write-ups": "المقالات",
+  "Notes from labs, CTFs and cloud security topics I'm learning.": "ملاحظات من المختبرات ومسابقات CTF ومواضيع أمن السحابة التي أتعلمها. المقالات مكتوبة بالإنجليزية.",
+  "Ask my terminal": "اسأل طرفيتي",
+  "The quick way to get to know me. Type <code>whoami</code>, <code>skills</code> or <code>projects</code>, or tap a command.": "أسرع طريقة للتعرف عليّ. اكتب <code>whoami</code> أو <code>skills</code> أو <code>projects</code>، أو اضغط على أحد الأوامر.",
+  "Hidden flags": "الرايات المخفية",
+  "There are four flags hidden on this site, each in the format <code>AA{...}</code>. Nothing here needs hacking: just curiosity and the tools in your browser.": "هناك أربع رايات مخفية في هذا الموقع، بصيغة <code>AA{...}</code>. لا حاجة لأي اختراق: يكفي الفضول وأدوات متصفحك.",
+  "Hints": "تلميحات",
+  "Every page has a back side.": "لكل صفحة جانب خلفي.",
+  "The site talks to itself where only developers listen.": "الموقع يحدّث نفسه حيث لا يسمع إلا المطورون.",
+  "Security people know exactly where a site keeps its contact details.": "أهل الأمن يعرفون تمامًا أين يحفظ الموقع بيانات التواصل.",
+  "Something in Chapter 3 isn't written in English.": "هناك شيء في الفصل 3 ليس مكتوبًا بلغة عادية.",
+  "Check a flag": "افحص راية",
+  "The checker runs in your browser, so it needs JavaScript. The hints work without it.": "الفاحص يعمل في متصفحك، لذا يحتاج إلى JavaScript. أما التلميحات فتعمل بدونه.",
+  "Flag": "الراية",
+  "Check flag": "افحص الراية",
+  "Flags are checked in your browser. Nothing is sent anywhere.": "تُفحص الرايات داخل متصفحك. لا يُرسل أي شيء إلى أي مكان.",
+  "0 of 4 found": "تم العثور على 0 من 4",
+  "To be continued…": "يتبع…",
+  "I'm looking for cloud security internships and junior roles. If your team works on cloud security, I'd like to hear from you.": "أبحث عن تدريب ووظائف مبتدئة في أمن السحابة. إذا كان فريقك يعمل في أمن السحابة، يسعدني أن أسمع منك.",
+  "My courses": "مقرراتي",
+  "Close": "إغلاق"
+ }
+}

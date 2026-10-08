@@ -17,6 +17,9 @@
   const root = document.documentElement;
   root.classList.add("js");
   const $ = id => document.getElementById(id);
+  // Words the script shows, written into the page by the build in the page's language (see views/ui.mjs).
+  const ui = (() => { try { return JSON.parse($("ui-strings").textContent); } catch (e) { return {}; } })();
+  const say = (key, vars = {}) => String(ui[key] ?? key).replace(/\{(\w+)\}/g, (m, k) => (k in vars ? vars[k] : m));
   const store = {
     get(key) { try { return localStorage.getItem(key); } catch (e) { return null; } },
     set(key, value) { try { localStorage.setItem(key, value); } catch (e) { /* storage unavailable */ } }
@@ -32,9 +35,9 @@
     const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : mq.matches;
     const sync = () => {
       const dark = isDark();
-      $("toggle-label").textContent = dark ? "Day" : "Night";
+      $("toggle-label").textContent = dark ? btn.dataset.day : btn.dataset.night;
       $("toggle-icon").setAttribute("d", dark ? SUN : MOON);
-      btn.setAttribute("aria-label", dark ? "Switch to day mode" : "Switch to night mode");
+      btn.setAttribute("aria-label", dark ? btn.dataset.toDay : btn.dataset.toNight);
     };
     const saved = store.get("aa-theme");
     if (saved === "light" || saved === "dark") root.dataset.theme = saved;
@@ -47,6 +50,9 @@
     sync();
   }
 
+  /* ---------- language: remember the visitor's choice, so "/" doesn't send them back (see lang.js) ---------- */
+  document.querySelectorAll(".lang a[data-lang]").forEach(a => a.addEventListener("click", () => store.set("aa-lang", a.dataset.lang)));
+
   /* ---------- Chapter 2: internship countdown (the HTML shows the date range) ---------- */
   function initInternship() {
     const bar = $("intern-bar");
@@ -56,7 +62,7 @@
     const now = Date.now();
     const pct = Math.round(Math.min(1, Math.max(0, (now - start) / (end - start))) * 100);
     const days = Math.max(0, Math.ceil((end - now) / 864e5));
-    $("intern-left").textContent = pct >= 100 ? "Complete" : `${days} days left`;
+    $("intern-left").textContent = pct >= 100 ? say("jsComplete") : say("jsDaysLeft", { n: days });
     bar.setAttribute("aria-valuenow", String(pct));
     $("intern-fill").style.setProperty("--p", pct + "%");
   }
@@ -96,11 +102,11 @@
       if (Array.isArray(saved)) saved.filter(i => Number.isInteger(i) && i >= 0 && i < HASHES.length).forEach(i => found.add(i));
     } catch (e) { /* corrupted */ }
     const msg = $("flag-msg");
-    const say = (text, state) => { msg.textContent = text; msg.dataset.state = state; };
+    const tell = (text, state) => { msg.textContent = text; msg.dataset.state = state; };
     const render = () => {
       const pips = $("flag-pips").children;
       for (let i = 0; i < pips.length; i++) pips[i].classList.toggle("on", i < found.size);
-      $("flag-count").textContent = `${found.size} of ${HASHES.length} found`;
+      $("flag-count").textContent = say("jsFlagCount", { n: found.size, total: HASHES.length });
       document.querySelectorAll("#hints li").forEach(li => li.classList.toggle("done", found.has(Number(li.dataset.flag))));
     };
     const sha256 = async text => {
@@ -111,19 +117,17 @@
       ev.preventDefault();
       const input = $("flag-input");
       const value = input.value.trim().slice(0, 64);
-      if (!/^AA\{[A-Za-z0-9_]{1,56}\}$/.test(value)) return say("Flags look like AA{...} with letters, numbers and underscores inside.", "bad");
-      if (!window.crypto || !crypto.subtle) return say("Your browser can't check flags here. Try a recent Chrome, Firefox or Safari.", "bad");
+      if (!/^AA\{[A-Za-z0-9_]{1,56}\}$/.test(value)) return tell(say("jsFlagFormat"), "bad");
+      if (!window.crypto || !crypto.subtle) return tell(say("jsFlagNoCrypto"), "bad");
       const idx = HASHES.indexOf(await sha256(value));
       if (idx === -1) {
-        say("That's not one of the flags. Check for typos and try again.", "bad");
+        tell(say("jsFlagWrong"), "bad");
       } else if (found.has(idx)) {
-        say(`You already found flag ${idx + 1}.`, "ok");
+        tell(say("jsFlagAgain", { n: idx + 1 }), "ok");
       } else {
         found.add(idx);
         store.set(KEY, JSON.stringify([...found]));
-        say(found.size === HASHES.length
-          ? "All four flags found. Message me on LinkedIn and tell me which one took longest."
-          : `Flag ${idx + 1} found. ${HASHES.length - found.size} to go.`, "ok");
+        tell(found.size === HASHES.length ? say("jsFlagAll") : say("jsFlagOne", { n: idx + 1, left: HASHES.length - found.size }), "ok");
         input.value = "";
       }
       render();
@@ -155,18 +159,18 @@
     const FILES = ["flag.txt", "cv.pdf"];
     // a few extras that aren't in the help list
     const extras = {
-      sudo: () => lines(`${user} is not in the sudoers file. This incident will be reported.`),
+      sudo: () => lines(say("jsSudo", { user })),
       ls: () => lines(FILES.join("  ")),
       pwd: () => lines(`/home/${user}`),
       date: () => lines(new Date().toString()),
       echo: args => lines(args.join(" ")),
-      rm: () => lines("rm: permission denied. Nice try."),
-      exit: () => lines("There is no escape. The Contact section is further down, though."),
-      cat: args => !args[0] ? lines("cat: missing file name")
-        : args[0] === "flag.txt" ? lines("Nice try. The real flags aren't in a file: see the hints under Hidden flags.")
-        : FILES.includes(args[0]) ? lines(`cat: ${args[0]}: binary file. Try the cv command.`)
-        : lines(`cat: ${args[0].slice(0, 30)}: No such file or directory`),
-      history: () => lines(...(past.length ? past.map((c, i) => `${String(i + 1).padStart(3)}  ${c}`) : ["Nothing yet."]))
+      rm: () => lines(say("jsRm")),
+      exit: () => lines(say("jsExit")),
+      cat: args => !args[0] ? lines(say("jsCatMissing"))
+        : args[0] === "flag.txt" ? lines(say("jsCatFlag"))
+        : FILES.includes(args[0]) ? lines(say("jsCatBinary", { file: args[0] }))
+        : lines(say("jsCatNone", { file: args[0].slice(0, 30) })),
+      history: () => lines(...(past.length ? past.map((c, i) => `${String(i + 1).padStart(3)}  ${c}`) : [say("jsNothingYet")]))
     };
     const names = [...outputs.keys(), "clear"];
     const past = [];
@@ -188,7 +192,7 @@
       if (name === "clear") { log.textContent = ""; return; }
       if (outputs.has(name)) return show(line, outputs.get(name).cloneNode(true));
       if (Object.hasOwn(extras, name)) return show(line, extras[name](args));
-      show(line, lines(`${word.slice(0, 20)}: command not found. Type help to see what works.`));
+      show(line, lines(say("jsNotFound", { word: word.slice(0, 20) })));
     };
 
     form.addEventListener("submit", e => { e.preventDefault(); if (typing) return; run(input.value); input.value = ""; });

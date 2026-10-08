@@ -2,6 +2,7 @@
  * Single text values, for elements marked data-bind="...".
  */
 import { str, arr, obj } from "./shared.mjs";
+import { t, fmt } from "./ui.mjs";
 
 export function bindings(data) {
   const P = obj(data.profile), C = obj(data.courses), CV = obj(data.cv);
@@ -12,7 +13,7 @@ export function bindings(data) {
     "cv.name": str(CV.fullName) || str(P.name),
     "cv.headline": str(CV.headline),
     "courses.university": str(C.university),
-    "courses.subtitle": [str(C.degree), str(C.major) && `${str(C.major)} major`].filter(Boolean).join(", ")
+    "courses.subtitle": [str(C.degree), str(C.major) && fmt(t(data, "major"), { major: str(C.major) })].filter(Boolean).join(", ")
   };
   arr(data.story).forEach((ch, i) => {
     values[`story.${i}.title`] = str(obj(ch).title);
