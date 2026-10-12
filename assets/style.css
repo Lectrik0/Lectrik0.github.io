@@ -10,42 +10,47 @@
    irregular comic grid (a true sequence, so chapters are numbered) → plain sections for skills,
    certifications, write-ups → "To be continued" contact panel. Day/night = light/dark theme. */
 :root{
-  --bg:#E4EDF0;
-  --panel:#F8FBFC;
-  --line:#142640;
-  --text:#13233A;
-  --muted:#4B5F78;
-  --blue:#1D4E89;
-  --teal:#0D8784;
-  --purple:#6A4BC8;
-  --green:#1C9A5F;
+  --bg:#E8EFF1;
+  --panel:#FAFCFD;
+  --line:#0F2340;
+  --text:#0E1F38;
+  --muted:#475A77;
+  --blue:#1B4F95;
+  --teal:#0B827E;
+  --purple:#6243D3;
+  --green:#178F58;
+  /* a warm accent, used sparingly: the sun, highlights, the hover "pop" */
+  --amber:#F2A93B;
   /* the same hues, dark enough for small text on --panel and --bg (WCAG AA) */
-  --green-text:#157A4B; --teal-text:#0B706D;
+  --green-text:#12744A; --teal-text:#086B67; --amber-text:#8F5300;
   /* scene colours */
-  --sky-a:#BFE5E8; --sky-b:#A3D6DE; --orb:#FBF6DF; --cloud:#FFFFFF;
+  --sky-a:#C4E8EC; --sky-b:#A8D9E1; --orb:#FFE6A3; --cloud:#FFFFFF;
   --far:#8DBCD0; --mid:#4C88B0; --near:#1F4F80; --ground:#2B5F8E;
-  --win:#E9F6F7; --star-o:0; --dots:rgba(20,38,64,.16);
+  --win:#EAF7F8; --star-o:0; --dots:rgba(15,35,64,.15);
+  --glow:transparent; --btn-hover:var(--teal-text);
   --f-display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
   --f-body:"Instrument Sans","Segoe UI",Roboto,system-ui,sans-serif;
   --frame:3px;
   --cut:22px;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#09101F; --panel:#101B32; --line:#9FBCE3; --text:#E2EBF7; --muted:#9AAECA;
-  --blue:#78A8EC; --teal:#45D4C8; --purple:#A991FF; --green:#5FE3A2;
-  --green-text:#5FE3A2; --teal-text:#45D4C8;
-  --sky-a:#121F3C; --sky-b:#18294D; --orb:#E4ECF7; --cloud:#24365F;
-  --far:#22355E; --mid:#1A2B4E; --near:#0C1630; --ground:#0F1B38;
-  --win:#6EF0BC; --star-o:1; --dots:rgba(159,188,227,.14);
+  --bg:#060C1A; --panel:#0D1730; --line:#93B4E4; --text:#E6EEF9; --muted:#9DB1CF;
+  --blue:#7FB0F5; --teal:#4FE0D2; --purple:#B39BFF; --green:#62E8A6; --amber:#FFC46B;
+  --green-text:#62E8A6; --teal-text:#4FE0D2; --amber-text:#FFC46B;
+  --sky-a:#101C3A; --sky-b:#16264B; --orb:#F1F4FA; --cloud:#22345D;
+  --far:#22355E; --mid:#1A2B4E; --near:#0B1530; --ground:#0E1A37;
+  --win:#FFC46B; --star-o:1; --dots:rgba(147,180,228,.13);
+  --glow:rgba(79,224,210,.18); --btn-hover:var(--teal);
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --bg:#09101F; --panel:#101B32; --line:#9FBCE3; --text:#E2EBF7; --muted:#9AAECA;
-  --blue:#78A8EC; --teal:#45D4C8; --purple:#A991FF; --green:#5FE3A2;
-  --green-text:#5FE3A2; --teal-text:#45D4C8;
-  --sky-a:#121F3C; --sky-b:#18294D; --orb:#E4ECF7; --cloud:#24365F;
-  --far:#22355E; --mid:#1A2B4E; --near:#0C1630; --ground:#0F1B38;
-  --win:#6EF0BC; --star-o:1; --dots:rgba(159,188,227,.14);
+  --bg:#060C1A; --panel:#0D1730; --line:#93B4E4; --text:#E6EEF9; --muted:#9DB1CF;
+  --blue:#7FB0F5; --teal:#4FE0D2; --purple:#B39BFF; --green:#62E8A6; --amber:#FFC46B;
+  --green-text:#62E8A6; --teal-text:#4FE0D2; --amber-text:#FFC46B;
+  --sky-a:#101C3A; --sky-b:#16264B; --orb:#F1F4FA; --cloud:#22345D;
+  --far:#22355E; --mid:#1A2B4E; --near:#0B1530; --ground:#0E1A37;
+  --win:#FFC46B; --star-o:1; --dots:rgba(147,180,228,.13);
+  --glow:rgba(79,224,210,.18); --btn-hover:var(--teal);
   color-scheme:dark;
 }
 *{box-sizing:border-box}
@@ -78,7 +83,7 @@ svg *{transition:fill .5s,stroke .5s}
 .sfx{font:italic 600 22px var(--f-display);fill:var(--purple)}
 
 /* nav */
-.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:var(--frame) solid var(--line);transition:background-color .5s}
+.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:color-mix(in srgb,var(--bg) 86%,transparent);-webkit-backdrop-filter:blur(10px) saturate(1.3);backdrop-filter:blur(10px) saturate(1.3);border-bottom:var(--frame) solid var(--line);transition:background-color .5s}
 .nav .wrap{display:flex;align-items:center;gap:20px;padding-block:10px}
 .brand{font:700 1.2rem/1 var(--f-display);text-decoration:none;letter-spacing:.02em}
 .nav ul{display:flex;gap:clamp(12px,2.4vw,26px);list-style:none;margin:0 0 0 auto;padding:0}
@@ -86,7 +91,13 @@ svg *{transition:fill .5s,stroke .5s}
 .nav ul a:hover{color:var(--text)}
 .brand,.nav ul a{white-space:nowrap}
 @media (max-width:1000px){.nav .wrap{gap:12px}.nav ul{gap:12px}.nav ul a{font-size:.92rem}}
-@media (max-width:760px){.nav ul{display:none}.toggle{margin-left:auto}}
+@media (max-width:760px){
+  .nav .wrap{flex-wrap:wrap;row-gap:6px}
+  .nav ul{order:3;flex:1 0 100%;margin:0 calc(-1 * clamp(16px,4vw,40px));padding:2px clamp(16px,4vw,40px) 4px;overflow-x:auto;scrollbar-width:none;
+    -webkit-mask:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 24px),transparent);mask:linear-gradient(90deg,transparent,#000 16px,#000 calc(100% - 24px),transparent)}
+  .nav ul::-webkit-scrollbar{display:none}
+  .lang{margin-inline-start:auto}
+}
 .toggle{display:inline-flex;align-items:center;gap:8px;border:2px solid var(--line);background:var(--panel);color:var(--text);
   font:600 .95rem/1 var(--f-display);padding:7px 12px;cursor:pointer;clip-path:polygon(8px 0,100% 0,100% calc(100% - 8px),calc(100% - 8px) 100%,0 100%,0 8px)}
 .toggle svg{width:16px;height:16px}
@@ -97,8 +108,8 @@ svg *{transition:fill .5s,stroke .5s}
   font:600 1.02rem/1 var(--f-display);letter-spacing:.02em;padding:13px 20px 12px;
   background:var(--text);color:var(--bg);border:0;
   clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));
-  transition:background-color .2s,transform .2s}
-.btn:hover{background:var(--teal);color:var(--bg)}
+  transition:background-color .2s,translate .2s cubic-bezier(.3,1.6,.5,1)}
+.btn:hover{background:var(--btn-hover);color:var(--bg)}
 .btn.ghost{background:transparent;color:var(--text);box-shadow:inset 0 0 0 2px var(--line)}
 .btn.ghost:hover{background:var(--panel);box-shadow:inset 0 0 0 2px var(--teal)}
 .btn svg{width:17px;height:17px;flex:none}
@@ -140,7 +151,7 @@ svg *{transition:fill .5s,stroke .5s}
 .bar i{position:absolute;inset:0 auto 0 0;width:var(--p,0%);background:var(--teal);transition:width 1.2s cubic-bezier(.2,.8,.2,1)}
 
 /* reveal: panels are fully visible at rest; JS only makes the ones below the fold settle in as they arrive */
-.reveal{transition:transform .9s cubic-bezier(.2,.8,.2,1)}
+.reveal{transition:transform .9s cubic-bezier(.2,.8,.2,1),translate .25s ease,background-color .25s}
 .reveal.wait{transform:translateY(26px) rotate(-.4deg)}
 
 /* accent colour for skill groups and certification badges */
@@ -210,8 +221,6 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px;p
   .skills{grid-template-columns:1fr}
 }
 @media (max-width:640px){
-  .nav ul{display:none}
-  .toggle{margin-left:auto}
   .empty .in{grid-template-columns:1fr}
   .empty svg{max-width:180px}
   .post{grid-template-columns:1fr}
@@ -538,3 +547,92 @@ html[dir="rtl"] .term-hint{text-align:end}
 svg .mono-t{direction:ltr}
 /* code and tables of code stay left to right inside a right-to-left page */
 html[dir="rtl"] pre,html[dir="rtl"] pre code{direction:ltr;text-align:left}
+
+/* ================= polish: hover, focus and motion details =================
+   Everything here is decoration on top of the layout above. Movement uses the separate `translate`,
+   `rotate` and `scale` properties, so it never fights the `transform` the reveal and the drawings use. */
+::selection{background:var(--amber);color:#0E1F38}
+
+/* nav: the current section is underlined (main.js marks it), and a thin bar shows how far down the page you are */
+.nav ul a{position:relative;padding-block:6px;transition:color .2s}
+.nav ul a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px;background:var(--teal);transform:scaleX(0);transform-origin:left;transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.nav ul a:hover::after,.nav ul a.on::after{transform:scaleX(1)}
+.nav ul a.on{color:var(--text)}
+.nav a[aria-current="page"]{text-decoration:none}
+.nav a[aria-current="page"]::after{transform:scaleX(1)}
+.nav::after{content:"";position:absolute;left:0;right:0;bottom:calc(-1 * var(--frame));height:var(--frame);background:var(--amber);transform:scaleX(0);transform-origin:left;pointer-events:none}
+.toggle{transition:background-color .2s,border-color .2s}
+.toggle:hover{border-color:var(--teal)}
+.toggle svg{transition:rotate .5s cubic-bezier(.3,1.6,.5,1)}
+.toggle:hover svg{rotate:-25deg}
+
+/* buttons lift a little under the pointer and press down when clicked */
+.btn:hover{translate:0 -2px}
+.btn:active{translate:0 1px}
+
+/* cards: the outline takes the card's colour and the card lifts */
+:is(.panel,.skill-col,.cert,.ctf .frame,.next){transition:translate .25s ease,background-color .25s}
+.panel:hover,.ctf .frame:hover,.next:hover{background:var(--teal)}
+:is(.skill-col,.cert):hover{background:var(--c)}
+:is(.skill-col,.cert):hover>.in{background:color-mix(in srgb,var(--c) 9%,var(--panel))}
+.panel:hover>.in,.next:hover>.in{background:color-mix(in srgb,var(--teal) 6%,var(--panel))}
+.cert svg{transition:rotate .4s cubic-bezier(.3,1.6,.5,1),scale .4s cubic-bezier(.3,1.6,.5,1)}
+.cert:hover svg{rotate:-10deg;scale:1.08}
+.chips li{transition:background-color .2s,translate .2s}
+.chips li:hover{background:color-mix(in srgb,var(--c) 16%,transparent);translate:0 -2px}
+
+/* write-ups: a comic "pop" with a hard shadow */
+.post{transition:border-color .2s,translate .2s ease,box-shadow .2s ease}
+.post:hover{translate:-3px -3px;box-shadow:6px 6px 0 var(--teal)}
+.post h3{transition:color .2s}
+.post:hover h3{color:var(--teal-text)}
+
+/* section titles get a skewed bar under them, like the progress meters */
+.sec-head h2::after{content:"";display:block;width:72px;height:7px;margin-top:14px;background:var(--teal);transform:skewX(-20deg);transform-origin:left}
+#skills .sec-head h2::after{background:var(--blue)}
+#certs .sec-head h2::after{background:var(--green)}
+#writeups .sec-head h2::after{background:var(--purple)}
+#terminal .sec-head h2::after{background:var(--amber)}
+#flags .sec-head h2::after{background:var(--purple)}
+
+/* the sun glows at night */
+.orb{filter:drop-shadow(0 0 22px var(--glow))}
+
+/* terminal: faint scanlines, like an old monitor */
+.term{position:relative}
+.term::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 2px,rgba(220,232,248,.025) 2px 3px)}
+
+/* hidden-flag pips pop when one is found */
+.pips i.on{animation:pip .45s cubic-bezier(.3,1.8,.5,1)}
+
+@media (hover:none){
+  .btn:hover,.chips li:hover,.post:hover{translate:none}
+}
+
+@media (prefers-reduced-motion:no-preference){
+  /* the hero name gets its shadow after the ink wipe */
+  .hero h1{animation:ink-wipe .9s cubic-bezier(.7,0,.2,1) .1s both,shadow-in .45s cubic-bezier(.3,1.6,.5,1) .95s both}
+  :is(.panel,.skill-col,.cert):hover{translate:0 -5px}
+  .ctf .frame:hover,.next:hover{translate:0 -3px}
+
+  /* scroll-driven touches, where the browser supports them (transform only: content never fades out) */
+  @supports (animation-timeline:view()){
+    .nav::after{animation:grow linear both;animation-timeline:scroll(root)}
+    .sec-head h2::after{animation:grow-skew linear both;animation-timeline:view();animation-range:entry 10% cover 30%}
+    :is(.skill-col,.cert,.post,.ctf .frame){animation:settle linear both;animation-timeline:view();animation-range:entry 0% entry 70%}
+    .skills>:nth-child(2),.certs>:nth-child(2){animation-range:entry 5% entry 80%}
+    .skills>:nth-child(3),.certs>:nth-child(3){animation-range:entry 10% entry 90%}
+    .certs>:nth-child(4){animation-range:entry 15% entry 100%}
+  }
+
+  /* switching day and night: the new theme spreads out from the button (see main.js) */
+  ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+  ::view-transition-new(root){animation:theme-reveal .65s cubic-bezier(.4,0,.2,1)}
+}
+.theme-switching,.theme-switching *{transition:none!important}
+@keyframes shadow-in{from{text-shadow:0 0 0 var(--teal)}to{text-shadow:.045em .045em 0 var(--teal)}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes grow-skew{from{transform:skewX(-20deg) scaleX(0)}to{transform:skewX(-20deg) scaleX(1)}}
+@keyframes settle{from{transform:translateY(28px) scale(.97)}to{transform:none}}
+@keyframes pip{0%{scale:.4}60%{scale:1.25}100%{scale:1}}
+@keyframes theme-reveal{from{clip-path:circle(0 at var(--vt-x,100%) var(--vt-y,0))}to{clip-path:circle(150vmax at var(--vt-x,100%) var(--vt-y,0))}}

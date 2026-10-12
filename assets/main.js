@@ -41,10 +41,20 @@
     };
     const saved = store.get("aa-theme");
     if (saved === "light" || saved === "dark") root.dataset.theme = saved;
-    btn.addEventListener("click", () => {
+    const flip = () => {
       root.dataset.theme = isDark() ? "light" : "dark";
       store.set("aa-theme", root.dataset.theme);
       sync();
+    };
+    btn.addEventListener("click", () => {
+      // Where supported, the new theme spreads out in a circle from the button (style.css, theme-reveal).
+      if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) return flip();
+      const r = btn.getBoundingClientRect();
+      root.style.setProperty("--vt-x", `${Math.round(r.left + r.width / 2)}px`);
+      root.style.setProperty("--vt-y", `${Math.round(r.top + r.height / 2)}px`);
+      root.classList.add("theme-switching");
+      const t = document.startViewTransition(flip);
+      t.finished.finally(() => root.classList.remove("theme-switching"));
     });
     mq.addEventListener("change", sync);
     sync();
@@ -52,6 +62,27 @@
 
   /* ---------- language: remember the visitor's choice, so "/" doesn't send them back (see lang.js) ---------- */
   document.querySelectorAll(".lang a[data-lang]").forEach(a => a.addEventListener("click", () => store.set("aa-lang", a.dataset.lang)));
+
+  /* ---------- nav: underline the section on screen ---------- */
+  function initScrollSpy() {
+    const links = new Map();
+    document.querySelectorAll('.nav ul a[href^="#"]').forEach(a => {
+      const section = document.getElementById(a.getAttribute("href").slice(1));
+      if (section) links.set(section, a);
+    });
+    if (!links.size) return;
+    const visible = new Set();
+    const mark = () => {
+      // the topmost section that's on screen wins
+      const current = [...links.keys()].find(s => visible.has(s));
+      links.forEach((a, s) => a.classList.toggle("on", s === current));
+    };
+    const spy = new IntersectionObserver(entries => {
+      entries.forEach(e => (e.isIntersecting ? visible.add(e.target) : visible.delete(e.target)));
+      mark();
+    }, { rootMargin: "-35% 0px -55% 0px" });
+    links.forEach((_, s) => spy.observe(s));
+  }
 
   /* ---------- Chapter 2: internship countdown (the HTML shows the date range) ---------- */
   function initInternship() {
@@ -280,6 +311,7 @@
   }
 
   initTheme();
+  initScrollSpy();
   initInternship();
   initCourses();
   initFlags();
