@@ -7,7 +7,7 @@
  * It runs in <head> before the page paints, so there is no flash of the wrong language.
  */
 (() => {
-  const PAGES = { en: "/", es: "/es/", ar: "/ar/" };
+  const PAGES = { en: "/", es: "/es/", de: "/de/", ar: "/ar/" };
   if (location.pathname !== "/" && location.pathname !== "/index.html") return;
   let saved = null;
   try { saved = localStorage.getItem("aa-lang"); } catch (e) { /* storage unavailable */ }

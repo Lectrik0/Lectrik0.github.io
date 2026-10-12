@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Explain This CVE – Ali Ahmed</title>
+<meta name="description" content="Ausgabe #2: ein einseitiger CVE-Prüfer für Führungskräfte und Analysten und die Sicherheitsentscheidungen dahinter.">
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/de/writeups/explain-this-cve.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="Explain This CVE – Ali Ahmed">
+<meta property="og:description" content="Ausgabe #2: ein einseitiger CVE-Prüfer für Führungskräfte und Analysten und die Sicherheitsentscheidungen dahinter.">
+<meta property="og:url" content="https://lectrik0.github.io/de/writeups/explain-this-cve.html">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: Student der Cybersicherheit auf dem Weg zu einer Karriere in der Cloud-Sicherheit.">
+<meta property="og:locale" content="de_DE">
+<meta property="article:published_time" content="2026-10-07">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<link rel="alternate" hreflang="en" href="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="de" href="https://lectrik0.github.io/de/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/writeups/explain-this-cve.html">
+<link rel="alternate" hreflang="x-default" href="https://lectrik0.github.io/writeups/explain-this-cve.html">
+<!-- /build:meta -->
+<link rel="icon" href="/assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=ac73f7b8a3">
+<noscript><link rel="stylesheet" href="/assets/nojs.css?v=02f3f7d7dd"></noscript>
+<script src="/assets/main.js?v=0f5b07f539" defer></script>
+</head>
+<body>
+<!-- build:nav -->
+<nav class="nav" aria-label="Hauptnavigation">
+  <div class="wrap">
+    <a class="brand" href="/de/">Ali Ahmed</a>
+    <ul>
+      <li><a href="/de/#story">Geschichte</a></li>
+      <li><a href="/de/#skills">Kenntnisse</a></li>
+      <li><a href="/de/#certs">Zertifikate</a></li>
+      <li><a href="/de/#writeups">Artikel</a></li>
+      <li><a href="/de/#flags">Flaggen</a></li>
+      <li><a href="/de/cv.html">Lebenslauf</a></li>
+      <li><a href="/de/#contact">Kontakt</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Sprache">
+      <a href="/writeups/explain-this-cve.html" hreflang="en" title="English" data-lang="en">EN</a>
+      <a href="/es/writeups/explain-this-cve.html" hreflang="es" title="Español" data-lang="es">ES</a>
+      <a href="/de/writeups/explain-this-cve.html" hreflang="de" title="Deutsch" aria-current="true" data-lang="de">DE</a>
+      <a href="/ar/writeups/explain-this-cve.html" hreflang="ar" title="العربية" data-lang="ar">AR</a>
+    </div>
+    <button class="toggle" id="toggle" type="button" aria-label="Zum Nachtmodus wechseln" data-day="Tag" data-night="Nacht" data-to-day="Zum Tagmodus wechseln" data-to-night="Zum Nachtmodus wechseln"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">Nacht</span></button>
+  </div>
+</nav>
+<!-- /build:nav -->
+<main>
+  <header class="page-head wrap">
+    <a class="back" href="/de/#writeups">Zurück zu den Artikeln</a>
+    <span class="caption">Ausgabe #2 &nbsp;/&nbsp; <time datetime="2026-10-07">7. Oktober 2026</time></span>
+    <h1>Explain This CVE</h1>
+    <p class="lede">Ein CVE-Eintrag ist für Spezialisten geschrieben. Ich habe einen einseitigen Prüfer gebaut, der jedes CVE in klarer Sprache erklärt, und versucht, ihn schwer missbrauchbar zu machen.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="strip">
+      <div class="frame cut-a"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Eine lange Textwand auf der einen Seite und eine kleine Zusammenfassungskarte auf der anderen">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="24" y="24" width="150" height="182" class="f-panel ink"/>
+          <path d="M38 48 h122 M38 62 h122 M38 76 h96 M38 90 h122 M38 104 h110 M38 118 h122 M38 132 h84 M38 146 h122 M38 160 h100 M38 174 h122 M38 188 h70" class="ink-thin" stroke-width="3"/>
+          <rect x="204" y="64" width="132" height="102" class="f-panel ink"/>
+          <rect x="204" y="64" width="132" height="26" class="f-purple ink"/>
+          <text x="270" y="82" class="mono-t" text-anchor="middle" fill="var(--panel)">CRITICAL</text>
+          <path d="M218 112 h104 M218 130 h80 M218 148 h92" class="ink-thin" stroke-width="4"/>
+          <text x="190" y="52" class="sfx" text-anchor="middle">vs</text>
+        </svg>
+        <figcaption class="cap"><b>Das Problem</b><span>Wer als Führungskraft entscheiden muss, ob heute alles stehen und liegen bleibt, bekommt einen Score, einen Vektor-String und 100 Links.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-b"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Drei öffentliche Datenquellen speisen eine Seite">
+          <rect width="360" height="230" class="sky-b"/>
+          <g class="ink">
+            <rect x="24" y="30" width="96" height="34" class="cloud"/>
+            <rect x="24" y="98" width="96" height="34" class="cloud"/>
+            <rect x="24" y="166" width="96" height="34" class="cloud"/>
+          </g>
+          <text x="72" y="52" class="mono-t" text-anchor="middle" fill="var(--purple)">NVD</text>
+          <text x="72" y="120" class="mono-t" text-anchor="middle" fill="var(--purple)">CISA KEV</text>
+          <text x="72" y="188" class="mono-t" text-anchor="middle" fill="var(--purple)">EPSS</text>
+          <path d="M122 47 L232 112 M122 115 h110 M122 183 L232 118" class="ink" stroke-width="3" stroke-dasharray="6 6" fill="none"/>
+          <rect x="232" y="70" width="104" height="90" class="f-panel ink"/>
+          <path d="M248 94 h72 M248 114 h72 M248 134 h48" class="ink-thin" stroke-width="4"/>
+        </svg>
+        <figcaption class="cap"><b>Die Quellen</b><span>Drei öffentliche Datenbanken, parallel abgefragt und zu einer kleinen, festen Antwort verdichtet.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-c"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Ein Schild zwischen nicht vertrauenswürdigen Daten und der Seite">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="250" y="44" width="86" height="142" class="f-panel ink"/>
+          <path d="M264 74 h58 M264 94 h58 M264 114 h40" class="ink-thin" stroke-width="4"/>
+          <path d="M150 36 l50 19 v44 c0 36 -22 58 -50 70 c-28 -12 -50 -34 -50 -70 v-44z" class="f-teal ink"/>
+          <path d="M128 106 l16 16 l30 -34" fill="none" stroke="var(--panel)" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+          <g class="ink" stroke-width="4"><path d="M24 70 l26 26 M50 70 l-26 26"/><path d="M30 144 l26 26 M56 144 l-26 26"/></g>
+          <text x="150" y="214" class="sfx" text-anchor="middle">als feindlich behandelt.</text>
+        </svg>
+        <figcaption class="cap"><b>Die Regel</b><span>Alles aus den Datenbanken und alles, was die KI sagt, wird als feindlicher Text behandelt.</span></figcaption>
+      </figure></div>
+    </div>
+
+    <article class="prose">
+      <h2>Was es tut</h2>
+      <p>Du gibst eine CVE-ID ein, etwa <code>CVE-2021-44228</code> (Log4Shell), und bekommst eine Seite mit sieben Kapiteln, immer in derselben Reihenfolge:</p>
+      <ol>
+        <li>Die CVE-ID, ihr Titel und das Veröffentlichungsdatum.</li>
+        <li>Schweregrad: der CVSS-Score mit Farbabzeichen und die Stufe als Wort.</li>
+        <li>Ob es ausgenutzt wird: die Known-Exploited-Vulnerabilities-Liste (KEV) der CISA und die EPSS-Wahrscheinlichkeit.</li>
+        <li>Eine Zusammenfassung in klarer Sprache.</li>
+        <li>Welche Produkte und Versionen betroffen sind.</li>
+        <li>Behebung und Abmilderung: was die CISA verlangt, die ersten nicht betroffenen Versionen, Patches und Hinweise.</li>
+        <li>Quellenverweise.</li>
+      </ol>
+      <p>Es gibt zwei Ansichten derselben Daten. Die <b>Manager</b>-Ansicht beantwortet „Müssen wir heute handeln?“. Die <b>Analyst</b>-Ansicht behält die Details. Jede Übersicht endet mit „Always verify with the official vendor advisory“ (immer mit dem offiziellen Herstellerhinweis abgleichen).</p>
+
+      <h2>Wie es funktioniert</h2>
+      <p>Es ist eine statische Seite und eine Serverless-Funktion, ohne Konten, ohne Datenbank und ohne Abhängigkeiten. Bei jeder Anfrage führt die Funktion diese Schritte der Reihe nach aus:</p>
+      <ol>
+        <li>Methode prüfen, dann die Anfragerate des Clients begrenzen.</li>
+        <li>Die ID validieren. Sie muss <code>^CVE-\d{4}-\d{4,10}$</code> entsprechen und der einzige Query-Parameter sein.</li>
+        <li>Im Cache nachsehen. Läuft schon eine andere Anfrage für dieselbe ID, auf sie warten, statt erneut zu fragen.</li>
+        <li>NVD, den CISA-KEV-Feed und EPSS parallel abfragen, jeweils mit eigenem Timeout.</li>
+        <li>Die nicht vertrauenswürdigen Daten in eine kleine, feste Form normalisieren.</li>
+        <li>Die Zusammenfassung schreiben: mit einem KI-Modell, wenn ein Schlüssel gesetzt ist, sonst mit festen Regeln.</li>
+      </ol>
+      <p>NVD ist Pflicht. Fallen CISA, EPSS oder das KI-Modell aus, funktioniert die Seite trotzdem und sagt, was fehlt. „Die CISA-Liste konnte nicht geprüft werden“ erscheint als <b>unbekannt</b>, nie als „nicht ausgenutzt“, denn eine fehlgeschlagene Abfrage, die wie eine gute Nachricht aussieht, ist das Schlimmste, was ein Sicherheitswerkzeug tun kann. Aus demselben Grund gilt ein KEV-Feed mit weniger als 100 Einträgen als defekt.</p>
+
+      <h2>Die Sicherheitsentscheidungen</h2>
+      <p>Die Daten stammen aus öffentlichen Datenbanken, aber auf einen Teil kann jeder Einfluss nehmen, und ein KI-Modell liest sie. Deshalb wird alles als feindlich behandelt.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Bedrohung</th><th>Was ich getan habe</th></tr></thead>
+        <tbody>
+          <tr><td>Durchsickern von API-Schlüsseln</td><td>Schlüssel werden in einer einzigen Serverdatei aus Umgebungsvariablen gelesen. Der Browser-Code erwähnt sie nie, und ein Test durchsucht jede eingecheckte Datei nach schlüsselähnlichen Zeichenfolgen.</td></tr>
+          <tr><td>Schlechte Eingaben und SSRF</td><td>Ein strenges Muster nur mit ASCII für die ID. Die drei API-Hosts sind Konstanten, die ID geht über <code>URL.searchParams</code> hinein, und Weiterleitungen werden abgelehnt.</td></tr>
+          <tr><td>XSS</td><td>Der Server bereinigt Text und begrenzt Längen. Der Browser schreibt nur mit <code>textContent</code>. Eine strenge Content Security Policy mit Trusted Types ist die letzte Verteidigungslinie.</td></tr>
+          <tr><td>Prompt Injection</td><td>Das Modell bekommt nur öffentliche Fakten, keine Werkzeuge und keine Geheimnisse. Seine Antwort muss ein JSON-Objekt mit drei Feldern sein und wird abgelehnt, wenn sie einen Link, ein Tag oder eine Versionsnummer enthält, die nicht in den Fakten steht.</td></tr>
+          <tr><td>Missbrauch und Kontingent</td><td>20 Anfragen pro Minute und Client, 6 Abfragen ohne Cache pro Minute, ein gemeinsames Budget knapp unter dem eigenen Limit von NVD und eine Stunde Cache.</td></tr>
+          <tr><td>Feindliche Upstream-Daten</td><td>Jedes Feld wird auf seinen Typ geprüft, Schleifen und Größen sind begrenzt, und ein Eintrag zu einem anderen CVE als dem angefragten wird abgelehnt.</td></tr>
+        </tbody>
+      </table></div>
+      <p>Es gibt mehr als 140 Tests auf gespeicherten echten API-Antworten, sie laufen also offline. Am nützlichsten ist eine XSS-Übung, die den echten Browser-Code gegen eine Antwort voller <code>&lt;img onerror&gt;</code>- und <code>&lt;script&gt;</code>-Payloads laufen lässt und bei jedem unerwarteten Element, Attribut oder Link fehlschlägt.</p>
+
+      <h2>Was es noch nicht kann</h2>
+      <ul>
+        <li>Cache und Ratenbegrenzung leben im Speicher einer einzelnen Funktionsinstanz und arbeiten daher nach bestem Bemühen. Ein gemeinsamer Speicher würde das beheben.</li>
+        <li>Das Kontingent von NVD teilen sich alle Besucher. Ist es aufgebraucht, zeigt die Seite die Meldung „ausgelastet“.</li>
+        <li>Ein überredetes KI-Modell kann immer noch einen irreführenden Satz ohne Link und ohne Versionsnummer schreiben. Die Prüfungen erkennen keine Meinung, deshalb werden Schweregrad, KEV und EPSS getrennt von der Zusammenfassung angezeigt.</li>
+        <li>KEV führt nur bestätigte Ausnutzung auf, und EPSS ist eine Wahrscheinlichkeit, kein Urteil.</li>
+        <li>Ich habe einen Chromium-Browser getestet, in beiden Themes, in Desktop- und Smartphone-Breite. Safari und Firefox habe ich nicht getestet.</li>
+      </ul>
+      <p>Ich habe es mit KI-Unterstützung gebaut. Funktionen und Sicherheitsanforderungen habe ich entworfen, den Code habe ich geprüft und getestet.</p>
+
+      <h2>Ausprobieren</h2>
+      <p>Der Prüfer läuft unter <a href="https://explain-this-cve.vercel.app" target="_blank" rel="noopener noreferrer">explain-this-cve.vercel.app</a>, der Code und ein Lernleitfaden liegen auf <a href="https://github.com/Lectrik0/explain-this-cve" target="_blank" rel="noopener noreferrer">GitHub</a>. Probiere zuerst Log4Shell.</p>
+    </article>
+
+    <div class="frame cut-b next"><div class="in">
+      <h3>Als Nächstes: Nessus-Plugin-IDs</h3>
+      <p>Anzeigen, welche Tenable-Nessus-Plugins ein CVE erkennen, damit ein Analyst von einem Scanner-Befund zu dieser Übersicht und zurück wechseln kann.</p>
+    </div></div>
+  </div>
+</main>
+
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, Kairo</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
+</body>
+</html>

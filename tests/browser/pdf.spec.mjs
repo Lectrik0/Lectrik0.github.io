@@ -24,6 +24,11 @@ test("the Spanish CV renders to one page too, and links to the live site", async
   expect(pdf.toString("latin1")).toContain(siteConfig().url);
 });
 
+test("the German CV renders to one page too", async () => {
+  test.setTimeout(60_000);
+  expect(pageCount(await cvPdf({ page: "de/cv.html" }))).toBe(1);
+});
+
 /* ---------- ATS: what an applicant tracking system reads out of the PDF ---------- */
 
 // The PDF's text in content order, with a new line wherever the baseline moves: roughly what ATS
@@ -128,5 +133,14 @@ test.describe("without JavaScript", () => {
     const body = await res.body();
     expect(pageCount(body)).toBe(1);
     expect(body.equals(readFileSync(new URL("../../cv-es.pdf", import.meta.url)))).toBe(true);
+  });
+
+  test("the German CV's PDF button gets its own committed PDF", async ({ page }) => {
+    await page.goto("/de/cv.html");
+    const button = page.getByRole("link", { name: "PDF herunterladen" });
+    await expect(button).toHaveAttribute("download", /-CV-DE\.pdf$/);
+    const body = await (await page.request.get(new URL(await button.getAttribute("href"), page.url()).href)).body();
+    expect(pageCount(body)).toBe(1);
+    expect(body.equals(readFileSync(new URL("../../cv-de.pdf", import.meta.url)))).toBe(true);
   });
 });

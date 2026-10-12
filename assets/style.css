@@ -467,65 +467,6 @@ code{font:500 .92em/1.4 ui-monospace,SFMono-Regular,Consolas,monospace;backgroun
   .card,.card.extra{display:grid;box-shadow:none;border:.2mm dashed #888}
 }
 
-/* ---------- terminal: "ask my terminal" ---------- */
-/* Always a dark screen, in day mode too; these colours all pass WCAG AA on it. */
-.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
-.term-frame .in{background:#0A1220}
-.term{grid-template-columns:minmax(0,1fr);--t-bg:#0A1220;--t-fg:#DCE8F8;--t-dim:#9FB2CC;--t-accent:#45D4C8;--t-ok:#5FE3A2;--t-warn:#C9B8FF;
-  display:grid;color:var(--t-fg);background:var(--t-bg);font:500 .95rem/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
-.term a{color:var(--t-accent);text-underline-offset:3px}
-.term a:hover{color:var(--t-ok)}
-.term-bar{display:flex;align-items:center;gap:7px;padding:10px 16px;border-bottom:1px solid #22314D;color:var(--t-dim);font-size:.85rem}
-.term-bar i{width:11px;height:11px;border-radius:50%;background:#22314D}
-.term-bar i:nth-child(1){background:#C86B6B} .term-bar i:nth-child(2){background:#CDB45E} .term-bar i:nth-child(3){background:#5FB88A}
-.term-bar span{margin-left:8px}
-.term-hint{margin:0;padding:12px 18px;color:var(--t-dim)}
-.term-log{padding:14px 18px 6px;border-top:1px solid #22314D;display:grid;gap:14px;align-content:start}
-.js .term-log{height:clamp(260px,46vh,440px);overflow-y:auto;overscroll-behavior:contain}
-.term-log:focus-visible{outline-offset:-4px}
-.term-cmd{margin:0 0 4px;color:var(--t-fg);overflow-wrap:anywhere}
-.term-ps{color:var(--t-ok);white-space:nowrap}
-.term-out{display:grid;gap:8px;padding-left:2px}
-.term-out p{margin:0}
-.term-dim{color:var(--t-dim)}
-.term-kv{margin:0;display:grid;grid-template-columns:max-content minmax(0,1fr);gap:2px 16px}
-.term-kv dt{color:var(--t-accent);font-weight:600}
-.term-kv dd{margin:0;overflow-wrap:anywhere}
-.term-out ul{list-style:none;margin:0;padding:0;display:grid;gap:3px}
-.term-bullets li{padding-left:2ch;text-indent:-2ch}
-.term-bullets li::before{content:"- ";color:var(--t-dim)}
-.term-item{display:grid;gap:3px}
-.term-item+.term-item{margin-top:6px}
-.term-head b{color:var(--t-fg)}
-.term-mark{color:var(--t-dim)}
-.term-mark.earned{color:var(--t-ok)} .term-mark.progress{color:var(--t-warn)}
-.term-err{color:var(--t-warn)}
-.term-chips{display:flex;flex-wrap:wrap;gap:8px;padding:8px 18px 4px}
-.term-chip{font:600 .85rem/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:var(--t-accent);background:transparent;
-  border:1px solid #2E4468;padding:8px 11px;cursor:pointer;transition:background-color .2s,border-color .2s}
-.term-chip:hover{background:#13213A;border-color:var(--t-accent)}
-.term-chip:focus-visible{outline:2px solid var(--t-accent);outline-offset:2px}
-.term-form{display:flex;align-items:center;gap:9px;margin:10px 18px 18px;padding:11px 12px;border:1px solid #2E4468;background:#0E1A30}
-.term-form:focus-within{outline:2px solid var(--t-accent);outline-offset:-1px}
-.term-form input{flex:1;min-width:0;border:0;outline:0;background:transparent;color:var(--t-fg);caret-color:var(--t-accent);
-  font:500 1rem/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;padding:0}
-.term-run{font:600 .85rem/1 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;color:#0A1220;background:var(--t-accent);border:0;padding:8px 12px;cursor:pointer}
-.term-run:hover{background:var(--t-ok)}
-.term-run:focus-visible{outline:2px solid var(--t-fg);outline-offset:2px}
-.term-form input::placeholder{color:var(--t-dim);opacity:1}
-@media (max-width:560px){
-  .term{font-size:.88rem}
-  .term-kv{grid-template-columns:minmax(0,1fr)}
-  .term-kv dd{margin-bottom:6px}
-  .term-bar{padding-inline:12px}
-  .term-log,.term-hint,.term-chips{padding-inline:12px}
-  .term-form{margin-inline:12px}
-}
-@media (prefers-reduced-motion:no-preference){
-  .js .term-out{animation:term-in .28s ease-out both}
-  @keyframes term-in{from{opacity:0;transform:translateY(5px)}}
-}
-
 /* Languages: the language switch, the Arabic fonts and right-to-left layout. The home page also exists in
    Spanish (/es/) and Arabic (/ar/); Spanish needs nothing beyond the Latin fonts above. */
 @font-face{font-family:"Noto Kufi Arabic";font-style:normal;font-weight:600;font-display:swap;src:url("fonts/noto-kufi-arabic-arabic-600-normal.woff2") format("woff2")}
@@ -541,9 +482,6 @@ html[lang="ar"] body{line-height:1.8}
 html[lang="ar"] *{letter-spacing:0!important;font-style:normal!important}
 /* the hero's skyline isn't mirrored, so its text stays on the left side */
 html[dir="rtl"] .hero-copy{margin-left:0;margin-right:auto}
-/* the terminal is code: prompt, commands and buttons read left to right; only the answers follow the page */
-html[dir="rtl"] .term-bar,html[dir="rtl"] .term-cmd,html[dir="rtl"] .term-chips,html[dir="rtl"] .term-form{direction:ltr}
-html[dir="rtl"] .term-hint{text-align:end}
 svg .mono-t{direction:ltr}
 /* code and tables of code stay left to right inside a right-to-left page */
 html[dir="rtl"] pre,html[dir="rtl"] pre code{direction:ltr;text-align:left}
@@ -592,15 +530,10 @@ html[dir="rtl"] pre,html[dir="rtl"] pre code{direction:ltr;text-align:left}
 #skills .sec-head h2::after{background:var(--blue)}
 #certs .sec-head h2::after{background:var(--green)}
 #writeups .sec-head h2::after{background:var(--purple)}
-#terminal .sec-head h2::after{background:var(--amber)}
 #flags .sec-head h2::after{background:var(--purple)}
 
 /* the sun glows at night */
 .orb{filter:drop-shadow(0 0 22px var(--glow))}
-
-/* terminal: faint scanlines, like an old monitor */
-.term{position:relative}
-.term::after{content:"";position:absolute;inset:0;pointer-events:none;background:repeating-linear-gradient(transparent 0 2px,rgba(220,232,248,.025) 2px 3px)}
 
 /* hidden-flag pips pop when one is found */
 .pips i.on{animation:pip .45s cubic-bezier(.3,1.8,.5,1)}

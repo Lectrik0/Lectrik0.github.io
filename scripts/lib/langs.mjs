@@ -8,6 +8,7 @@
 export const LANGS = [
   { code: "en", name: "English", short: "EN", path: "/", dir: "ltr", ogLocale: "en_GB" },
   { code: "es", name: "Español", short: "ES", path: "/es/", dir: "ltr", ogLocale: "es_ES" },
+  { code: "de", name: "Deutsch", short: "DE", path: "/de/", dir: "ltr", ogLocale: "de_DE" },
   { code: "ar", name: "العربية", short: "AR", path: "/ar/", dir: "rtl", ogLocale: "ar_EG" }
 ];
 export const langOfPath = path => LANGS.find(l => l.path === path) || null;

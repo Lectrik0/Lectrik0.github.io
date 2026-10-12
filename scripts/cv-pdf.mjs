@@ -18,7 +18,7 @@ import { serve } from "./serve.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 // each CV page and the PDF made from it
-export const CV_FILES = [["cv.html", "cv.pdf"], ["es/cv.html", "cv-es.pdf"]];
+export const CV_FILES = [["cv.html", "cv.pdf"], ["es/cv.html", "cv-es.pdf"], ["de/cv.html", "cv-de.pdf"]];
 
 // page: the CV page to render, "cv.html" or "es/cv.html"
 export async function cvPdf({ root = ROOT, page: cvPage = "cv.html" } = {}) {

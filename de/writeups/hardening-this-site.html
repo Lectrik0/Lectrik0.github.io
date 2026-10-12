@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; connect-src 'none'; manifest-src 'none'; media-src 'none'; frame-src 'none'; worker-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'; upgrade-insecure-requests; require-trusted-types-for 'script'; trusted-types 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Eine statische Seite härten – Ali Ahmed</title>
+<meta name="description" content="Ausgabe #1: wie diese statische Seite XSS mit CSP und Trusted Types blockt und wie sie getestet wurde.">
+<!-- build:meta -->
+<link rel="canonical" href="https://lectrik0.github.io/de/writeups/hardening-this-site.html">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Ali Ahmed">
+<meta property="og:title" content="Eine statische Seite härten – Ali Ahmed">
+<meta property="og:description" content="Ausgabe #1: wie diese statische Seite XSS mit CSP und Trusted Types blockt und wie sie getestet wurde.">
+<meta property="og:url" content="https://lectrik0.github.io/de/writeups/hardening-this-site.html">
+<meta property="og:image" content="https://lectrik0.github.io/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Ali Ahmed: Student der Cybersicherheit auf dem Weg zu einer Karriere in der Cloud-Sicherheit.">
+<meta property="og:locale" content="de_DE">
+<meta property="article:published_time" content="2026-10-04">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
+<link rel="alternate" hreflang="en" href="https://lectrik0.github.io/writeups/hardening-this-site.html">
+<link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/writeups/hardening-this-site.html">
+<link rel="alternate" hreflang="de" href="https://lectrik0.github.io/de/writeups/hardening-this-site.html">
+<link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/writeups/hardening-this-site.html">
+<link rel="alternate" hreflang="x-default" href="https://lectrik0.github.io/writeups/hardening-this-site.html">
+<!-- /build:meta -->
+<link rel="icon" href="/assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
+<link rel="preload" href="/assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/assets/style.css?v=ac73f7b8a3">
+<noscript><link rel="stylesheet" href="/assets/nojs.css?v=02f3f7d7dd"></noscript>
+<script src="/assets/main.js?v=0f5b07f539" defer></script>
+</head>
+<body>
+<!-- build:nav -->
+<nav class="nav" aria-label="Hauptnavigation">
+  <div class="wrap">
+    <a class="brand" href="/de/">Ali Ahmed</a>
+    <ul>
+      <li><a href="/de/#story">Geschichte</a></li>
+      <li><a href="/de/#skills">Kenntnisse</a></li>
+      <li><a href="/de/#certs">Zertifikate</a></li>
+      <li><a href="/de/#writeups">Artikel</a></li>
+      <li><a href="/de/#flags">Flaggen</a></li>
+      <li><a href="/de/cv.html">Lebenslauf</a></li>
+      <li><a href="/de/#contact">Kontakt</a></li>
+    </ul>
+    <div class="lang" role="group" aria-label="Sprache">
+      <a href="/writeups/hardening-this-site.html" hreflang="en" title="English" data-lang="en">EN</a>
+      <a href="/es/writeups/hardening-this-site.html" hreflang="es" title="Español" data-lang="es">ES</a>
+      <a href="/de/writeups/hardening-this-site.html" hreflang="de" title="Deutsch" aria-current="true" data-lang="de">DE</a>
+      <a href="/ar/writeups/hardening-this-site.html" hreflang="ar" title="العربية" data-lang="ar">AR</a>
+    </div>
+    <button class="toggle" id="toggle" type="button" aria-label="Zum Nachtmodus wechseln" data-day="Tag" data-night="Nacht" data-to-day="Zum Tagmodus wechseln" data-to-night="Zum Nachtmodus wechseln"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">Nacht</span></button>
+  </div>
+</nav>
+<!-- /build:nav -->
+<main>
+  <header class="page-head wrap">
+    <a class="back" href="/de/#writeups">Zurück zu den Artikeln</a>
+    <span class="caption">Ausgabe #1 &nbsp;/&nbsp; <time datetime="2026-10-04">4. Oktober 2026</time></span>
+    <h1>Eine statische Seite härten</h1>
+    <p class="lede">Diese Seite hat kein Backend, keinen Login und keine Datenbank. Angreifbar ist sie trotzdem. Hier steht, was schiefgehen konnte, was ich geändert habe und wie ich es getestet habe.</p>
+  </header>
+
+  <div class="wrap">
+    <div class="strip">
+      <div class="frame cut-a"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Eine Webseite, in die sich ein Script-Tag einschleicht">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="40" y="30" width="200" height="170" class="f-panel ink"/>
+          <rect x="40" y="30" width="200" height="24" class="mid ink"/>
+          <g class="win"><circle cx="56" cy="42" r="4"/><circle cx="70" cy="42" r="4"/><circle cx="84" cy="42" r="4"/></g>
+          <path d="M60 80 h150 M60 100 h150 M60 120 h110 M60 140 h140" class="ink-thin" stroke-width="4"/>
+          <g transform="rotate(-8 270 150)">
+            <rect x="196" y="132" width="132" height="40" class="f-purple ink"/>
+            <text x="262" y="158" class="mono-t" text-anchor="middle" fill="var(--panel)">&lt;script&gt;</text>
+          </g>
+          <path d="M330 120 l-22 8 l6 -20" fill="none" class="ink" stroke-width="3"/>
+          <text x="300" y="104" class="sfx" text-anchor="middle">schleich</text>
+        </svg>
+        <figcaption class="cap"><b>Das Problem</b><span>Jeder Text, der als HTML in die Seite gelangt, kann im Browser eines Besuchers Code ausführen.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-b"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Angriffs-Payloads fliegen auf die Seite zu">
+          <rect width="360" height="230" class="sky-b"/>
+          <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
+          <path d="M246 70 h68 M246 90 h68 M246 110 h48" class="ink-thin" stroke-width="4"/>
+          <g class="ink">
+            <rect x="20" y="40" width="150" height="34" class="cloud"/>
+            <rect x="40" y="100" width="150" height="34" class="cloud"/>
+            <rect x="16" y="160" width="150" height="34" class="cloud"/>
+          </g>
+          <text x="95" y="63" class="mono-t" text-anchor="middle" fill="var(--purple)">&lt;img onerror&gt;</text>
+          <text x="115" y="123" class="mono-t" text-anchor="middle" fill="var(--purple)">javascript:</text>
+          <text x="91" y="183" class="mono-t" text-anchor="middle" fill="var(--purple)">&lt;svg onload&gt;</text>
+          <path d="M176 57 h40 M196 117 h28 M172 177 h44" class="ink" stroke-width="3" stroke-dasharray="6 6"/>
+        </svg>
+        <figcaption class="cap"><b>Der Angriff</b><span>Ich habe klassische XSS-Payloads in die eigenen Inhalte der Seite eingespeist, um zu sehen, was ausgeführt wird.</span></figcaption>
+      </figure></div>
+
+      <div class="frame cut-c"><figure class="in">
+        <svg viewBox="0 0 360 230" role="img" aria-label="Ein Schild mit der Aufschrift CSP blockt die Payloads">
+          <rect width="360" height="230" class="sky-a"/>
+          <rect x="230" y="40" width="100" height="150" class="f-panel ink"/>
+          <path d="M246 70 h68 M246 90 h68 M246 110 h48" class="ink-thin" stroke-width="4"/>
+          <path d="M150 40 l52 20 v46 c0 38 -24 60 -52 72 c-28 -12 -52 -34 -52 -72 v-46z" class="f-teal ink"/>
+          <text x="150" y="122" text-anchor="middle" font-family="var(--f-display)" font-weight="700" font-size="26" fill="var(--panel)">CSP</text>
+          <g class="ink" stroke-width="4"><path d="M30 60 l30 30 M60 60 l-30 30"/><path d="M40 150 l30 30 M70 150 l-30 30"/></g>
+          <text x="150" y="214" class="sfx" text-anchor="middle">blockiert.</text>
+        </svg>
+        <figcaption class="cap"><b>Die Lösung</b><span>Alles als Text ausgeben und den Browser das mit CSP und Trusted Types durchsetzen lassen.</span></figcaption>
+      </figure></div>
+    </div>
+
+    <article class="prose">
+      <h2>Warum auch eine statische Seite Sicherheit braucht</h2>
+      <p>Man denkt leicht, eine statische Seite biete keine Angriffsfläche. Es gibt keinen Servercode zum Ausnutzen und keine Datenbank zum Auslesen. Aber die Seite führt in jedem Browser JavaScript aus, und genau dort entsteht Cross-Site-Scripting (XSS).</p>
+      <p>Meine Seite baut Teile der Seite aus Daten: Kenntnisse, Zertifikate und die Liste der Artikel. Die erste Version fügte diese Daten mit <code>innerHTML</code> ein. Das ist unproblematisch, solange ich alle Daten selbst schreibe, aber ein einziger schlechter Titel oder Link, den ich irgendwo kopiere, würde für jeden, der die Seite öffnet, als Code laufen.</p>
+
+      <h2>Was schiefgehen konnte</h2>
+      <ul>
+        <li><b>XSS über Inhalte:</b> ein Artikeltitel wie <code>&lt;img src=x onerror=...&gt;</code> läuft, sobald die Seite ihn darstellt.</li>
+        <li><b>Bösartige Links:</b> eine <code>javascript:</code>- oder <code>data:</code>-URL in einem Link führt beim Klick Code aus.</li>
+        <li><b>Code von Dritten:</b> Schriften oder Skripte von fremden Domains können sich ändern, Besucher verfolgen oder kompromittiert sein.</li>
+        <li><b>Reverse Tabnabbing:</b> eine in einem neuen Tab geöffnete Seite kann meinen ursprünglichen Tab umleiten.</li>
+      </ul>
+
+      <h2>Was ich geändert habe</h2>
+      <p><b>1. Inhalte sind immer Text, nie HTML.</b> Jedes Element wird mit <code>createElement</code> gebaut und mit <code>textContent</code> gefüllt. Der Browser behandelt die Daten als Text, Markup darin wird also angezeigt, nicht ausgeführt.</p>
+      <p><b>2. Eine strenge Content Security Policy.</b> Der Browser lädt Skripte, Stile, Schriften und Bilder nur von meiner eigenen Seite. Inline-Skripte, <code>eval</code>, Plugins und Formulare sind blockiert.</p>
+<pre><code>default-src 'none'; script-src 'self'; style-src 'self';
+font-src 'self'; img-src 'self'; connect-src 'self';
+object-src 'none'; base-uri 'none'; form-action 'none';
+require-trusted-types-for 'script'; trusted-types 'none'</code></pre>
+      <p><b>3. Trusted Types.</b> Die letzten beiden Zeilen der Policy lassen den Browser jede rohe HTML-Zuweisung verweigern, etwa <code>innerHTML</code>. Selbst wenn ich das alte Muster später versehentlich wieder einbaue, gibt es einen Fehler statt einer Sicherheitslücke.</p>
+      <p><b>4. Eine Allowlist für URLs.</b> Jeder Link läuft durch eine Funktion, bevor er auf die Seite kommt. Nur <code>https:</code>-Links und Pfade auf meiner eigenen Seite kommen durch.</p>
+<pre><code>function safeUrl(value) {
+  const u = new URL(value, location.href);
+  if (u.protocol === "https:") return u.href;
+  if (u.origin === location.origin) return u.href;
+  return null; // javascript:, data: und alles andere wird verworfen
+}</code></pre>
+      <p><b>5. Keine Dritten.</b> Die Schriften liegen auf der Seite selbst, und die Seite stellt keine Anfragen an andere Domains. Es gibt keinen fremden Code, dem man trauen müsste, und kein Tracking der Besucher.</p>
+      <p><b>6. Die Kleinigkeiten.</b> Ausgehende Links nutzen <code>rel="noopener noreferrer"</code>, die Referrer-Policy ist <code>no-referrer</code>, und <code>/.well-known/security.txt</code> sagt, wie man ein Problem melden kann.</p>
+
+      <h2>Wie ich getestet habe</h2>
+      <p>Ich habe echte Payloads in die Daten der Seite eingebaut, sie lokal ausgeliefert und in Chromium mit aktiver Policy geladen.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Payload</th><th>Wo</th><th>Ergebnis</th></tr></thead>
+        <tbody>
+          <tr><td><code>&lt;img src=x onerror=...&gt;</code></td><td>Artikeltitel</td><td class="ok">Als Text angezeigt</td></tr>
+          <tr><td><code>&lt;script&gt;...&lt;/script&gt;</code></td><td>Artikel-Tag</td><td class="ok">Als Text angezeigt</td></tr>
+          <tr><td><code>"&gt;&lt;svg onload=...&gt;</code></td><td>Artikelzusammenfassung</td><td class="ok">Als Text angezeigt</td></tr>
+          <tr><td><code>javascript:...</code></td><td>Artikel- und Lebenslauf-Link</td><td class="ok">Link entfernt</td></tr>
+          <tr><td><code>data:text/html,...</code></td><td>Artikel-Link</td><td class="ok">Link entfernt</td></tr>
+          <tr><td>Inline-<code>&lt;script&gt;</code> im HTML</td><td>Seitenquelltext</td><td class="ok">Von CSP blockiert</td></tr>
+          <tr><td><code>eval()</code></td><td>Skript der Seite</td><td class="ok">Von CSP blockiert</td></tr>
+          <tr><td>Zuweisung an <code>innerHTML</code></td><td>Live-Seite</td><td class="ok">Von Trusted Types blockiert</td></tr>
+        </tbody>
+      </table></div>
+      <p>Keine der Payloads wurde ausgeführt. Die letzte Prüfung habe ich nach dem Ausrollen auf der Live-Seite wiederholt.</p>
+
+      <h2>Was noch fehlt</h2>
+      <p>GitHub Pages erlaubt keine eigenen HTTP-Antwort-Header. Manche Schutzmaßnahmen funktionieren nur als Header und nicht als <code>&lt;meta&gt;</code>-Tag: <code>frame-ancestors</code> gegen Clickjacking, <code>Strict-Transport-Security</code> und <code>Permissions-Policy</code>. Das Risiko ist gering, weil die Seite nichts bietet, wozu man jemanden per Klick-Trick verleiten könnte, aber es bleibt eine Lücke.</p>
+      <p>Die Lösung ist, die Seite von einem Ort auszuliefern, an dem ich die Header kontrolliere. Das ist die nächste Ausgabe.</p>
+    </article>
+
+    <div class="frame cut-b next"><div class="in">
+      <h3>Als Nächstes: Ausgabe #2, Explain This CVE</h3>
+      <p>Ein einseitiger CVE-Prüfer für Führungskräfte und Analysten. Der Umzug dieser Seite zu S3 und CloudFront, um richtige Sicherheits-Header zu bekommen, steht weiterhin auf der Liste.</p>
+    </div></div>
+  </div>
+</main>
+
+<!-- build:footer -->
+<footer>
+  <div class="wrap">
+    <span>Ali Ahmed, Kairo</span>
+    <span id="year">2026</span>
+  </div>
+</footer>
+<!-- /build:footer -->
+</body>
+</html>

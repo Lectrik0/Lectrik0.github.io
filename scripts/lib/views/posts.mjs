@@ -1,5 +1,5 @@
 /*
- * Which write-ups to show, and in what order. Shared by the home page, the feed and the terminal.
+ * Which write-ups to show, and in what order. Shared by the home page and the feed.
  */
 import { safeUrl } from "../html.mjs";
 import { named } from "./shared.mjs";

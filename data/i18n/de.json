@@ -1,0 +1,326 @@
+{
+ "ui": {
+  "locale": "de-DE",
+  "navLabel": "Hauptnavigation",
+  "story": "Geschichte",
+  "skills": "Kenntnisse",
+  "certs": "Zertifikate",
+  "writeups": "Artikel",
+  "flags": "Flaggen",
+  "cv": "Lebenslauf",
+  "contact": "Kontakt",
+  "language": "Sprache",
+  "night": "Nacht",
+  "day": "Tag",
+  "toNight": "Zum Nachtmodus wechseln",
+  "toDay": "Zum Tagmodus wechseln",
+  "viewCv": "Lebenslauf ansehen",
+  "email": "E-Mail",
+  "cveChecker": "CVE-Prüfer",
+  "downloadPdf": "PDF herunterladen",
+  "internship": "Praktikum",
+  "internshipProgress": "Fortschritt des Praktikums",
+  "earned": "Erworben",
+  "progress": "In Arbeit",
+  "planned": "Geplant",
+  "noPosts": "Der erste Artikel kommt bald",
+  "courses": "Module",
+  "ectsDone": "von {total} ECTS abgeschlossen",
+  "semesters": "Semester",
+  "completed": "Abgeschlossen",
+  "current": "Laufend",
+  "upcoming": "Anstehend",
+  "abroad": "Im Ausland: ",
+  "ects": "ECTS",
+  "major": "Schwerpunkt {major}",
+  "semester": "Semester",
+  "jsComplete": "Abgeschlossen",
+  "jsDaysLeft": "Noch {n} Tage",
+  "jsFlagFormat": "Flaggen haben das Format AA{...} mit Buchstaben, Ziffern und Unterstrichen darin.",
+  "jsFlagNoCrypto": "Dein Browser kann Flaggen hier nicht prüfen. Probiere eine aktuelle Version von Chrome, Firefox oder Safari.",
+  "jsFlagWrong": "Das ist keine der Flaggen. Prüfe auf Tippfehler und versuche es noch einmal.",
+  "jsFlagAgain": "Du hast Flagge {n} schon gefunden.",
+  "jsFlagAll": "Alle vier Flaggen gefunden. Schreib mir auf LinkedIn und sag mir, welche am längsten gedauert hat.",
+  "jsFlagOne": "Flagge {n} gefunden. Noch {left} offen.",
+  "jsFlagCount": "{n} von {total} gefunden",
+  "cvPdfPath": "/cv-de.pdf",
+  "cvPdfSuffix": "-CV-DE",
+  "cvWords": {
+   "Profile": "Profil",
+   "Education": "Ausbildung",
+   "Experience": "Berufserfahrung",
+   "Projects": "Projekte",
+   "Certifications & Training": "Zertifikate und Weiterbildung",
+   "Skills": "Kenntnisse",
+   "Spoken languages": "Sprachen",
+   "Military status": "Wehrdienststatus",
+   "Verify": "Prüfen",
+   "Earned": "Erworben",
+   "In progress": "In Arbeit",
+   "Planned": "Geplant"
+  },
+  "courseNames": {
+   "Mathematics I": "Mathematik I",
+   "Mathematics II": "Mathematik II",
+   "Mathematics III": "Mathematik III",
+   "Mathematics IV": "Mathematik IV",
+   "Programming I": "Programmierung I",
+   "Programming II": "Programmierung II",
+   "Programming III": "Programmierung III",
+   "Physics": "Physik",
+   "Digital Logic Design": "Digitaler Schaltungsentwurf",
+   "English for Academic Purposes and Study Skills": "Akademisches Englisch und Studientechniken",
+   "German 1": "Deutsch 1",
+   "German 2": "Deutsch 2",
+   "German 3": "Deutsch 3",
+   "German 4": "Deutsch 4",
+   "Computer Networks": "Rechnernetze",
+   "Theoretical Computer Science": "Theoretische Informatik",
+   "Computer Organization": "Rechnerorganisation",
+   "Scientific Methods": "Wissenschaftliche Methoden",
+   "Operating Systems": "Betriebssysteme",
+   "Databases": "Datenbanken",
+   "Data Structures & Algorithms": "Datenstrukturen und Algorithmen",
+   "Communication and Presentation Skills": "Kommunikations- und Präsentationstechniken",
+   "Software Engineering": "Softwaretechnik",
+   "Analysis and Design of Algorithms": "Analyse und Entwurf von Algorithmen",
+   "Information Security": "Informationssicherheit",
+   "Introduction to Data Science": "Einführung in Data Science",
+   "Introduction to Media Informatics": "Einführung in die Medieninformatik",
+   "Research Paper Writing": "Wissenschaftliches Schreiben",
+   "Cryptography": "Kryptografie",
+   "Software and Mobile Devices Security": "Sicherheit von Software und mobilen Geräten",
+   "Digital Forensics": "Digitale Forensik",
+   "Software Project I": "Softwareprojekt I",
+   "Machine Learning": "Maschinelles Lernen",
+   "Database Programming": "Datenbankprogrammierung",
+   "Network Security": "Netzwerksicherheit",
+   "Ethical Hacking and Penetration Testing": "Ethical Hacking und Penetrationstests",
+   "Business Continuity and Risk Management": "Business Continuity und Risikomanagement",
+   "Project Management": "Projektmanagement",
+   "Big Data and NoSQL": "Big Data und NoSQL",
+   "Mobile Software Development": "Entwicklung mobiler Software",
+   "Bachelor Thesis and Colloquium": "Bachelorarbeit und Kolloquium",
+   "Research Methodology": "Forschungsmethodik",
+   "Workplace & Internship Readiness": "Vorbereitung auf Beruf und Praktikum",
+   "Internship": "Praktikum",
+   "Internship-accompanying Seminar": "Praktikumsbegleitendes Seminar",
+   "Business Ethics": "Wirtschaftsethik",
+   "GIU Berlin, Germany": "GIU Berlin, Deutschland"
+  }
+ },
+ "data": {
+  "profile": {
+   "location": "Kairo, Ägypten",
+   "tagline": "Student der Cybersicherheit auf dem Weg zu einer Karriere in der Cloud-Sicherheit.",
+   "cv": "de/cv.html"
+  },
+  "story": [
+   {
+    "title": "Ich studiere Cybersicherheit an der GIU",
+    "text": "Letztes Jahr eines Bachelorstudiums an der German International University mit Schwerpunkt IT-Sicherheit. Netzwerke, Betriebssysteme, Kryptografie und wie all das kaputtgeht."
+   },
+   {
+    "title": "Sechs Monate in einer Bank",
+    "text": "Praktikum bei Ebank: Ich sehe, wie ein Finanzinstitut seine IT und Sicherheit betreibt."
+   },
+   {
+    "title": "Hinauf in die Cloud",
+    "text": "Ich lerne für AWS Certified Cloud Practitioner. In der Cloud möchte ich mich spezialisieren: Identitäten, Daten und Infrastruktur, die sich selbst verteidigen."
+   },
+   {
+    "title": "Nächste Schritte",
+    "text": "AWS Solutions Architect – Associate, um zu lernen, wie sichere Systeme entworfen werden, danach AWS Certified Security – Specialty."
+   },
+   {
+    "title": "Cloud-Security-Architekt",
+    "text": "Dorthin führt dieser Weg."
+   }
+  ],
+  "courses": {
+   "university": "German International University (GIU)",
+   "degree": "B.Sc. Informatik und Computerwissenschaften",
+   "major": "IT-Sicherheit"
+  },
+  "skills": [
+   {
+    "group": "Sicher im Umgang mit",
+    "note": "In Studium und Projekten eingesetzt.",
+    "color": "teal",
+    "items": [
+     "Netzwerke",
+     "Linux",
+     "Grundlagen der Sicherheit",
+     "Grundlagen der Kryptografie"
+    ]
+   },
+   {
+    "group": "Aktuell im Einsatz",
+    "note": "Praktisches Wissen, das jede Woche besser wird.",
+    "color": "blue",
+    "items": [
+     "Python",
+     "Zentrale AWS-Dienste",
+     "Git und GitHub"
+    ]
+   },
+   {
+    "group": "Als Nächstes",
+    "note": "Auf der Roadmap für die kommenden Monate.",
+    "color": "purple",
+    "items": [
+     "Cloud IAM",
+     "Terraform",
+     "CloudFormation",
+     "Cloud-Logging und -Erkennung"
+    ]
+   }
+  ],
+  "posts": [
+   {
+    "title": "Ausgabe #2: Explain This CVE",
+    "date": "2026-10-07",
+    "tag": "Projekt",
+    "summary": "Ein einseitiger CVE-Prüfer für Führungskräfte und Analysten: wie er funktioniert und welche Sicherheitsentscheidungen dahinterstehen.",
+    "url": "de/writeups/explain-this-cve.html"
+   },
+   {
+    "title": "Ausgabe #1: Eine statische Seite härten",
+    "date": "2026-10-04",
+    "tag": "Websicherheit",
+    "summary": "Auch eine Seite ohne Backend kann angegriffen werden. Wie diese hier XSS mit CSP und Trusted Types blockt und wie ich es getestet habe.",
+    "url": "de/writeups/hardening-this-site.html"
+   }
+  ],
+  "cv": {
+   "headline": "IT-Sicherheit im letzten Studienjahr, Schwerpunkt Cloud-Sicherheit.",
+   "military": "Zurückgestellt (Student)",
+   "summary": "Student der IT-Sicherheit im letzten Studienjahr mit praktischer Praktikumserfahrung in einer Bank: Schwachstellenmanagement, Governance, Risk und Compliance (GRC), Penetrationstests und SOC-Betrieb. Ich arbeite auf eine Karriere in der Cloud-Sicherheit hin und bereite AWS Certified Cloud Practitioner vor.",
+   "education": [
+    {
+     "title": "B.Sc. Informatik und Computerwissenschaften, Schwerpunkt IT-Sicherheit",
+     "org": "German International University (GIU)",
+     "dates": "Sep. 2023 – Sep. 2027",
+     "details": "Schwerpunkte: Kryptografie, Netzwerksicherheit, Ethical Hacking, Digitale Forensik, Software- und Mobilsicherheit, Risikomanagement."
+    },
+    {
+     "title": "Austauschsemester (5. Semester), Cybersicherheit",
+     "org": "German International University in Berlin (GIU Berlin)",
+     "location": "Berlin, Deutschland",
+     "dates": "Sep. 2025 – Feb. 2026"
+    }
+   ],
+   "experience": [
+    {
+     "title": "Praktikant Informationssicherheit",
+     "org": "Ebank",
+     "location": "Neu-Kairo, Ägypten",
+     "dates": "Aug. 2026 – Jan. 2027",
+     "bullets": [
+      "Rotation durch die Teams Schwachstellenmanagement, GRC, Penetrationstests und SOC der Bank.",
+      "Schwachstellenscans mit Tenable durchgeführt und die Ergebnisse nach CVE und Plugin analysiert.",
+      "Mit dem GRC-Team an Risikobewertungen für Mitarbeitende nach ISO/IEC 27001 gearbeitet.",
+      "Phishing-Simulationen durchgeführt, um das Sicherheitsbewusstsein zu prüfen.",
+      "Interne Netzwerk-Penetrationstests auf jeder Etage der Bank, betreut vom Pentest-Team.",
+      "Mit IBM QRadar (SIEM) im SOC Sicherheitsereignisse überwacht und analysiert."
+     ]
+    },
+    {
+     "title": "Praktikant Cybersicherheit",
+     "org": "ICT Misr",
+     "location": "Scheich Zayid, Gizeh, Ägypten",
+     "dates": "Juli 2024 (1 Monat)",
+     "bullets": [
+      "Das Cybersicherheitsteam im Alltag begleitet und gelernt, wie Unternehmen Sicherheit praktisch umsetzen.",
+      "Beobachtet, wie das Team mit Kunden arbeitet und deren Sicherheitsbedarf bedient.",
+      "Grundlagen zu Sicherheitskonzepten, gängigen Angriffsvektoren und einfachen Schutzmaßnahmen aufgebaut."
+     ]
+    }
+   ],
+   "projects": [
+    {
+     "title": "Explain This CVE: explain-this-cve.vercel.app",
+     "stack": "JavaScript, Node.js, Vercel, NVD, CISA KEV, EPSS",
+     "dates": "2026",
+     "bullets": [
+      "CVE-Prüfer gebaut, der NVD-, CISA-KEV- und EPSS-Daten zu einer Einseiten-Übersicht für Führungskräfte und Analysten verdichtet.",
+      "Alle externen Daten und KI-Ausgaben als feindlich behandelt: Eingabeprüfung, Ratenbegrenzung, CSP mit Trusted Types und über 140 Offline-Tests samt XSS-Übung."
+     ]
+    },
+    {
+     "title": "Persönliche Seite: lectrik0.github.io",
+     "stack": "HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation",
+     "dates": "2026",
+     "bullets": [
+      "Statisches Portfolio, gehärtet gegen XSS (strenge CSP und Trusted Types, mit Injection-Payloads getestet), ohne Drittanbieter-Anfragen und mit AWS-Infrastruktur als Code, schlüssellos per OIDC ausgerollt."
+     ]
+    }
+   ],
+   "skills": [
+    {
+     "label": "Sicherheit",
+     "text": "Schwachstellenscans, Netzwerk-Penetrationstests, Phishing-Simulation, Risikobewertung, Websicherheit, Kryptografie"
+    },
+    {
+     "label": "Werkzeuge",
+     "text": "Tenable, IBM QRadar (SIEM), Git, GitHub Actions"
+    },
+    {
+     "label": "Cloud",
+     "text": "Zentrale AWS-Dienste, IAM, S3, CloudFront, CloudFormation"
+    },
+    {
+     "label": "Systeme",
+     "text": "Netzwerke, Linux"
+    },
+    {
+     "label": "Standards",
+     "text": "ISO/IEC 27001"
+    }
+   ],
+   "languages": [
+    "Englisch (verhandlungssicher)",
+    "Arabisch (Muttersprache)"
+   ]
+  }
+ },
+ "text": {
+  "Ali Ahmed, cybersecurity student in Cairo building toward a career in cloud security.": "Ali Ahmed, Student der Cybersicherheit in Kairo, auf dem Weg zu einer Karriere in der Cloud-Sicherheit.",
+  "The story so far": "Die Geschichte bisher",
+  "Where I've been, where I am, and where I'm heading.": "Wo ich war, wo ich bin und wohin ich will.",
+  "Chapter 1": "Kapitel 1",
+  "Chapter 2": "Kapitel 2",
+  "Chapter 3": "Kapitel 3",
+  "Chapter 4": "Kapitel 4",
+  "Chapter 5": "Kapitel 5",
+  "See all my courses": "Alle meine Module ansehen",
+  "A student looking at the Cairo skyline": "Ein Student blickt auf die Skyline von Kairo",
+  "A bank building with a shield on its front": "Ein Bankgebäude mit einem Schild an der Fassade",
+  "A padlock inside a cloud, connected by lines to the ground": "Ein Vorhängeschloss in einer Wolke, durch Linien mit dem Boden verbunden",
+  "Three rising blocks like stairs, with a flag on the top one": "Drei aufsteigende Blöcke wie Treppenstufen, auf dem obersten eine Flagge",
+  "A road leading toward a distant city on the horizon": "Eine Straße führt zu einer fernen Stadt am Horizont",
+  "Skills": "Kenntnisse",
+  "Grouped by where I am with each one.": "Gruppiert danach, wo ich bei jeder stehe.",
+  "Certifications": "Zertifikate",
+  "Earned badges fill in. Dashed ones are in progress or planned.": "Erworbene Abzeichen sind gefüllt. Gestrichelte sind in Arbeit oder geplant.",
+  "Write-ups": "Artikel",
+  "Notes from labs, CTFs and cloud security topics I'm learning.": "Notizen aus Labs, CTFs und Cloud-Sicherheitsthemen, die ich lerne.",
+  "Hidden flags": "Versteckte Flaggen",
+  "There are four flags hidden on this site, each in the format <code>AA{...}</code>. Nothing here needs hacking: just curiosity and the tools in your browser.": "Auf dieser Seite sind vier Flaggen versteckt, jeweils im Format <code>AA{...}</code>. Dafür muss nichts gehackt werden: nur Neugier und die Werkzeuge deines Browsers.",
+  "Hints": "Hinweise",
+  "Every page has a back side.": "Jede Seite hat eine Rückseite.",
+  "The site talks to itself where only developers listen.": "Die Seite spricht mit sich selbst, dort, wo nur Entwickler zuhören.",
+  "Security people know exactly where a site keeps its contact details.": "Sicherheitsleute wissen genau, wo eine Seite ihre Kontaktdaten aufbewahrt.",
+  "Something in Chapter 3 isn't written in English.": "Etwas in Kapitel 3 ist nicht in normaler Sprache geschrieben.",
+  "Check a flag": "Flagge prüfen",
+  "The checker runs in your browser, so it needs JavaScript. The hints work without it.": "Die Prüfung läuft in deinem Browser und braucht daher JavaScript. Die Hinweise funktionieren auch ohne.",
+  "Flag": "Flagge",
+  "Check flag": "Flagge prüfen",
+  "Flags are checked in your browser. Nothing is sent anywhere.": "Flaggen werden in deinem Browser geprüft. Es wird nichts verschickt.",
+  "0 of 4 found": "0 von 4 gefunden",
+  "To be continued…": "Fortsetzung folgt…",
+  "I'm looking for cloud security internships and junior roles. If your team works on cloud security, I'd like to hear from you.": "Ich suche Praktika und Junior-Stellen in der Cloud-Sicherheit. Wenn dein Team an Cloud-Sicherheit arbeitet, melde dich gern bei mir.",
+  "My courses": "Meine Module",
+  "Close": "Schließen"
+ }
+}

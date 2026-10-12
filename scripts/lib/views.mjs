@@ -13,5 +13,4 @@ export { heroButtons, contactButtons, internship, skills, certs, posts } from ".
 export { postList } from "./views/posts.mjs";
 export { coursesSummary, semesters } from "./views/courses.mjs";
 export { cvContact, cvPersonal, cvSections, cvBody, cvDownloads, cards } from "./views/cv.mjs";
-export { terminal } from "./views/terminal.mjs";
 export { bindings } from "./views/bindings.mjs";

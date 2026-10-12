@@ -8,7 +8,7 @@ import { ICON_PATHS } from "./icons.mjs";
 import { t, jsStrings } from "./ui.mjs";
 import { LANGS, langOfPath } from "../langs.mjs";
 
-const NAV = ["story", "skills", "certs", "writeups", "terminal", "flags", "cv", "contact"];
+const NAV = ["story", "skills", "certs", "writeups", "flags", "cv", "contact"];
 
 // EN / ES / AR links: each goes to the same page in that language, and only languages that have it are listed.
 function languageSwitch(data, page) {

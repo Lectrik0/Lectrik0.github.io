@@ -23,19 +23,20 @@
 <link rel="alternate" type="application/atom+xml" title="Ali Ahmed: write-ups" href="/feed.xml">
 <link rel="alternate" hreflang="en" href="https://lectrik0.github.io/">
 <link rel="alternate" hreflang="es" href="https://lectrik0.github.io/es/">
+<link rel="alternate" hreflang="de" href="https://lectrik0.github.io/de/">
 <link rel="alternate" hreflang="ar" href="https://lectrik0.github.io/ar/">
 <link rel="alternate" hreflang="x-default" href="https://lectrik0.github.io/">
 <script type="application/ld+json">{"@context":"https://schema.org","@type":"Person","name":"Ali Ahmed","url":"https://lectrik0.github.io/ar/","description":"طالب أمن سيبراني يبني طريقه نحو مسار مهني في أمن السحابة.","address":{"@type":"PostalAddress","addressLocality":"القاهرة، مصر"},"email":"mailto:aliahmedismail2@gmail.com","alumniOf":{"@type":"CollegeOrUniversity","name":"الجامعة الألمانية الدولية (GIU)"},"sameAs":["https://www.linkedin.com/in/aliahmed255","https://github.com/Lectrik0"]}</script>
 <!-- /build:meta -->
 <!-- build:ui-strings -->
-<script type="application/json" id="ui-strings">{"jsComplete":"اكتمل","jsDaysLeft":"متبقٍ {n} يومًا","jsFlagFormat":"شكل الراية AA{...} وبداخلها حروف وأرقام وشرطات سفلية.","jsFlagNoCrypto":"متصفحك لا يستطيع فحص الرايات هنا. جرّب نسخة حديثة من Chrome أو Firefox أو Safari.","jsFlagWrong":"هذه ليست إحدى الرايات. راجع الكتابة وحاول مرة أخرى.","jsFlagAgain":"لقد وجدت الراية {n} من قبل.","jsFlagAll":"وجدت الرايات الأربع. راسلني على LinkedIn وأخبرني أيها استغرقت وقتًا أطول.","jsFlagOne":"تم العثور على الراية {n}. تبقّى {left}.","jsFlagCount":"تم العثور على {n} من {total}","jsSudo":"{user} غير موجود في ملف sudoers. سيتم الإبلاغ عن هذه الحادثة.","jsRm":"rm: تم رفض الإذن. محاولة جيدة.","jsExit":"لا مهرب من هنا. لكن قسم التواصل في الأسفل.","jsCatMissing":"cat: اسم الملف مفقود","jsCatFlag":"محاولة جيدة. الرايات الحقيقية ليست في ملف: انظر التلميحات في قسم الرايات المخفية.","jsCatBinary":"cat: {file}: ملف ثنائي. جرّب الأمر cv.","jsCatNone":"cat: {file}: لا يوجد ملف أو مجلد بهذا الاسم","jsNothingYet":"لا شيء بعد.","jsNotFound":"{word}: الأمر غير موجود. اكتب help لعرض الأوامر المتاحة."}</script>
+<script type="application/json" id="ui-strings">{"jsComplete":"اكتمل","jsDaysLeft":"متبقٍ {n} يومًا","jsFlagFormat":"شكل الراية AA{...} وبداخلها حروف وأرقام وشرطات سفلية.","jsFlagNoCrypto":"متصفحك لا يستطيع فحص الرايات هنا. جرّب نسخة حديثة من Chrome أو Firefox أو Safari.","jsFlagWrong":"هذه ليست إحدى الرايات. راجع الكتابة وحاول مرة أخرى.","jsFlagAgain":"لقد وجدت الراية {n} من قبل.","jsFlagAll":"وجدت الرايات الأربع. راسلني على LinkedIn وأخبرني أيها استغرقت وقتًا أطول.","jsFlagOne":"تم العثور على الراية {n}. تبقّى {left}.","jsFlagCount":"تم العثور على {n} من {total}"}</script>
 <!-- /build:ui-strings -->
-<script src="/assets/lang.js?v=6115b2af9f"></script>
+<script src="/assets/lang.js?v=a17eefbd2d"></script>
 <link rel="icon" href="/assets/favicon.svg?v=a036ab01e4" type="image/svg+xml">
 <link rel="preload" href="/assets/fonts/chakra-petch-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="/assets/style.css?v=e7a37081a1">
-<noscript><link rel="stylesheet" href="/assets/nojs.css?v=16c2832380"></noscript>
-<script src="/assets/main.js?v=4f85ad0f18" defer></script>
+<link rel="stylesheet" href="/assets/style.css?v=ac73f7b8a3">
+<noscript><link rel="stylesheet" href="/assets/nojs.css?v=02f3f7d7dd"></noscript>
+<script src="/assets/main.js?v=0f5b07f539" defer></script>
 </head>
 <body>
 <!-- Hi, curious one. You found flag 1 of 4: AA{v13w_s0urc3_f1rst} -->
@@ -64,7 +65,6 @@
       <li><a href="#skills">المهارات</a></li>
       <li><a href="#certs">الشهادات</a></li>
       <li><a href="#writeups">المقالات</a></li>
-      <li><a href="#terminal">الطرفية</a></li>
       <li><a href="#flags">الرايات</a></li>
       <li><a href="/cv.html">السيرة الذاتية</a></li>
       <li><a href="#contact">تواصل</a></li>
@@ -72,6 +72,7 @@
     <div class="lang" role="group" aria-label="اللغة">
       <a href="/" hreflang="en" title="English" data-lang="en">EN</a>
       <a href="/es/" hreflang="es" title="Español" data-lang="es">ES</a>
+      <a href="/de/" hreflang="de" title="Deutsch" data-lang="de">DE</a>
       <a href="/ar/" hreflang="ar" title="العربية" aria-current="true" data-lang="ar">AR</a>
     </div>
     <button class="toggle" id="toggle" type="button" aria-label="التبديل إلى الوضع الليلي" data-day="نهاري" data-night="ليلي" data-to-day="التبديل إلى الوضع النهاري" data-to-night="التبديل إلى الوضع الليلي"><svg viewBox="0 0 16 16" aria-hidden="true"><path id="toggle-icon" fill="currentColor" d="M6 .3a7.7 7.7 0 109.7 9.7A6.2 6.2 0 016 .3z"></path></svg><span id="toggle-label">ليلي</span></button>
@@ -355,86 +356,6 @@
       <a href="/ar/writeups/hardening-this-site.html" class="post"><time datetime="2026-10-04">٤ أكتوبر ٢٠٢٦</time><div><h3>Issue #1: Hardening a static site</h3><p>موقع بلا خادم خلفي يمكن مهاجمته أيضًا. كيف يمنع هذا الموقع هجمات XSS عبر CSP وTrusted Types، وكيف اختبرته.</p></div><span class="tag">أمن الويب</span></a>
     </div>
     <!-- /build:posts -->
-  </section>
-
-  <section class="sec wrap" id="terminal" aria-labelledby="terminal-h">
-    <div class="sec-head">
-      <h2 id="terminal-h">اسأل طرفيتي</h2>
-      <p>أسرع طريقة للتعرف عليّ. اكتب <code>whoami</code> أو <code>skills</code> أو <code>projects</code>، أو اضغط على أحد الأوامر.</p>
-    </div>
-    <div class="frame cut-b term-frame"><div class="in">
-      <!-- build:terminal -->
-      <div class="term" id="term">
-        <div class="term-bar" aria-hidden="true"><i></i><i></i><i></i><span>ali@portfolio:~</span></div>
-        <p class="term-hint needs-js">اكتب أمرًا واضغط Enter، أو اضغط على أحد الأوامر أدناه.</p>
-        <div class="term-log" id="term-log" role="log" tabindex="0" aria-label="مخرجات الطرفية" aria-live="off">
-          <div class="term-block" data-cmd="help">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> help</p>
-            <div class="term-out"><p>الأوامر (Tab لإكمال الأمر، وسهم الأعلى لاسترجاع الأمر السابق):</p><dl class="term-kv"><dt>help</dt><dd>هذه القائمة</dd><dt>whoami</dt><dd>من أنا</dd><dt>skills</dt><dd>ما أعرفه وما أتعلمه</dd><dt>projects</dt><dd>ما بنيته</dd><dt>certs</dt><dd>الشهادات</dd><dt>education</dt><dd>أين أدرس</dd><dt>experience</dt><dd>أين عملت</dd><dt>writeups</dt><dd>ما كتبته</dd><dt>contact</dt><dd>كيف تتواصل معي</dd><dt>cv</dt><dd>سيرتي الذاتية في صفحة واحدة</dd><dt>flags</dt><dd>تلميح عن الرايات المخفية</dd><dt>clear</dt><dd>مسح الشاشة</dd></dl></div>
-          </div>
-          <div class="term-block" data-cmd="whoami" data-static="">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> whoami</p>
-            <div class="term-out"><dl class="term-kv"><dt>الاسم</dt><dd>Ali Ahmed</dd><dt>نبذة</dt><dd>طالب أمن سيبراني يبني طريقه نحو مسار مهني في أمن السحابة.</dd><dt>المقر</dt><dd>القاهرة، مصر</dd><dt>الأحدث</dt><dd>متدرب أمن المعلومات, Ebank (أغسطس 2026 – يناير 2027)</dd><dt>الدراسة</dt><dd>بكالوريوس المعلوماتية وعلوم الحاسب, تخصص أمن المعلومات في الجامعة الألمانية الدولية (GIU)</dd></dl></div>
-          </div>
-          <div class="term-block" data-cmd="skills" data-static="">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> skills</p>
-            <div class="term-out"><dl class="term-kv"><dt>أتقنها</dt><dd>الشبكات, Linux, أساسيات الأمن, أساسيات التشفير</dd><dt>أستخدمها الآن</dt><dd>Python, خدمات AWS الأساسية, Git وGitHub</dd><dt>أتعلمها لاحقًا</dt><dd>إدارة الهويات والوصول في السحابة (IAM), Terraform, CloudFormation, سجلات السحابة والكشف</dd></dl></div>
-          </div>
-          <div class="term-block" data-cmd="projects" data-static="">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> projects</p>
-            <div class="term-out"><div class="term-item"><p class="term-head"><b>Explain This CVE: explain-this-cve.vercel.app</b> <span class="term-dim">JavaScript, Node.js, Vercel, NVD, CISA KEV, EPSS</span></p><p class="term-dim">2026</p><ul class="term-bullets"><li>بنيت فاحص CVE يحول بيانات NVD وCISA KEV وEPSS إلى ملخص من صفحة واحدة للمديرين والمحللين.</li><li>تعاملت مع كل البيانات الخارجية ومخرجات الذكاء الاصطناعي على أنها غير موثوقة: التحقق من المدخلات، وتحديد معدل الطلبات، وCSP مع Trusted Types، وأكثر من 140 اختبارًا دون اتصال تشمل تمرين XSS.</li></ul></div><div class="term-item"><p class="term-head"><b>موقع شخصي: lectrik0.github.io</b> <span class="term-dim">HTML, CSS, JavaScript, GitHub Actions, AWS CloudFormation</span></p><p class="term-dim">2026</p><ul class="term-bullets"><li>بنيت موقعًا ثابتًا محصّنًا ضد XSS (سياسة CSP صارمة وTrusted Types، واختبرته بحمولات حقن) بلا طلبات لأطراف خارجية، وبنية AWS كشيفرة تُنشر دون مفاتيح عبر OIDC.</li></ul></div></div>
-          </div>
-          <div class="term-block" data-cmd="certs">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> certs</p>
-            <div class="term-out"><ul class="term-certs"><li><span class="term-mark earned" aria-hidden="true">[x]</span> Deloitte Cyber Job Simulation (virtual) <span class="term-dim">مكتسبة</span> · <a href="https://www.theforage.com/completion-certificates/9PBTqmSxAf6zZTseP/E9pA6qsdbeyEkp3ti_9PBTqmSxAf6zZTseP_6aa43695707c12e17f9b9691_1789147084233_completion_certificate.pdf" target="_blank" rel="noopener noreferrer" class="verify" aria-label="Verify Deloitte Cyber Job Simulation (virtual)">Verify<span aria-hidden="true"> ↗</span></a></li><li><span class="term-mark progress" aria-hidden="true">[~]</span> AWS Certified Cloud Practitioner <span class="term-dim">قيد التحضير</span></li><li><span class="term-mark planned" aria-hidden="true">[ ]</span> AWS Solutions Architect – Associate <span class="term-dim">مخطط لها</span></li><li><span class="term-mark planned" aria-hidden="true">[ ]</span> AWS Certified Security – Specialty <span class="term-dim">مخطط لها</span></li></ul></div>
-          </div>
-          <div class="term-block" data-cmd="education">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> education</p>
-            <div class="term-out"><div class="term-item"><p class="term-head"><b>بكالوريوس المعلوماتية وعلوم الحاسب، تخصص أمن المعلومات</b></p><p class="term-dim">الجامعة الألمانية الدولية (GIU) · سبتمبر 2023 – سبتمبر 2027</p><p>مقررات ذات صلة: التشفير، أمن الشبكات، القرصنة الأخلاقية واختبار الاختراق، التحقيق الجنائي الرقمي، أمن البرمجيات والأجهزة المحمولة، استمرارية الأعمال وإدارة المخاطر.</p></div><div class="term-item"><p class="term-head"><b>فصل دراسي تبادلي (الفصل الخامس)، الأمن السيبراني</b></p><p class="term-dim">الجامعة الألمانية الدولية في برلين (GIU Berlin) · برلين، ألمانيا · سبتمبر 2025 – فبراير 2026</p></div></div>
-          </div>
-          <div class="term-block" data-cmd="experience">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> experience</p>
-            <div class="term-out"><div class="term-item"><p class="term-head"><b>متدرب أمن المعلومات</b></p><p class="term-dim">Ebank · القاهرة الجديدة، مصر · أغسطس 2026 – يناير 2027</p><ul class="term-bullets"><li>تنقلت بين فرق إدارة الثغرات والحوكمة والمخاطر والامتثال (GRC) واختبار الاختراق ومركز العمليات الأمنية (SOC) في البنك.</li><li>أجريت فحوصات للثغرات باستخدام Tenable وحللت النتائج حسب CVE والإضافة.</li><li>عملت مع فريق GRC على تقييمات مخاطر الموظفين وفق معيار ISO/IEC 27001.</li><li>نفذت محاكاة للتصيد الاحتيالي لاختبار وعي الموظفين بالأمن.</li><li>أجريت اختبارات اختراق للشبكة الداخلية في كل طابق من مكاتب البنك، بإشراف فريق اختبار الاختراق.</li><li>استخدمت IBM QRadar (SIEM) مع فريق SOC لمراقبة الأحداث الأمنية وتحليلها.</li></ul></div><div class="term-item"><p class="term-head"><b>متدرب أمن سيبراني</b></p><p class="term-dim">ICT Misr · الشيخ زايد، الجيزة، مصر · يوليو 2024 (شهر واحد)</p><ul class="term-bullets"><li>رافقت العاملين في الأمن السيبراني في عملهم اليومي وتعلمت كيف تطبق الشركات الأمن عمليًا.</li><li>لاحظت كيف يتعامل الفريق مع العملاء ويلبي احتياجاتهم الأمنية.</li><li>كوّنت معرفة أساسية بمفاهيم الأمن وسبل التهديد الشائعة وضوابط الأمن الأولية.</li></ul></div></div>
-          </div>
-          <div class="term-block" data-cmd="writeups">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> writeups</p>
-            <div class="term-out"><ul class="term-posts"><li><a href="/ar/writeups/explain-this-cve.html">Issue #2: Explain This CVE</a> <span class="term-dim">٧ أكتوبر ٢٠٢٦</span></li><li><a href="/ar/writeups/hardening-this-site.html">Issue #1: Hardening a static site</a> <span class="term-dim">٤ أكتوبر ٢٠٢٦</span></li></ul></div>
-          </div>
-          <div class="term-block" data-cmd="contact" data-static="">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> contact</p>
-            <div class="term-out"><dl class="term-kv"><dt>email</dt><dd><a href="mailto:aliahmedismail2@gmail.com">aliahmedismail2@gmail.com</a></dd><dt>linkedin</dt><dd><a href="https://www.linkedin.com/in/aliahmed255" target="_blank" rel="noopener noreferrer">linkedin.com/in/aliahmed255</a></dd><dt>github</dt><dd><a href="https://github.com/Lectrik0" target="_blank" rel="noopener noreferrer">github.com/Lectrik0</a></dd></dl></div>
-          </div>
-          <div class="term-block" data-cmd="cv">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> cv</p>
-            <div class="term-out"><p>صفحة واحدة بنص عادي، مصممة للبشر ولبرامج ATS.</p><ul class="term-links"><li><a href="/cv.html">اقرأها على الموقع</a></li><li><a href="/cv.pdf" download="Ali-Ahmed-Ismail-CV.pdf">تحميل ملف PDF</a></li></ul></div>
-          </div>
-          <div class="term-block" data-cmd="flags">
-            <p class="term-cmd"><span class="term-ps" aria-hidden="true">ali@portfolio:~$</span> flags</p>
-            <div class="term-out"><p>هناك رايات مخفية في هذا الموقع. بلا حرق للأحداث: التلميحات والفاحص في قسم <a href="#flags">الرايات المخفية</a>.</p></div>
-          </div>
-        </div>
-        <div class="term-chips needs-js">
-          <button class="term-chip" type="button" data-run="help">help</button>
-          <button class="term-chip" type="button" data-run="whoami">whoami</button>
-          <button class="term-chip" type="button" data-run="skills">skills</button>
-          <button class="term-chip" type="button" data-run="projects">projects</button>
-          <button class="term-chip" type="button" data-run="certs">certs</button>
-          <button class="term-chip" type="button" data-run="education">education</button>
-          <button class="term-chip" type="button" data-run="experience">experience</button>
-          <button class="term-chip" type="button" data-run="writeups">writeups</button>
-          <button class="term-chip" type="button" data-run="contact">contact</button>
-          <button class="term-chip" type="button" data-run="cv">cv</button>
-          <button class="term-chip" type="button" data-run="flags">flags</button>
-        </div>
-        <form class="term-form needs-js" id="term-form" novalidate>
-          <label class="sr" for="term-input">الأمر</label>
-          <span class="term-ps" aria-hidden="true">ali@portfolio:~$</span>
-          <input id="term-input" name="command" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="40" placeholder="اكتب أمرًا">
-          <button class="term-run" type="submit">تنفيذ</button>
-        </form>
-      </div>
-      <!-- /build:terminal -->
-    </div></div>
   </section>
 
   <section class="sec wrap" id="flags" aria-labelledby="flags-h">

@@ -17,7 +17,7 @@
 
 ## 👋 In plain words
 
-This is the personal website of **Ali Ahmed**, a final-year cybersecurity student in Cairo. It tells the story so far: university, an internship at a bank, and the road to cloud security, with skills, certifications, write-ups and a printable CV. The home page comes in English, [Spanish](https://lectrik0.github.io/es/) and [Arabic](https://lectrik0.github.io/ar/), and the CV and write-ups also in Spanish (the write-ups in Arabic too).
+This is the personal website of **Ali Ahmed**, a final-year cybersecurity student in Cairo. It tells the story so far: university, an internship at a bank, and the road to cloud security, with skills, certifications, write-ups and a printable CV. The home page comes in English, [Spanish](https://lectrik0.github.io/es/), [German](https://lectrik0.github.io/de/) and [Arabic](https://lectrik0.github.io/ar/); the CV and write-ups also come in Spanish and German (the write-ups in Arabic too).
 
 The site is also a security project in its own right. It was built from scratch, locked down the way a real company would protect its website, and every change is tested automatically before it goes live.
 
@@ -25,10 +25,10 @@ The site is also a security project in its own right. It was built from scratch,
 
 | Page | What you'll find |
 |---|---|
-| [Home](https://lectrik0.github.io) | The story so far (open Chapter 1 for every university course), skills, certifications, write-ups, an interactive "Ask my terminal" (type `whoami`, `skills` or `projects`), hidden flags and contact links |
+| [Home](https://lectrik0.github.io) | The story so far (open Chapter 1 for every university course), skills, certifications, write-ups, hidden flags and contact links |
 | [CV](https://lectrik0.github.io/cv.html) | A one-page CV in a classic, ATS-friendly layout, ready to download as a PDF |
 | [Write-ups](https://lectrik0.github.io/#writeups) | Hands-on security projects, each told as a comic-book "issue" |
-| [Español](https://lectrik0.github.io/es/) · [العربية](https://lectrik0.github.io/ar/) | The same story in Spanish and Arabic (right to left). A first-time visitor whose browser is set to one of them is taken there automatically |
+| [Español](https://lectrik0.github.io/es/) · [Deutsch](https://lectrik0.github.io/de/) · [العربية](https://lectrik0.github.io/ar/) | The same story in Spanish, German and Arabic (right to left). A first-time visitor whose browser is set to one of them is taken there automatically |
 
 ## ✨ What makes it different
 
@@ -85,7 +85,7 @@ npm run lint           # validate the HTML
 npm test               # unit tests: content schema, escaping, build output
 npm run test:browser   # Playwright: errors, CSP, links, no-JS, accessibility, XSS
 npm run og             # re-render assets/og.png, the link preview image
-npm run pdf            # render cv.html and es/cv.html into cv.pdf and cv-es.pdf, the CVs' Download PDF files
+npm run pdf            # render cv.html, es/cv.html and de/cv.html into cv.pdf, cv-es.pdf and cv-de.pdf, the CVs' Download PDF files
 npm run qr             # re-make assets/qr-cv.svg, the job-fair cards' QR code (only if the site's address changes)
 ```
 
@@ -100,11 +100,11 @@ data/i18n/*.json                      ├► es/ and ar/ home pages, es/cv.html,
 ```
 
 - The HTML files stay hand-written: the drawings, layout and write-ups are edited directly. The build only rewrites what comes from data:
-  - regions between `<!-- build:name -->` and `<!-- /build:name -->` (nav, footer, `<head>` meta tags, skills, certifications, write-ups, terminal, course list, CV),
+  - regions between `<!-- build:name -->` and `<!-- /build:name -->` (nav, footer, `<head>` meta tags, skills, certifications, write-ups, course list, CV),
   - the text of elements marked `data-bind="..."` (story chapters, tagline, CV headline),
   - `?v=` version stamps on CSS/JS/image links, so a browser never mixes a new page with an old cached stylesheet.
 - The output is committed. The build is deterministic: run it twice and nothing changes.
-- [`assets/main.js`](assets/main.js) only adds behaviour on top: day/night toggle, flag checker, internship countdown, the terminal prompt, motion. Without it, the toggle, flag checker and terminal prompt are hidden (the terminal shows a short transcript instead) ([`assets/nojs.css`](assets/nojs.css)) and the course list still opens through the buttons' `command` attributes in current browsers.
+- [`assets/main.js`](assets/main.js) only adds behaviour on top: day/night toggle, flag checker, internship countdown, motion. Without it, the toggle and flag checker are hidden ([`assets/nojs.css`](assets/nojs.css)) and the course list still opens through the buttons' `command` attributes in current browsers.
 
 </details>
 
@@ -138,8 +138,8 @@ data/i18n/*.json                      ├► es/ and ar/ home pages, es/cv.html,
 2. **Build:** on a PR the pages must already be rebuilt (`npm run check`); on `main` they're rebuilt from `data/site.json`.
 3. **HTML validation** with html-validate.
 4. **Unit tests:** escaping, URL filtering, deterministic build, meta tags, sitemap, feed, security.txt, and that Backstage's content checker agrees with Ajv on over a thousand edited versions of the content.
-5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker, terminal and course list work; the Spanish and Arabic pages follow the browser's language, remember a chosen language, lay out right to left in Arabic and read in their own language; the Spanish CV is one page too; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated); the CV renders to a one-page PDF, identical on every run, and an ATS-style text extraction (pdf.js) reads it in order with every word whole, also after content edits.
-6. **Publish** (`main` only, after everything passes): the CVs are rendered to `cv.pdf` and `cv-es.pdf`, and if that or the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
+5. **Browser tests** in Chromium: each page loads with no console errors, CSP violations or failed requests; every internal link, asset and `#anchor` resolves; link previews and the preview image work; pages are complete with JavaScript off; theme toggle, flag checker and course list work; the Spanish, German and Arabic pages follow the browser's language, remember a chosen language, lay out right to left in Arabic and read in their own language; the Spanish and German CVs are one page too; no serious accessibility problems (axe, WCAG 2.2 AA) in day and night mode; hostile content never runs; Backstage refuses content CI would reject (GitHub's API simulated); the CV renders to a one-page PDF, identical on every run, and an ATS-style text extraction (pdf.js) reads it in order with every word whole, also after content edits.
+6. **Publish** (`main` only, after everything passes): the CVs are rendered to `cv.pdf`, `cv-es.pdf` and `cv-de.pdf`, and if that or the rebuild changed anything, it's committed back to `main` and GitHub Pages redeploys. If a check fails, nothing is published and the live site stays as it was.
 
 The tests check the site *against* the content rather than freezing today's content: what each page must show is worked out from `data/site.json`, and the content checks also run on copies of the site built from edited content (more entries, fewer entries, half-filled entries, write-ups stored out of order). So editing the content can't make a test fail unless the edit itself is a problem.
 
@@ -165,7 +165,7 @@ Edit [`data/site.json`](data/site.json), run `npm run build`, and commit both. O
 
 Anyone can load the editor page, but without the encrypted token on their own device and the password, it can't do anything.
 
-**Languages.** `es/index.html` and `ar/index.html` are generated from `index.html` and `data/site.json` plus a translation file each, [`data/i18n/es.json`](data/i18n/es.json) and [`ar.json`](data/i18n/ar.json): `ui` (the words the views write), `data` (the parts of the content that differ, such as the story, skills and the terminal's CV entries) and `text` (each hand-written English string in `index.html` and its translation). The build fails if a `text` key no longer matches the page, and a unit test fails if a UI string is untranslated. Backstage edits the English content only; the translations are edited in these files. The Spanish CV is built from the same layout with the Spanish content (`ui.cvWords` translates its headings), and `es/writeups/*.html` and `ar/writeups/*.html` are hand-written translations of the write-ups: when an English write-up changes, its Spanish and Arabic pages have to be updated by hand. [`assets/lang.js`](assets/lang.js) does the first-visit redirect, using no network and nothing but the browser's language and a remembered choice.
+**Languages.** `es/index.html`, `de/index.html` and `ar/index.html` are generated from `index.html` and `data/site.json` plus a translation file each, [`data/i18n/es.json`](data/i18n/es.json), [`de.json`](data/i18n/de.json) and [`ar.json`](data/i18n/ar.json): `ui` (the words the views write), `data` (the parts of the content that differ, such as the story, skills and the CV entries) and `text` (each hand-written English string in `index.html` and its translation). The build fails if a `text` key no longer matches the page, and a unit test fails if a UI string is untranslated. Backstage edits the English content only; the translations are edited in these files. The Spanish CV is built from the same layout with the Spanish content (`ui.cvWords` translates its headings), and `es/writeups/*.html`, `de/writeups/*.html` and `ar/writeups/*.html` are hand-written translations of the write-ups: when an English write-up changes, its Spanish, German and Arabic pages have to be updated by hand. [`assets/lang.js`](assets/lang.js) does the first-visit redirect, using no network and nothing but the browser's language and a remembered choice.
 
 A new write-up is a new HTML page in `writeups/` (copy the existing one, keeping its `build:` markers) plus an entry in the Write-ups list. The build adds it to the home page, the feed and the sitemap, and gives it link-preview tags.
 
@@ -194,9 +194,9 @@ The editor page gets its own header policy (CSP that also allows `api.github.com
 | Path | What |
 |---|---|
 | `/` | The story (Chapter 1 opens the full GIU course list), skills, certifications, write-ups, flags |
-| `/es/`, `/ar/` | The home page in Spanish and Arabic (right to left). Visitors whose browser is set to one of them are sent there on their first visit; the EN / ES / AR switch in the nav overrides that |
-| `/es/cv.html`, `/cv-es.pdf` | The CV in Spanish (one page, with its own PDF). Arabic has no CV, so its pages link to the English one |
-| `/es/writeups/*.html`, `/ar/writeups/*.html` | The write-ups in Spanish and Arabic. English terms with no good translation (CSP, XSS, Trusted Types, CVE...) are kept as they are |
+| `/es/`, `/de/`, `/ar/` | The home page in Spanish, German and Arabic (right to left). Visitors whose browser is set to one of them are sent there on their first visit; the EN / ES / AR switch in the nav overrides that |
+| `/es/cv.html`, `/cv-es.pdf`, `/de/cv.html`, `/cv-de.pdf` | The CV in Spanish and German (one page each, with its own PDF). Arabic has no CV, so its pages link to the English one |
+| `/es/writeups/*.html`, `/de/writeups/*.html`, `/ar/writeups/*.html` | The write-ups in Spanish, German and Arabic. English terms with no good translation (CSP, XSS, Trusted Types, CVE...) are kept as they are |
 | `/cv.html` | CV, prints cleanly to one A4 page |
 | `/cv.pdf` | The same CV as a PDF (made by CI with `npm run pdf`) |
 | `/card.html` | Job-fair business cards, ten to an A4 page, with a QR code that opens the CV (not indexed) |
