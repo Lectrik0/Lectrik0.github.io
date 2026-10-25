@@ -1,5 +1,5 @@
 <p align="center">
-  <a href="https://lectrik0.github.io"><img src="assets/og.png" width="760" alt="Ali Ahmed: cybersecurity student building toward a career in cloud security. lectrik0.github.io"></a>
+  <a href="https://lectrik0.github.io"><img src="assets/og.png" width="760" alt="Ali Ahmed: cybersecurity student building toward a career in DevOps and cloud engineering. lectrik0.github.io"></a>
 </p>
 
 <p align="center">
@@ -17,7 +17,7 @@
 
 ## 👋 In plain words
 
-This is the personal website of **Ali Ahmed**, a final-year cybersecurity student in Cairo. It tells the story so far: university, an internship at a bank, and the road to cloud security, with skills, certifications, write-ups and a printable CV. The home page comes in English, [Spanish](https://lectrik0.github.io/es/), [German](https://lectrik0.github.io/de/) and [Arabic](https://lectrik0.github.io/ar/); the CV and write-ups also come in Spanish and German (the write-ups in Arabic too).
+This is the personal website of **Ali Ahmed**, a final-year cybersecurity student in Cairo. It tells the story so far: university, an internship at a bank, and the road to DevOps and cloud engineering, with skills, certifications, write-ups and a printable CV. The home page comes in English, [Spanish](https://lectrik0.github.io/es/), [German](https://lectrik0.github.io/de/) and [Arabic](https://lectrik0.github.io/ar/); the CV and write-ups also come in Spanish and German (the write-ups in Arabic too).
 
 The site is also a security project in its own right. It was built from scratch, locked down the way a real company would protect its website, and every change is tested automatically before it goes live.
 

@@ -96,6 +96,7 @@
         "properties": {
           "name": { "$ref": "#/$defs/text" },
           "short": { "type": "string", "minLength": 1, "maxLength": 7 },
+          "icon": { "description": "The picture in the badge; leave it out for text only.", "enum": ["cloud", "blocks", "layers", "gears", "helm", "shield", "award"] },
           "status": { "enum": ["earned", "progress", "planned"] },
           "issued": { "type": "string" },
           "verify": { "description": "Needs an https:// link, like your Credly badge, or leave it empty.", "anyOf": [{ "const": "" }, { "$ref": "#/$defs/httpsUrl" }] }

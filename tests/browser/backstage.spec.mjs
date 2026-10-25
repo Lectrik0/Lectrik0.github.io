@@ -58,6 +58,7 @@ test("a half-filled certification is caught before publishing, then published on
   await page.getByRole("button", { name: "Add certification" }).click();
   const item = page.locator("details.bs-item").last();
   await expect(item.getByLabel("Status")).toHaveValue("planned"); // a new certification isn't claimed as earned
+  await expect(item.getByLabel("Picture in the badge")).toHaveValue("award");
 
   await page.locator("#publish").click();
   const problems = page.locator("#problems");
@@ -78,7 +79,7 @@ test("a half-filled certification is caught before publishing, then published on
   await expect(page.locator("#toast")).toContainText("Published.");
   await expect(page.locator("#toast a")).toHaveText("Follow the checks");
   expect(published).toHaveLength(1);
-  expect(published[0].certs.at(-1)).toEqual({ name: "Test certificate", short: "TC", status: "planned", issued: "", verify: "" });
+  expect(published[0].certs.at(-1)).toEqual({ name: "Test certificate", short: "TC", icon: "award", status: "planned", issued: "", verify: "" });
 });
 
 test("a write-up linking to a page that doesn't exist yet is caught", async ({ page }) => {

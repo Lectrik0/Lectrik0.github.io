@@ -167,7 +167,7 @@ svg *{transition:fill .5s,stroke .5s}
 .chips li{font:600 .95rem/1 var(--f-display);padding:8px 11px;border:2px solid var(--c);color:var(--text)}
 
 /* certifications */
-.certs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.certs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
 .cert .in{padding:20px;display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:center}
 .cert svg{width:72px;height:80px}
 .cert h3{margin:0;font-size:1.1rem;line-height:1.2}
@@ -183,6 +183,9 @@ svg *{transition:fill .5s,stroke .5s}
 .verify{color:inherit;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:2px}
 .verify:hover{text-decoration-color:var(--teal)}
 .cert.earned .hex-t{fill:var(--panel)}
+.cert .hex-t.under{font-size:10.5px}
+.cert .hex-i{fill:var(--c);stroke:var(--c);stroke-width:.6;stroke-linejoin:round}
+.cert.earned .hex-i{fill:var(--panel);stroke:var(--panel)}
 
 /* write-ups */
 .posts{display:grid;gap:14px}

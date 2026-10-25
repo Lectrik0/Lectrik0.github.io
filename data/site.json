@@ -1,7 +1,7 @@
 {
  "profile": {
   "name": "Ali Ahmed",
-  "tagline": "Cybersecurity student building toward a career in cloud security.",
+  "tagline": "Cybersecurity student building toward a career in DevOps and cloud engineering.",
   "location": "Cairo, Egypt",
   "github": "https://github.com/Lectrik0",
   "linkedin": "https://www.linkedin.com/in/aliahmed255",
@@ -25,14 +25,14 @@
   },
   {
    "title": "Up into the cloud",
-   "text": "Studying for AWS Certified Cloud Practitioner. Cloud is where I want to specialise: identity, data and infrastructure that defend themselves."
+   "text": "Studying for AWS Certified Cloud Practitioner. I want to build, ship and run cloud infrastructure: automated, repeatable and reliable."
   },
   {
    "title": "Next steps",
-   "text": "AWS Solutions Architect – Associate to learn how secure systems are designed, then AWS Certified Security – Specialty."
+   "text": "AWS Solutions Architect – Associate to learn how systems are designed, then Terraform, AWS CloudOps Engineer and the Certified Kubernetes Administrator."
   },
   {
-   "title": "Cloud Security Architect",
+   "title": "Cloud Security / DevSecOps",
    "text": "Where this road leads."
   }
  ],
@@ -312,26 +312,34 @@
  ],
  "certs": [
   {
-   "name": "Deloitte Cyber Job Simulation (virtual)",
-   "short": "DLT",
-   "status": "earned",
-   "issued": "Sep 2026",
-   "verify": "https://www.theforage.com/completion-certificates/9PBTqmSxAf6zZTseP/E9pA6qsdbeyEkp3ti_9PBTqmSxAf6zZTseP_6aa43695707c12e17f9b9691_1789147084233_completion_certificate.pdf"
-  },
-  {
    "name": "AWS Certified Cloud Practitioner",
    "short": "CLF",
-   "status": "progress"
+   "status": "progress",
+   "icon": "cloud"
   },
   {
    "name": "AWS Solutions Architect – Associate",
    "short": "SAA",
-   "status": "planned"
+   "status": "planned",
+   "icon": "blocks"
   },
   {
-   "name": "AWS Certified Security – Specialty",
-   "short": "SCS",
-   "status": "planned"
+   "name": "HashiCorp Certified: Terraform Associate",
+   "short": "TFA",
+   "status": "planned",
+   "icon": "layers"
+  },
+  {
+   "name": "AWS Certified CloudOps Engineer – Associate",
+   "short": "SOA",
+   "status": "planned",
+   "icon": "gears"
+  },
+  {
+   "name": "Certified Kubernetes Administrator (CKA)",
+   "short": "CKA",
+   "status": "planned",
+   "icon": "helm"
   }
  ],
  "posts": [
@@ -352,9 +360,9 @@
  ],
  "cv": {
   "fullName": "Ali Ahmed Ismail",
-  "headline": "Final-year IT Security student focused on cloud security.",
+  "headline": "Final-year IT Security student focused on DevOps and cloud engineering.",
   "military": "Postponed (student)",
-  "summary": "Final-year IT Security student with hands-on internship experience at a bank in vulnerability management, governance, risk and compliance (GRC), penetration testing and SOC operations. Building toward a career in cloud security and studying for AWS Certified Cloud Practitioner.",
+  "summary": "Final-year IT Security student with hands-on internship experience at a bank in vulnerability management, governance, risk and compliance (GRC), penetration testing and SOC operations. Building toward a career in DevOps and cloud engineering and studying for AWS Certified Cloud Practitioner.",
   "education": [
    {
     "title": "B.Sc. Informatics and Computer Science, IT Security major",
