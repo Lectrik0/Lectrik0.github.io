@@ -136,3 +136,17 @@ test("security.txt is valid and not about to expire", () => {
   assert.ok(days <= 366, "RFC 9116 recommends an Expires date less than a year ahead");
   if (days < 30) console.log(`::warning file=.well-known/security.txt::security.txt expires in ${Math.floor(days)} days`);
 });
+
+test("a certification's badge shows its picture, and falls back to its text when the picture is unknown or missing", () => {
+  const data = JSON.parse(read("data/site.json"));
+  data.certs = [
+    { name: "With picture", short: "WP", status: "planned", icon: "cloud" },
+    { name: "Unknown picture", short: "UP", status: "planned", icon: "<script>" },
+    { name: "No picture", short: "NP", status: "planned" }
+  ];
+  const page = renderSite({ data }).get("index.html");
+  const card = name => new RegExp(`<h3>${name}</h3>`).test(page) ? page.split(`<h3>${name}</h3>`)[0].split('<div class="frame cut-c cert').pop() : "";
+  assert.match(card("With picture"), /class="hex-i"[\s\S]*class="hex-t under"[^>]*>WP</);
+  for (const name of ["Unknown picture", "No picture"]) assert.doesNotMatch(card(name), /hex-i/, name);
+  assert.doesNotMatch(page, /<script>/);
+});

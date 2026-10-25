@@ -152,7 +152,7 @@
       ["internship", { type: "object", label: "Internship progress bar", fields: {
         start: T("Start date", { kind: "date" }), end: T("End date", { kind: "date" }) } }]
     ] },
-    { id: "story", label: "Story", icon: "story", desc: "The five chapters on the home page, from GIU to cloud security.", fields: [
+    { id: "story", label: "Story", icon: "story", desc: "The five chapters on the home page, from GIU to DevOps and cloud.", fields: [
       ["story", LIST("Chapters", { title: T("Title"), text: A("Text") }, { fixed: true, name: (it, i) => `Chapter ${i + 1}`, help: "The five drawings are fixed, so chapters can be edited but not added or removed." })]
     ] },
     { id: "courses", label: "Courses", icon: "courses", desc: "Every semester and course, shown when someone opens “See all my courses”.", fields: [
@@ -173,6 +173,7 @@
     { id: "certs", label: "Certifications", icon: "certs", desc: "Certifications on the home page, the CV and your GitHub profile.", fields: [
       ["certs", LIST("Certifications", {
         name: T("Name"), short: T("Badge text (max 7 characters, e.g. AZ-900)", { max: 7 }),
+        icon: SEL("Picture in the badge", [["award", "Star"], ["cloud", "Cloud"], ["blocks", "Building blocks"], ["layers", "Layers"], ["gears", "Gears"], ["helm", "Ship's wheel"], ["shield", "Shield"]], { default: "award" }),
         status: SEL("Status", [["earned", "Earned"], ["progress", "In progress"], ["planned", "Planned"]], { default: "planned" }),
         issued: T("Issued (optional, e.g. Sep 2026)", { help: "Shown on the CV instead of \"Earned\"." }),
         verify: T("Verify link (optional)", { help: "Your Credly badge link, like https://www.credly.com/badges/…. Shown as a Verify button once the status is Earned." }) }, { name: it => it.name || "New certification" })]

@@ -112,7 +112,7 @@
  "data": {
   "profile": {
    "location": "El Cairo, Egipto",
-   "tagline": "Estudiante de ciberseguridad en camino hacia una carrera en seguridad en la nube.",
+   "tagline": "Estudiante de ciberseguridad en camino hacia una carrera en DevOps e ingeniería en la nube.",
    "cv": "es/cv.html"
   },
   "story": [
@@ -126,14 +126,14 @@
    },
    {
     "title": "Hacia la nube",
-    "text": "Me preparo para AWS Certified Cloud Practitioner. La nube es donde quiero especializarme: identidad, datos e infraestructura que se defienden solas."
+    "text": "Me preparo para AWS Certified Cloud Practitioner. Quiero construir, desplegar y operar infraestructura en la nube: automatizada, repetible y fiable."
    },
    {
     "title": "Próximos pasos",
-    "text": "AWS Solutions Architect – Associate para aprender cómo se diseñan los sistemas seguros, y después Terraform, AWS CloudOps Engineer y Certified Kubernetes Administrator."
+    "text": "AWS Solutions Architect – Associate para aprender cómo se diseñan los sistemas, y después Terraform, AWS CloudOps Engineer y Certified Kubernetes Administrator."
    },
    {
-    "title": "Arquitecto de seguridad en la nube",
+    "title": "Seguridad en la nube / DevSecOps",
     "text": "Adonde lleva este camino."
    }
   ],
@@ -253,9 +253,9 @@
      ]
     }
    ],
-   "headline": "Estudiante de último año de Seguridad Informática, centrado en la seguridad en la nube.",
+   "headline": "Estudiante de último año de Seguridad Informática, centrado en DevOps y la ingeniería en la nube.",
    "military": "Aplazado (estudiante)",
-   "summary": "Estudiante de último año de Seguridad Informática con experiencia práctica en un banco en gestión de vulnerabilidades, gobernanza, riesgo y cumplimiento (GRC), pruebas de penetración y operaciones de SOC. Me encamino hacia la seguridad en la nube y preparo AWS Certified Cloud Practitioner.",
+   "summary": "Estudiante de último año de Seguridad Informática con experiencia práctica en un banco en gestión de vulnerabilidades, gobernanza, riesgo y cumplimiento (GRC), pruebas de penetración y operaciones de SOC. Me encamino hacia DevOps y la ingeniería en la nube y preparo AWS Certified Cloud Practitioner.",
    "skills": [
     {
      "label": "Seguridad",
@@ -285,7 +285,7 @@
   }
  },
  "text": {
-  "Ali Ahmed, cybersecurity student in Cairo building toward a career in cloud security.": "Ali Ahmed, estudiante de ciberseguridad en El Cairo, en camino hacia una carrera en seguridad en la nube.",
+  "Ali Ahmed, cybersecurity student in Cairo building toward a career in DevOps and cloud engineering.": "Ali Ahmed, estudiante de ciberseguridad en El Cairo, en camino hacia una carrera en DevOps e ingeniería en la nube.",
   "The story so far": "La historia hasta ahora",
   "Where I've been, where I am, and where I'm heading.": "De dónde vengo, dónde estoy y hacia dónde voy.",
   "Chapter 1": "Capítulo 1",
@@ -304,7 +304,7 @@
   "Certifications": "Certificaciones",
   "Earned badges fill in. Dashed ones are in progress or planned.": "Las insignias obtenidas aparecen rellenas. Las discontinuas están en curso o planificadas.",
   "Write-ups": "Artículos",
-  "Notes from labs, CTFs and cloud security topics I'm learning.": "Notas de laboratorios, CTF y temas de seguridad en la nube que estoy aprendiendo.",
+  "Notes from labs, CTFs and cloud and security topics I'm learning.": "Notas de laboratorios, CTF y temas de nube y seguridad que estoy aprendiendo.",
   "Hidden flags": "Banderas ocultas",
   "There are four flags hidden on this site, each in the format <code>AA{...}</code>. Nothing here needs hacking: just curiosity and the tools in your browser.": "Hay cuatro banderas ocultas en este sitio, cada una con el formato <code>AA{...}</code>. No hace falta hackear nada: solo curiosidad y las herramientas de tu navegador.",
   "Hints": "Pistas",
@@ -319,7 +319,7 @@
   "Flags are checked in your browser. Nothing is sent anywhere.": "Las banderas se comprueban en tu navegador. No se envía nada a ningún sitio.",
   "0 of 4 found": "0 de 4 encontradas",
   "To be continued…": "Continuará…",
-  "I'm looking for cloud security internships and junior roles. If your team works on cloud security, I'd like to hear from you.": "Busco prácticas y puestos junior en seguridad en la nube. Si tu equipo trabaja en seguridad en la nube, me encantaría saber de ti.",
+  "I'm looking for DevOps and cloud engineering internships and junior roles. If your team builds on the cloud, I'd like to hear from you.": "Busco prácticas y puestos junior en DevOps e ingeniería en la nube. Si tu equipo construye en la nube, me encantaría saber de ti.",
   "My courses": "Mis asignaturas",
   "Close": "Cerrar"
  }
