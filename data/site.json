@@ -29,7 +29,7 @@
   },
   {
    "title": "Next steps",
-   "text": "AWS Solutions Architect – Associate to learn how secure systems are designed, then AWS Certified Security – Specialty."
+   "text": "AWS Solutions Architect – Associate to learn how secure systems are designed, then Terraform, AWS CloudOps Engineer and the Certified Kubernetes Administrator."
   },
   {
    "title": "Cloud Security Architect",
@@ -312,13 +312,6 @@
  ],
  "certs": [
   {
-   "name": "Deloitte Cyber Job Simulation (virtual)",
-   "short": "DLT",
-   "status": "earned",
-   "issued": "Sep 2026",
-   "verify": "https://www.theforage.com/completion-certificates/9PBTqmSxAf6zZTseP/E9pA6qsdbeyEkp3ti_9PBTqmSxAf6zZTseP_6aa43695707c12e17f9b9691_1789147084233_completion_certificate.pdf"
-  },
-  {
    "name": "AWS Certified Cloud Practitioner",
    "short": "CLF",
    "status": "progress"
@@ -329,8 +322,18 @@
    "status": "planned"
   },
   {
-   "name": "AWS Certified Security – Specialty",
-   "short": "SCS",
+   "name": "HashiCorp Certified: Terraform Associate",
+   "short": "TFA",
+   "status": "planned"
+  },
+  {
+   "name": "AWS Certified CloudOps Engineer – Associate",
+   "short": "SOA",
+   "status": "planned"
+  },
+  {
+   "name": "Certified Kubernetes Administrator (CKA)",
+   "short": "CKA",
    "status": "planned"
   }
  ],

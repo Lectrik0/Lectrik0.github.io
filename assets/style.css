@@ -167,7 +167,7 @@ svg *{transition:fill .5s,stroke .5s}
 .chips li{font:600 .95rem/1 var(--f-display);padding:8px 11px;border:2px solid var(--c);color:var(--text)}
 
 /* certifications */
-.certs{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+.certs{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:16px}
 .cert .in{padding:20px;display:grid;grid-template-columns:72px 1fr;gap:16px;align-items:center}
 .cert svg{width:72px;height:80px}
 .cert h3{margin:0;font-size:1.1rem;line-height:1.2}
